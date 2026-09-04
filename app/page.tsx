@@ -12,6 +12,10 @@ export default function HomePage() {
   const lang = useLabStore((s) => s.lang);
   const t = dictionary[lang];
   const live = registry.tools.filter((tool) => tool.status === "live");
+  const coming = registry.tools.filter((tool) => tool.status === "next" || tool.status === "planned");
+  // Landing shows live tools; until the first one ships, it shows what is coming next.
+  const shown = live.length ? live : coming;
+  const heading = live.length ? t.modules.live : t.modules.coming;
 
   return (
     <>
@@ -52,8 +56,9 @@ export default function HomePage() {
         {/* Live tools — generated from tools/registry.json */}
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 border-t border-rule">
           <div className="max-w-6xl mx-auto">
+            <h2 className="font-mono text-xs uppercase tracking-wider text-muted mb-4">{heading}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {live.map((tool) => (
+              {shown.map((tool) => (
                 <ToolCard key={tool.id} tool={tool} lang={lang} />
               ))}
             </div>

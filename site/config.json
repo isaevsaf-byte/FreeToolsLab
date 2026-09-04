@@ -2,18 +2,31 @@
   "name": "FreeToolsLab",
   "tagline_en": "Strategic Intelligence. Democratized.",
   "tagline_ru": "Демократизация Стратегии.",
-  "author": { "name": "Safar Isaev", "linkedin": "https://www.linkedin.com/in/safarisaev", "email": "saf@safarisaev.ai" },
+  "author": {
+    "name": "Safar Isaev",
+    "linkedin": "https://www.linkedin.com/in/safarisaev",
+    "email": "saf@safarisaev.ai"
+  },
   "support": {
     "kofi": "https://ko-fi.com/REPLACE_ME",
     "github_sponsors": "https://github.com/sponsors/REPLACE_ME",
     "buymeacoffee": "https://buymeacoffee.com/REPLACE_ME",
     "copy_en": "Free forever. If a tool saved you an hour, buy the lab a coffee — it pays for the AI subscriptions behind the next one.",
     "copy_ru": "Бесплатно навсегда. Если инструмент сэкономил вам час — купите лаборатории кофе: это оплачивает AI-подписки, на которых делается следующий.",
-    "covers": ["Claude", "Cursor", "Vercel", "Remotion", "Domain & hosting"],
+    "covers": [
+      "Claude",
+      "Cursor",
+      "Vercel",
+      "Remotion",
+      "Domain & hosting"
+    ],
     "tools_shipped_this_month": 0
   },
-  "subscribe": { "provider": "buttondown", "url": "https://buttondown.com/REPLACE_ME" },
-  "submit_tool": "https://github.com/REPLACE_ME/freetoolslab/issues/new?template=tool-idea.yml",
+  "subscribe": {
+    "provider": "buttondown",
+    "url": "https://buttondown.com/REPLACE_ME"
+  },
+  "submit_tool": "https://github.com/isaevsaf-byte/FreeToolsLab/issues/new?template=tool-idea.yml",
   "credit_en": "Architected by Safar Isaev",
   "credit_ru": "Архитектор: Сафар Исаев"
 }

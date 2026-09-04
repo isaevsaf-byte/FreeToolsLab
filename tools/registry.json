@@ -8,7 +8,7 @@
       "tagline_en": "Mathematically sound sourcing & hiring decisions — weighted decision matrix.",
       "tagline_ru": "Взвешенная матрица решений для тендеров и найма.",
       "category": "decisions",
-      "status": "live",
+      "status": "planned",
       "added": "2026-06-01",
       "url": "/tools/tenderlens/",
       "post_url": ""
@@ -20,7 +20,7 @@
       "tagline_en": "Root cause analysis with recursive 5 Whys.",
       "tagline_ru": "Поиск корневой причины методом «5 почему».",
       "category": "decisions",
-      "status": "live",
+      "status": "planned",
       "added": "2026-06-01",
       "url": "/tools/deepcure/",
       "post_url": ""
@@ -32,7 +32,7 @@
       "tagline_en": "A mental model for digitisation requests.",
       "tagline_ru": "Ментальная модель для запросов на цифровизацию.",
       "category": "decisions",
-      "status": "live",
+      "status": "planned",
       "added": "2026-06-01",
       "url": "/tools/request-protocol/",
       "post_url": ""

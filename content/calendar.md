@@ -6,7 +6,7 @@ Tuesday 08:15 UK — tool live + post. Thursday 15:15 UK — video + short post.
 
 | Tue | Tool | Thu video | Status |
 |-----|------|-----------|--------|
-| 2026-09-08 | Payment Terms Lens | "Payment terms are a loan" — cash pool shifts, supplier shrinks | spec |
+| 2026-09-08 | Payment Terms Lens | "Payment terms are a loan" — cash pool shifts, supplier shrinks | build |
 | 2026-09-15 | Tail Spend Simulator | Pareto curve; tail thins under sliders | planned |
 | 2026-09-22 | Renewal Radar | "Renewal cliff" — 200 dots, 137 flash red | planned |
 | 2026-09-29 | Cost of a PO | "$54 → $14" waterfall | planned |

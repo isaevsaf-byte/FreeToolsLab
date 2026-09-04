@@ -1,5 +1,6 @@
 # request-protocol
 
-Listed as `live` in `tools/registry.json` but the code is not in this repository yet.
-Port it here as `index.html` (+ `tool.js`, `i18n.js`) following `tools/_template/README.md`,
-or set its status to `retired` if it will not be ported. Until then `/tools/request-protocol/` is not served from this build.
+Set to `planned` in `tools/registry.json` on 2026-09-04: it was marked `live` but no code exists in this repo and
+https://freetoolslab.org/tools/request-protocol/ returns 404 (the old landing linked it too, also 404).
+To ship it: `npm run new request-protocol` (the registry entry is reused), build it per `tools/_template/README.md`,
+then set status `live` + `added` date.

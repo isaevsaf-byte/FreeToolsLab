@@ -13,9 +13,15 @@
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="stylesheet" href="../../shared/tokens.css" />
     <link rel="stylesheet" href="../../shared/tool.css" />
+    <style>
+      [data-panel="fair"][data-shown="0"] .fair-value { display: none; }
+      [data-panel="fair"][data-shown="0"] { color: var(--muted); }
+      .warn { color: var(--warn); font-family: var(--font-mono); font-size: 0.8125rem; }
+      .dir { font-size: 0.8125rem; color: var(--warn); }
+    </style>
   </head>
   <body>
-    <!-- 11. OG view: rendered by Playwright at ?og=1 (1200x630) -->
+    <!-- OG view (?og=1, 1200x630) -->
     <section class="og" aria-hidden="true">
       <div><span class="pill" data-i18n="og.kicker"></span></div>
       <div>
@@ -29,12 +35,9 @@
     </section>
 
     <main class="tool">
-      <!-- 1. Header -->
       <header class="tool-header">
         <div class="row">
-          <a href="/" class="muted" style="font-family: var(--font-mono); font-size: 0.75rem; text-decoration: none">
-            FreeToolsLab
-          </a>
+          <a href="/" class="muted" style="font-family: var(--font-mono); font-size: 0.75rem; text-decoration: none">FreeToolsLab</a>
           <div class="row">
             <span class="pill" data-i18n="status"></span>
             <button type="button" class="btn btn--ghost" data-lang-toggle></button>
@@ -42,12 +45,11 @@
         </div>
         <h1 data-i18n="name"></h1>
         <p class="tagline" data-i18n="tagline"></p>
-        <!-- 2. Privacy line -->
         <p class="privacy" data-i18n="privacy"></p>
       </header>
 
       <div class="grid-2">
-        <!-- 3. Inputs -->
+        <!-- Inputs -->
         <section class="card" aria-labelledby="inputs-title">
           <h2 id="inputs-title" data-i18n="inputs.title"></h2>
 
@@ -61,94 +63,150 @@
           </div>
 
           <div class="field">
-            <label for="volume" data-i18n="inputs.volume.label"></label>
+            <label for="spend" data-i18n="inputs.spend.label"></label>
             <div class="input-unit">
-              <input id="volume" class="input" type="number" inputmode="decimal" min="0" step="1" data-param="volume" />
-              <span class="unit" data-i18n="inputs.volume.unit"></span>
+              <input id="spend" class="input" type="number" inputmode="decimal" min="0" step="1000" data-param="spend" />
+              <span class="unit"><span data-ccy-symbol></span> <span data-i18n="inputs.spend.unit"></span></span>
             </div>
-            <span class="hint" data-i18n="inputs.volume.source"></span>
+            <span class="hint" data-i18n="inputs.spend.source"></span>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label for="cur" data-i18n="inputs.current.label"></label>
+              <div class="input-unit">
+                <input id="cur" class="input" type="number" inputmode="numeric" min="0" max="365" step="1" data-param="cur" />
+                <span class="unit" data-i18n="inputs.current.unit"></span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="next" data-i18n="inputs.proposed.label"></label>
+              <div class="input-unit">
+                <input id="next" class="input" type="number" inputmode="numeric" min="0" max="365" step="1" data-param="next" />
+                <span class="unit" data-i18n="inputs.proposed.unit"></span>
+              </div>
+            </div>
           </div>
 
           <div class="field">
-            <label for="unitCost" data-i18n="inputs.unit_cost.label"></label>
-            <div class="input-unit">
-              <input id="unitCost" class="input" type="number" inputmode="decimal" min="0" step="0.01" data-param="unitCost" />
-              <span class="unit" data-ccy-symbol></span>
-            </div>
-            <span class="hint" data-i18n="inputs.unit_cost.source"></span>
+            <label for="br"><span data-i18n="inputs.buyer_rate.label"></span>: <span class="num" data-out="brLabel"></span><span data-i18n="inputs.buyer_rate.unit"></span></label>
+            <input id="br" class="range" type="range" min="0" max="25" step="0.5" data-param="br" />
+            <span class="hint" data-i18n="inputs.buyer_rate.source"></span>
           </div>
 
           <div class="field">
-            <label for="saving">
-              <span data-i18n="inputs.saving.label"></span>: <span class="num" data-out="savingLabel"></span>%
-            </label>
-            <input id="saving" class="range" type="range" min="0" max="50" step="1" data-param="saving" />
-            <span class="hint" data-i18n="inputs.saving.source"></span>
+            <label for="srev" data-i18n="inputs.supplier_revenue.label"></label>
+            <div class="input-unit">
+              <input id="srev" class="input" type="number" inputmode="decimal" min="0" step="10000" data-param="srev" />
+              <span class="unit"><span data-ccy-symbol></span> <span data-i18n="inputs.supplier_revenue.unit"></span></span>
+            </div>
+            <span class="hint" data-i18n="inputs.supplier_revenue.source"></span>
           </div>
 
-          <!-- 4. If the tool accepts pasted/uploaded data, add here:
-               textarea/file input · "Load example" (fictional) · "Anonymise" toggle ON by default
-               (see ../../shared/anonymise.js) · invalid rows listed. -->
+          <div class="field">
+            <label for="sr"><span data-i18n="inputs.supplier_rate.label"></span>: <span class="num" data-out="srLabel"></span><span data-i18n="inputs.supplier_rate.unit"></span></label>
+            <input id="sr" class="range" type="range" min="0" max="40" step="0.5" data-param="sr" />
+            <span class="hint" data-i18n="inputs.supplier_rate.source"></span>
+          </div>
+
+          <div class="field">
+            <label for="m"><span data-i18n="inputs.margin.label"></span>: <span class="num" data-out="mLabel"></span><span data-i18n="inputs.margin.unit"></span></label>
+            <input id="m" class="range" type="range" min="0" max="40" step="0.5" data-param="m" />
+            <span class="hint" data-i18n="inputs.margin.source"></span>
+          </div>
         </section>
 
-        <!-- 5. Result cards -->
-        <section class="card" aria-labelledby="results-title" aria-live="polite">
-          <h2 id="results-title" data-i18n="results.title"></h2>
-          <div class="result result--stop">
-            <span class="label" data-i18n="results.annual"></span>
-            <span class="value" data-out="annual">—</span>
-          </div>
-          <div class="result result--go">
-            <span class="label" data-i18n="results.after"></span>
-            <span class="value" data-out="after">—</span>
-          </div>
-          <div class="result">
-            <span class="label" data-i18n="results.delta"></span>
-            <span class="value" data-out="delta">—</span>
-          </div>
-        </section>
+        <div style="display: grid; gap: 1rem; align-content: start">
+          <!-- Result cards -->
+          <section class="card" aria-labelledby="results-title" aria-live="polite">
+            <h2 id="results-title" data-i18n="results.title"></h2>
+            <div class="result result--warn">
+              <span class="label" data-i18n="results.cash"></span>
+              <span class="value" data-out="cash">—</span>
+              <span class="dir" data-out="cashDir"></span>
+            </div>
+            <div class="result result--go" data-card="buyer">
+              <span class="label" data-out="buyerLabel"></span>
+              <span class="value" data-out="buyer">—</span>
+            </div>
+            <div class="result result--stop" data-card="supplier">
+              <span class="label" data-out="supplierLabel"></span>
+              <span class="value" data-out="supplier">—</span>
+            </div>
+            <div class="result">
+              <span class="label" data-out="leakLabel"></span>
+              <span class="value" data-out="leak">—</span>
+              <span class="hint muted" data-out="leakNote"></span>
+            </div>
+          </section>
+
+          <!-- Supplier impact -->
+          <section class="card" aria-labelledby="impact-title" aria-live="polite">
+            <h2 id="impact-title" data-i18n="impact.title"></h2>
+            <div class="result">
+              <span class="label" data-i18n="impact.pct_profit"></span>
+              <span class="value" data-out="pctProfit">—</span>
+            </div>
+            <div class="result">
+              <span class="label" data-i18n="impact.days"></span>
+              <span class="value" data-out="days">—</span>
+            </div>
+            <div class="result">
+              <span class="label" data-i18n="impact.share"></span>
+              <span class="value" data-out="share">—</span>
+            </div>
+            <p class="warn" data-out="warnSpend" hidden></p>
+          </section>
+        </div>
       </div>
 
-      <!-- 6. PRIMARY VISUAL — one SVG that carries the insight -->
+      <!-- PRIMARY VISUAL -->
       <section class="card" aria-labelledby="visual-title">
         <h2 id="visual-title" data-i18n="visual.title"></h2>
-        <svg class="visual" viewBox="0 0 640 110" role="img" aria-labelledby="visual-desc">
+        <svg class="visual" viewBox="0 0 640 220" role="img" aria-labelledby="visual-desc">
           <title id="visual-desc" data-i18n="visual.title"></title>
-          <text x="0" y="32" font-size="20" data-i18n="visual.before"></text>
-          <rect class="bar" x="120" y="12" height="28" width="0" fill="var(--stop)" data-bar="before"></rect>
-          <text x="0" y="90" font-size="20" data-i18n="visual.after"></text>
-          <rect class="bar" x="120" y="70" height="28" width="0" fill="var(--go)" data-bar="after"></rect>
-          <line class="axis" x1="120" y1="0" x2="120" y2="110" stroke-width="1"></line>
+          <text x="0" y="20" font-size="20" data-out="vBuyer"></text>
+          <rect class="bar" x="0" y="30" height="26" width="0" fill="var(--go)" data-bar="buyer"></rect>
+          <text x="0" y="92" font-size="20" data-out="vSupplier"></text>
+          <rect class="bar" x="0" y="102" height="26" width="0" fill="var(--stop)" data-bar="supplier"></rect>
+          <text x="0" y="164" font-size="20" data-out="vProfit"></text>
+          <rect x="0" y="174" height="26" width="640" fill="var(--rule-2)"></rect>
+          <rect class="bar" x="0" y="174" height="26" width="0" fill="var(--stop)" data-bar="bite"></rect>
         </svg>
-        <p class="num muted" style="font-family: var(--font-mono); font-size: 0.8125rem" data-out="visualNote"></p>
       </section>
 
-      <!-- 7. Secondary panel (optional): alternatives / strategies / "what's fair" -->
+      <!-- Secondary panel: what's fair -->
+      <section class="card" aria-labelledby="fair-title" data-panel="fair" data-shown="0">
+        <h2 id="fair-title" data-i18n="fair.title"></h2>
+        <p data-out="fairText"></p>
+        <p class="fair-value num" style="font-family: var(--font-mono)" data-out="fairValue"></p>
+      </section>
 
-      <!-- 8. Actions -->
+      <!-- Actions -->
       <section class="row">
-        <button type="button" class="btn btn--primary" data-action="copy">
-          <span data-i18n="actions.copy"></span>
-        </button>
-        <button type="button" class="btn" data-action="csv">
-          <span data-i18n="actions.csv"></span>
-        </button>
+        <button type="button" class="btn btn--primary" data-action="copy"><span data-i18n="actions.copy"></span></button>
+        <button type="button" class="btn" data-action="csv"><span data-i18n="actions.csv"></span></button>
         <span class="muted" style="font-family: var(--font-mono); font-size: 0.75rem" data-out="status" role="status"></span>
       </section>
 
-      <!-- 9. Assumptions -->
+      <!-- Assumptions -->
       <section class="card assumptions" aria-labelledby="assumptions-title">
         <h2 id="assumptions-title" data-i18n="assumptions.title"></h2>
         <ul>
           <li><code data-i18n="assumptions.f1"></code></li>
           <li><code data-i18n="assumptions.f2"></code></li>
           <li><code data-i18n="assumptions.f3"></code></li>
+          <li><code data-i18n="assumptions.f4"></code></li>
+          <li><code data-i18n="assumptions.f5"></code></li>
+          <li><code data-i18n="assumptions.f6"></code></li>
+          <li><code data-i18n="assumptions.f7"></code></li>
+          <li><code data-i18n="assumptions.f8"></code></li>
         </ul>
         <p data-i18n="assumptions.note"></p>
         <p data-i18n="assumptions.disclaimer"></p>
       </section>
 
-      <!-- 10. Credit block — text links only. Support link lives ONLY here (and /support, footer). -->
+      <!-- Credit block -->
       <footer class="credit">
         <a data-site="linkedin" rel="noopener noreferrer" target="_blank"><span data-site="credit"></span></a>
         <a href="/support/" data-i18n="credit.support"></a>

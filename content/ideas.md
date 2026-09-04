@@ -24,3 +24,4 @@ Statuses: idea → spec → build → live → killed. One line per idea. New id
 | 18 | Procurement Jeopardy | Quiz with shareable score | Safar | idea | fun |
 | 19 | Glossary in Motion | 20 terms, each animated by what it means | Safar | idea | video series |
 | 20 | RU mirror of top tools | CIS audience; doubles as showcase for CIS clients | Safar | idea | after 8 tools |
+| 21 | Payment Terms Lens v1.1 | SCF toggle (supplier paid at buyer rate + bank spread → leak = spread only) + "supplier reprices X% into next quote" net line | Board / CPO Skeptic 2026-09-05 | idea | after v1 ships |

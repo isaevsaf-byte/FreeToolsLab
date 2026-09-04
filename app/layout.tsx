@@ -10,7 +10,7 @@ import { SITE } from "@/lib/config";
 export const metadata: Metadata = {
   title: `${SITE.name} — ${SITE.tagline_en}`,
   description: "Free, local-first tools. Nothing leaves your browser. No tracking, no servers.",
-  metadataBase: new URL("https://freetoolslab.org"),
+  metadataBase: new URL("https://www.freetoolslab.org"),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

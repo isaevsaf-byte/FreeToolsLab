@@ -1,0 +1,77 @@
+{
+  "$schema": "./registry.schema.json",
+  "tools": [
+    {
+      "id": "tenderlens",
+      "name_en": "TenderLens",
+      "name_ru": "TenderLens",
+      "tagline_en": "Mathematically sound sourcing & hiring decisions — weighted decision matrix.",
+      "tagline_ru": "Взвешенная матрица решений для тендеров и найма.",
+      "category": "decisions",
+      "status": "live",
+      "added": "2026-06-01",
+      "url": "/tools/tenderlens/",
+      "post_url": ""
+    },
+    {
+      "id": "deepcure",
+      "name_en": "DeepCure",
+      "name_ru": "DeepCure",
+      "tagline_en": "Root cause analysis with recursive 5 Whys.",
+      "tagline_ru": "Поиск корневой причины методом «5 почему».",
+      "category": "decisions",
+      "status": "live",
+      "added": "2026-06-01",
+      "url": "/tools/deepcure/",
+      "post_url": ""
+    },
+    {
+      "id": "request-protocol",
+      "name_en": "Request Protocol",
+      "name_ru": "Request Protocol",
+      "tagline_en": "A mental model for digitisation requests.",
+      "tagline_ru": "Ментальная модель для запросов на цифровизацию.",
+      "category": "decisions",
+      "status": "live",
+      "added": "2026-06-01",
+      "url": "/tools/request-protocol/",
+      "post_url": ""
+    },
+    {
+      "id": "payment-terms-lens",
+      "name_en": "Payment Terms Lens",
+      "name_ru": "Условия оплаты: обе стороны",
+      "tagline_en": "What a change in payment terms does to you — and to a supplier this size.",
+      "tagline_ru": "Что изменение условий оплаты делает с вами — и с поставщиком такого размера.",
+      "category": "procurement",
+      "status": "next",
+      "added": "",
+      "url": "/tools/payment-terms-lens/",
+      "post_url": ""
+    },
+    {
+      "id": "tail-spend-simulator",
+      "name_en": "Tail Spend Simulator",
+      "name_ru": "Симулятор хвоста поставщиков",
+      "tagline_en": "What the supplier tail costs to run, and what four strategies save.",
+      "tagline_ru": "Сколько стоит обслуживать хвост и что дают четыре стратегии.",
+      "category": "procurement",
+      "status": "planned",
+      "added": "",
+      "url": "/tools/tail-spend-simulator/",
+      "post_url": ""
+    },
+    {
+      "id": "renewal-radar",
+      "name_en": "Renewal Radar",
+      "name_ru": "Радар продлений",
+      "tagline_en": "Paste your contracts. See what auto-renews before you can act. Export to calendar.",
+      "tagline_ru": "Вставьте контракты. Увидьте, что продлится само. Экспорт в календарь.",
+      "category": "procurement",
+      "status": "planned",
+      "added": "",
+      "url": "/tools/renewal-radar/",
+      "post_url": ""
+    }
+  ]
+}

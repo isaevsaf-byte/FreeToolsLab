@@ -4,77 +4,113 @@ export const dictionary = {
   en: {
     nav: {
       tools: "Modules",
-      support: "Support Lab"
+      support: "Support",
+      lang: "Switch language",
     },
     hero: {
       badge: "SYSTEM: OPERATIONAL",
       title: "Strategic Intelligence. Democratized.",
-      sub: "A suite of local-first cognitive tools. No tracking. No servers. Open access for the sovereign mind.",
-      cta: "Access Tools"
+      sub: "A suite of local-first tools for business decisions. No tracking. No servers. Nothing leaves your browser.",
+      cta: "Access Tools",
     },
     mission: {
       title: "The Manifesto",
-      text: "High-level strategic thinking shouldn't be a privilege. We build 'Cognitive Exoskeletons'—tools that help you think clearer, faster, and without bias."
+      text: "High-level strategic thinking shouldn't be a privilege. We build 'Cognitive Exoskeletons' — tools that help you think clearer, faster, and without bias.",
     },
-    tools: {
-      tender: {
-        title: "TenderLens",
-        desc: "Weighted Decision Matrix. Mathematically sound sourcing & hiring."
+    modules: {
+      title: "Modules",
+      sub: "Free, local-first tools. Designed to be usable under strict data policies — nothing leaves your browser. Check your own policy.",
+      live: "Live",
+      coming: "Coming next",
+      empty: "No tools yet.",
+      submit: "Submit a tool idea",
+      status: {
+        live: "live",
+        next: "next",
+        planned: "planned",
+        idea: "idea",
+        retired: "retired",
       },
-      deep: {
-        title: "DeepCure",
-        desc: "Root Cause Analysis (5 Whys). Recursive problem solving."
-      },
-      request: {
-        title: "Request Protocol",
-        desc: "Suggest a mental model for digitization."
-      }
     },
-    support_modal: {
-      title: "Value for Value",
-      text: "FreeToolsLab is a public good. No paywalls. If a tool helped you earn money or clarity, you can fuel the next experiment.",
-      coffee: "Buy me a Coffee",
-      stripe: "Support via Stripe",
-      crypto: "Copy USDT Address"
-    }
+    support: {
+      title: "Support the Lab",
+      kofi: "Ko-fi — one-off or monthly",
+      github: "GitHub Sponsors",
+      bmc: "Buy Me a Coffee",
+      not_set: "Support links are not set up yet.",
+      byok_title: "Your key vs your coffee",
+      byok_text:
+        "Smart features use your own Anthropic API key: calls go from your browser to Anthropic directly, nothing passes through the lab. Your key pays for your own usage. Your coffee pays for building the next tool.",
+      covers_title: "What the money covers",
+      shipped: "Tools shipped this month: {n}",
+    },
+    subscribe: {
+      title: "Get the weekly tool",
+      text: "One new tool every Tuesday. One email a week, no tracking pixels, unsubscribe in one click. The newsletter lives on its own page — never inside a tool.",
+      cta: "Subscribe",
+      not_set: "The newsletter is not set up yet.",
+    },
+    footer: {
+      support: "Support the Lab",
+      subscribe: "Get the weekly tool",
+      submit: "Submit a tool idea",
+    },
   },
   ru: {
     nav: {
       tools: "Модули",
-      support: "Поддержать"
+      support: "Поддержать",
+      lang: "Переключить язык",
     },
     hero: {
       badge: "СТАТУС: АКТИВЕН",
       title: "Демократизация Стратегии.",
-      sub: "Набор local-first инструментов для мышления. Без слежки. Без серверов. Открытый доступ.",
-      cta: "Открыть Инструменты"
+      sub: "Набор local-first инструментов для бизнес-решений. Без слежки. Без серверов. Ничего не покидает ваш браузер.",
+      cta: "Открыть Инструменты",
     },
     mission: {
       title: "Манифест",
-      text: "Стратегическое мышление не должно быть привилегией. Мы создаем «Когнитивные Экзоскелеты» — инструменты, которые убирают шум и эмоции из ваших решений."
+      text: "Стратегическое мышление не должно быть привилегией. Мы создаём «Когнитивные Экзоскелеты» — инструменты, которые убирают шум и эмоции из ваших решений.",
     },
-    tools: {
-      tender: {
-        title: "TenderLens",
-        desc: "Матрица Решений. Математический подход к найму и выбору."
+    modules: {
+      title: "Модули",
+      sub: "Бесплатные local-first инструменты. Сделаны так, чтобы работать при строгих политиках данных — ничего не покидает ваш браузер. Сверьтесь со своей политикой.",
+      live: "Работают",
+      coming: "Дальше",
+      empty: "Инструментов пока нет.",
+      submit: "Предложить инструмент",
+      status: {
+        live: "работает",
+        next: "следующий",
+        planned: "в плане",
+        idea: "идея",
+        retired: "в архиве",
       },
-      deep: {
-        title: "DeepCure",
-        desc: "Анализ Первопричин (5 Почему). Рекурсивный поиск корня проблемы."
-      },
-      request: {
-        title: "Запрос",
-        desc: "Предложить ментальную модель для оцифровки."
-      }
     },
-    support_modal: {
-      title: "Ценность за Ценность",
-      text: "Лаборатория бесплатна. Если инструмент помог вам заработать или сэкономить, вы можете поддержать разработку.",
-      coffee: "Купить кофе",
-      stripe: "Поддержать через Stripe",
-      crypto: "Скопировать USDT"
-    }
-  }
+    support: {
+      title: "Поддержать лабораторию",
+      kofi: "Ko-fi — разово или ежемесячно",
+      github: "GitHub Sponsors",
+      bmc: "Buy Me a Coffee",
+      not_set: "Ссылки для поддержки ещё не настроены.",
+      byok_title: "Ваш ключ и ваш кофе",
+      byok_text:
+        "Умные функции работают на вашем собственном ключе Anthropic: запросы идут из вашего браузера напрямую в Anthropic, через лабораторию ничего не проходит. Ваш ключ оплачивает ваше использование. Ваш кофе оплачивает создание следующего инструмента.",
+      covers_title: "На что идут деньги",
+      shipped: "Инструментов за этот месяц: {n}",
+    },
+    subscribe: {
+      title: "Инструмент раз в неделю",
+      text: "Один новый инструмент каждый вторник. Одно письмо в неделю, без трекинг-пикселей, отписка в один клик. Рассылка живёт на отдельной странице — никогда внутри инструмента.",
+      cta: "Подписаться",
+      not_set: "Рассылка ещё не настроена.",
+    },
+    footer: {
+      support: "Поддержать лабораторию",
+      subscribe: "Инструмент раз в неделю",
+      submit: "Предложить инструмент",
+    },
+  },
 } as const;
 
 export type Dictionary = typeof dictionary.en;

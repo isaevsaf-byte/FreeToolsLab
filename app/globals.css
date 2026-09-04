@@ -2,8 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fonts are bundled at build time (@fontsource) — never loaded from a CDN. */
+:root {
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
 @layer base {
   body {
-    @apply bg-slate-950 text-slate-100;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+  }
+  :focus-visible {
+    outline: 2px solid var(--link);
+    outline-offset: 2px;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
   }
 }

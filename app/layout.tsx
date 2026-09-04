@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import "@fontsource-variable/inter";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
+import "@/shared/tokens.css";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin", "cyrillic"] });
+import { LangSync } from "@/components/LangSync";
+import { SITE } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "FreeToolsLab — Strategic Intelligence. Democratized.",
-  description: "A suite of local-first cognitive tools. No tracking. No servers. Open access for the sovereign mind.",
+  title: `${SITE.name} — ${SITE.tagline_en}`,
+  description: "Free, local-first tools. Nothing leaves your browser. No tracking, no servers.",
+  metadataBase: new URL("https://freetoolslab.org"),
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" data-theme="dark">
+      <body>
+        <LangSync />
+        {children}
+      </body>
     </html>
   );
 }

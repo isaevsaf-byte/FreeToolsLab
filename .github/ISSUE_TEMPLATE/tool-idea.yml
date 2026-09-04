@@ -1,0 +1,31 @@
+name: Tool idea
+description: Suggest a free tool for FreeToolsLab
+title: "[Tool idea] "
+labels: ["tool-idea"]
+body:
+  - type: input
+    id: problem
+    attributes:
+      label: The problem, in one sentence
+      placeholder: "Nobody on my team knows what a purchase order costs us to process."
+    validations: { required: true }
+  - type: textarea
+    id: who
+    attributes:
+      label: Who has this problem and when?
+    validations: { required: true }
+  - type: textarea
+    id: output
+    attributes:
+      label: What should the tool show at the end? (a number, a picture, a list, a file)
+    validations: { required: true }
+  - type: textarea
+    id: inputs
+    attributes:
+      label: What would you be willing to type or paste in? (no real company data needed)
+  - type: checkboxes
+    id: credit
+    attributes:
+      label: Credit
+      options:
+        - label: You may credit me by first name / handle on the tool page if it gets built

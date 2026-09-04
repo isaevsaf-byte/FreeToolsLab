@@ -1,0 +1,344 @@
+/* FreeToolsLab — shared tool styles. Colours ONLY via tokens.css variables. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+}
+body:focus-visible,
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+h1,
+h2,
+h3 {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 0;
+}
+h1 {
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+}
+h2 {
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+p {
+  margin: 0;
+}
+a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.num {
+  font-variant-numeric: tabular-nums;
+}
+.muted {
+  color: var(--muted);
+}
+
+/* layout */
+.tool {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 3rem;
+  display: grid;
+  gap: 1.25rem;
+}
+@media (min-width: 640px) {
+  .tool {
+    padding: 2rem 1.5rem 4rem;
+  }
+}
+.grid-2 {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+/* header */
+.tool-header {
+  display: grid;
+  gap: 0.5rem;
+}
+.tool-header .row {
+  justify-content: space-between;
+}
+.tagline {
+  color: var(--muted);
+  font-size: 1.0625rem;
+}
+.privacy {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  border-left: 2px solid var(--go);
+  padding-left: 0.75rem;
+}
+
+/* pill */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border: 1px solid var(--go);
+  color: var(--go);
+  background: var(--go-soft);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.pill::before {
+  content: "";
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: var(--go);
+}
+.pill--warn {
+  border-color: var(--warn);
+  color: var(--warn);
+  background: var(--warn-soft);
+}
+.pill--warn::before {
+  background: var(--warn);
+}
+
+/* cards */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+.result {
+  display: grid;
+  gap: 0.25rem;
+}
+.result .label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.result .value {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}
+.result--go .value {
+  color: var(--go);
+}
+.result--stop .value {
+  color: var(--stop);
+}
+.result--warn .value {
+  color: var(--warn);
+}
+
+/* fields */
+.field {
+  display: grid;
+  gap: 0.375rem;
+}
+.field label {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.field .hint {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.input,
+.select,
+.textarea {
+  width: 100%;
+  background: var(--panel-2);
+  border: 1px solid var(--rule-2);
+  color: var(--ink);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.625rem;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+.input-unit {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+}
+.input-unit .unit {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  min-width: 3ch;
+}
+.range {
+  width: 100%;
+  accent-color: var(--go);
+}
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--rule-2);
+  background: var(--panel);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+.btn:hover {
+  border-color: var(--link);
+}
+.btn--primary {
+  border-color: var(--go);
+  color: var(--go);
+  background: var(--go-soft);
+}
+.btn--ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+/* visual */
+.visual {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.visual .bar {
+  transition: width 0.4s ease, x 0.4s ease;
+}
+.visual text {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  fill: var(--ink);
+}
+.visual .axis {
+  stroke: var(--rule-2);
+}
+
+/* assumptions */
+.assumptions {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.assumptions ul {
+  margin: 0;
+  padding-left: 1.125rem;
+  display: grid;
+  gap: 0.25rem;
+}
+.assumptions code {
+  font-family: var(--font-mono);
+  color: var(--ink);
+  font-size: 0.8125rem;
+}
+
+/* credit */
+.credit {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  border-top: 1px solid var(--rule);
+  padding-top: 1rem;
+  display: grid;
+  gap: 0.375rem;
+}
+.credit a {
+  color: var(--muted);
+}
+.credit a:hover {
+  color: var(--ink);
+}
+
+/* OG view (?og=1) — 1200x630 for Playwright */
+.og {
+  display: none;
+}
+body[data-og="1"] .tool {
+  display: none;
+}
+body[data-og="1"] .og {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 1200px;
+  height: 630px;
+  padding: 64px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-mono);
+}
+.og h1 {
+  font-size: 64px;
+}
+.og .tagline {
+  font-size: 30px;
+  font-family: var(--font-sans);
+  margin-top: 20px;
+  max-width: 1000px;
+}
+.og .foot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+  color: var(--muted);
+}
+
+/* motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

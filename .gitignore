@@ -1,6 +1,11 @@
 node_modules/
 .next/
+out/
 .env
-node_modules/
-.next/
-.env
+.env.*
+playwright-report/
+test-results/
+.DS_Store
+shared/site.js
+*.zip
+tsconfig.tsbuildinfo

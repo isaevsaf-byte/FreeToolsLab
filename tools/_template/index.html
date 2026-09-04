@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>__NAME_EN__ — FreeToolsLab</title>
+    <meta name="description" content="__TAGLINE_EN__" />
+    <meta property="og:title" content="__NAME_EN__ — FreeToolsLab" />
+    <meta property="og:description" content="__TAGLINE_EN__" />
+    <meta property="og:image" content="https://freetoolslab.org/tools/__SLUG__/og.png" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="stylesheet" href="../../shared/tokens.css" />
+    <link rel="stylesheet" href="../../shared/tool.css" />
+  </head>
+  <body>
+    <!-- 11. OG view: rendered by Playwright at ?og=1 (1200x630) -->
+    <section class="og" aria-hidden="true">
+      <div><span class="pill" data-i18n="og.kicker"></span></div>
+      <div>
+        <h1 data-i18n="name"></h1>
+        <p class="tagline" data-i18n="tagline"></p>
+      </div>
+      <div class="foot">
+        <span data-i18n="og.site"></span>
+        <span data-site="credit"></span>
+      </div>
+    </section>
+
+    <main class="tool">
+      <!-- 1. Header -->
+      <header class="tool-header">
+        <div class="row">
+          <a href="/" class="muted" style="font-family: var(--font-mono); font-size: 0.75rem; text-decoration: none">
+            FreeToolsLab
+          </a>
+          <div class="row">
+            <span class="pill" data-i18n="status"></span>
+            <button type="button" class="btn btn--ghost" data-lang-toggle></button>
+          </div>
+        </div>
+        <h1 data-i18n="name"></h1>
+        <p class="tagline" data-i18n="tagline"></p>
+        <!-- 2. Privacy line -->
+        <p class="privacy" data-i18n="privacy"></p>
+      </header>
+
+      <div class="grid-2">
+        <!-- 3. Inputs -->
+        <section class="card" aria-labelledby="inputs-title">
+          <h2 id="inputs-title" data-i18n="inputs.title"></h2>
+
+          <div class="field">
+            <label for="ccy" data-i18n="inputs.currency"></label>
+            <select id="ccy" class="select" data-param="ccy">
+              <option value="GBP">GBP £</option>
+              <option value="USD">USD $</option>
+              <option value="EUR">EUR €</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="volume" data-i18n="inputs.volume.label"></label>
+            <div class="input-unit">
+              <input id="volume" class="input" type="number" inputmode="decimal" min="0" step="1" data-param="volume" />
+              <span class="unit" data-i18n="inputs.volume.unit"></span>
+            </div>
+            <span class="hint" data-i18n="inputs.volume.source"></span>
+          </div>
+
+          <div class="field">
+            <label for="unitCost" data-i18n="inputs.unit_cost.label"></label>
+            <div class="input-unit">
+              <input id="unitCost" class="input" type="number" inputmode="decimal" min="0" step="0.01" data-param="unitCost" />
+              <span class="unit" data-ccy-symbol></span>
+            </div>
+            <span class="hint" data-i18n="inputs.unit_cost.source"></span>
+          </div>
+
+          <div class="field">
+            <label for="saving">
+              <span data-i18n="inputs.saving.label"></span>: <span class="num" data-out="savingLabel"></span>%
+            </label>
+            <input id="saving" class="range" type="range" min="0" max="50" step="1" data-param="saving" />
+            <span class="hint" data-i18n="inputs.saving.source"></span>
+          </div>
+
+          <!-- 4. If the tool accepts pasted/uploaded data, add here:
+               textarea/file input · "Load example" (fictional) · "Anonymise" toggle ON by default
+               (see ../../shared/anonymise.js) · invalid rows listed. -->
+        </section>
+
+        <!-- 5. Result cards -->
+        <section class="card" aria-labelledby="results-title" aria-live="polite">
+          <h2 id="results-title" data-i18n="results.title"></h2>
+          <div class="result result--stop">
+            <span class="label" data-i18n="results.annual"></span>
+            <span class="value" data-out="annual">—</span>
+          </div>
+          <div class="result result--go">
+            <span class="label" data-i18n="results.after"></span>
+            <span class="value" data-out="after">—</span>
+          </div>
+          <div class="result">
+            <span class="label" data-i18n="results.delta"></span>
+            <span class="value" data-out="delta">—</span>
+          </div>
+        </section>
+      </div>
+
+      <!-- 6. PRIMARY VISUAL — one SVG that carries the insight -->
+      <section class="card" aria-labelledby="visual-title">
+        <h2 id="visual-title" data-i18n="visual.title"></h2>
+        <svg class="visual" viewBox="0 0 640 110" role="img" aria-labelledby="visual-desc">
+          <title id="visual-desc" data-i18n="visual.title"></title>
+          <text x="0" y="32" font-size="20" data-i18n="visual.before"></text>
+          <rect class="bar" x="120" y="12" height="28" width="0" fill="var(--stop)" data-bar="before"></rect>
+          <text x="0" y="90" font-size="20" data-i18n="visual.after"></text>
+          <rect class="bar" x="120" y="70" height="28" width="0" fill="var(--go)" data-bar="after"></rect>
+          <line class="axis" x1="120" y1="0" x2="120" y2="110" stroke-width="1"></line>
+        </svg>
+        <p class="num muted" style="font-family: var(--font-mono); font-size: 0.8125rem" data-out="visualNote"></p>
+      </section>
+
+      <!-- 7. Secondary panel (optional): alternatives / strategies / "what's fair" -->
+
+      <!-- 8. Actions -->
+      <section class="row">
+        <button type="button" class="btn btn--primary" data-action="copy">
+          <span data-i18n="actions.copy"></span>
+        </button>
+        <button type="button" class="btn" data-action="csv">
+          <span data-i18n="actions.csv"></span>
+        </button>
+        <span class="muted" style="font-family: var(--font-mono); font-size: 0.75rem" data-out="status" role="status"></span>
+      </section>
+
+      <!-- 9. Assumptions -->
+      <section class="card assumptions" aria-labelledby="assumptions-title">
+        <h2 id="assumptions-title" data-i18n="assumptions.title"></h2>
+        <ul>
+          <li><code data-i18n="assumptions.f1"></code></li>
+          <li><code data-i18n="assumptions.f2"></code></li>
+          <li><code data-i18n="assumptions.f3"></code></li>
+        </ul>
+        <p data-i18n="assumptions.note"></p>
+        <p data-i18n="assumptions.disclaimer"></p>
+      </section>
+
+      <!-- 10. Credit block — text links only. Support link lives ONLY here (and /support, footer). -->
+      <footer class="credit">
+        <a data-site="linkedin" rel="noopener noreferrer" target="_blank"><span data-site="credit"></span></a>
+        <a href="/support/" data-i18n="credit.support"></a>
+        <a href="/subscribe/" data-i18n="credit.subscribe"></a>
+      </footer>
+    </main>
+
+    <script type="module" src="./tool.js"></script>
+  </body>
+</html>

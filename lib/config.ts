@@ -1,14 +1,16 @@
+import site from "@/site/config.json";
+
+/** Single source of truth: site/config.json (support links, contact, credit lines). */
+export const SITE = site;
+
+/** True when a config URL has been filled in (not a REPLACE_ME placeholder). */
+export const isSet = (url?: string) => !!url && !/REPLACE_ME|YOUR_/.test(url);
+
 export const LAB_CONFIG = {
-  author: "Safarisaev",
+  author: site.author.name,
   links: {
-    linkedin: "https://www.linkedin.com/in/YOUR_PROFILE",
-    email: "mailto:saf@safarisaev.ai",
-    website: "https://safarisaev.ai",
-    github: "https://github.com/YOUR_GITHUB" // Optional
+    linkedin: site.author.linkedin,
+    email: `mailto:${site.author.email}`,
+    submit: site.submit_tool,
   },
-  support: {
-    buymeacoffee: "https://buymeacoffee.com/YOUR_LINK",
-    stripe: "https://buy.stripe.com/YOUR_LINK",
-    crypto_usdt: "TRC20_WALLET_ADDRESS_HERE"
-  }
 };

@@ -107,8 +107,8 @@ export default {
     },
     fair: {
       title: "The fair alternative",
-      text: "A discount of {low} to {high} for paying at {days} days beats the extension for both sides.",
-      value: "Worth {lowMoney} to {highMoney} a year.",
+      text: "Instead of the extension: a {low} to {high} discount for paying at {days} days. Both sides win.",
+      value: "In money: {lowMoney} to {highMoney} a year.",
       hidden: "Shown when terms get longer and the supplier borrows dearer than you.",
     },
     compare: {
@@ -203,7 +203,7 @@ export default {
       discount: "Discount {disc} for paying at {b} days: worth {d} a year. Net: you {yn}, the supplier {sn}",
       scf: "Supply-chain finance: supplier pays {eff} ({br} + {spread})",
       supplier_line: "{pct} of its profit, {days} days of its sales",
-      fair: "Fair alternative: a {low} to {high} discount for paying on current terms",
+      fair: "Instead: a {low} to {high} discount for paying on current terms",
       option_b: "Option B: terms {a} → {b} days, discount {disc}: net you {yn}, the supplier {sn}",
     },
     assumptions: {
@@ -270,7 +270,7 @@ export default {
         warn_spend: "Sales to this buyer exceed your revenue. Check the inputs.",
       },
       fair: {
-        text: "A discount of {low} to {high} for being paid at {days} days beats the extension for both sides.",
+        text: "Instead of the extension: a {low} to {high} discount for being paid at {days} days. Both sides win.",
         hidden: "Shown when terms get longer and you borrow dearer than the buyer.",
       },
       compare: {
@@ -321,7 +321,7 @@ export default {
       copy: {
         discount: "Discount {disc} for being paid at {b} days: worth {d} a year. Net: you {sn}, the buyer {yn}",
         supplier_line: "{pct} of your profit, {days} days of your sales",
-        fair: "Fair alternative: a {low} to {high} discount for being paid on current terms",
+        fair: "Instead: a {low} to {high} discount for being paid on current terms",
         option_b: "Option B: terms {a} → {b} days, discount {disc}: net you {sn}, the buyer {yn}",
       },
     },
@@ -430,8 +430,8 @@ export default {
     },
     fair: {
       title: "Честная альтернатива",
-      text: "Скидка от {low} до {high} за оплату в {days} дней выгоднее отсрочки для обеих сторон.",
-      value: "Это от {lowMoney} до {highMoney} в год.",
+      text: "Вместо отсрочки: скидка от {low} до {high} за оплату в {days} дней. Выигрывают обе стороны.",
+      value: "В деньгах: от {lowMoney} до {highMoney} в год.",
       hidden: "Показывается, когда отсрочка растёт, а поставщик занимает дороже вас.",
     },
     compare: {
@@ -526,7 +526,7 @@ export default {
       discount: "Скидка {disc} за оплату через {b} дней: {d} в год. Итог: вы {yn}, поставщик {sn}",
       scf: "Финансирование поставщиков (SCF): поставщик платит {eff} ({br} + {spread})",
       supplier_line: "{pct} его прибыли, {days} дней его выручки",
-      fair: "Честная альтернатива: скидка от {low} до {high} за оплату в текущий срок",
+      fair: "Вместо отсрочки: скидка от {low} до {high} за оплату в текущий срок",
       option_b: "Вариант B: отсрочка {a} → {b} дней, скидка {disc}: итог вы {yn}, поставщик {sn}",
     },
     assumptions: {
@@ -593,7 +593,7 @@ export default {
         warn_spend: "Продажи этому покупателю больше вашей выручки. Проверьте данные.",
       },
       fair: {
-        text: "Скидка от {low} до {high} за оплату вам в {days} дней выгоднее отсрочки для обеих сторон.",
+        text: "Вместо отсрочки: скидка от {low} до {high} за оплату вам в {days} дней. Выигрывают обе стороны.",
         hidden: "Показывается, когда отсрочка растёт, а вы занимаете дороже покупателя.",
       },
       compare: {
@@ -644,7 +644,7 @@ export default {
       copy: {
         discount: "Скидка {disc} за оплату вам через {b} дней: {d} в год. Итог: вы {sn}, покупатель {yn}",
         supplier_line: "{pct} вашей прибыли, {days} дней вашей выручки",
-        fair: "Честная альтернатива: скидка от {low} до {high} за оплату вам в текущий срок",
+        fair: "Вместо отсрочки: скидка от {low} до {high} за оплату вам в текущий срок",
         option_b: "Вариант B: отсрочка {a} → {b} дней, скидка {disc}: итог вы {sn}, покупатель {yn}",
       },
     },

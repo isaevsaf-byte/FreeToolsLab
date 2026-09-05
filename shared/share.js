@@ -128,6 +128,11 @@ export function formatMoney(n, ccy = DEFAULT_CURRENCY, lang = "en", digits = 0) 
   }).format(n);
 }
 
+/** Percent with up to `maxDigits` decimals and no trailing zeros: 0.49 -> "0.5%", 1.0 -> "1%". */
+export function formatPercentLoose(n, lang = "en", maxDigits = 1) {
+  return new Intl.NumberFormat(LOCALE[lang] || LOCALE.en, { style: "percent", maximumFractionDigits: maxDigits }).format(n / 100);
+}
+
 export function formatPercent(n, lang = "en", digits = 0) {
   return new Intl.NumberFormat(LOCALE[lang] || LOCALE.en, {
     style: "percent",

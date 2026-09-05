@@ -34,6 +34,7 @@ import {
   formatMoney,
   formatNumber,
   formatPercent,
+  formatPercentLoose,
   currencySymbol,
   CURRENCIES,
   DEFAULT_CURRENCY,
@@ -302,7 +303,8 @@ function render() {
   // fair alternative
   const fair = $("[data-panel='fair']");
   fair.dataset.shown = A.fairShown ? "1" : "0";
-  setText("fairText", A.fairShown ? t("fair.text", { low: pct(A.fairLow, 2), high: pct(A.fairHigh, 2), days: num(state.cur) }) : t("fair.hidden"));
+  const pctLoose = (n) => formatPercentLoose(n, lang, 1);
+  setText("fairText", A.fairShown ? t("fair.text", { low: pctLoose(A.fairLow), high: pctLoose(A.fairHigh), days: num(state.cur) }) : t("fair.hidden"));
   setText("fairValue", A.fairShown ? t("fair.value", { lowMoney: money(A.buyerGain), highMoney: money(A.supplierCost) }) : "");
 
   // visual: where the money goes (HTML rows; `vis` also feeds the PNG export)
@@ -491,7 +493,7 @@ function resultText() {
   );
   if (A.disc > 0) lines.push(t("copy.discount", { disc: pct(A.disc, 1), b: formatNumber(state.next, lang), d: money(A.discountValue), yn: signed(A.buyerNet), sn: signed(A.supplierNet) }));
   if (state.scf) lines.push(t("copy.scf", { eff: pct(A.effSr, 1), br: pct(state.br, 1), spread: pct(state.spread || 0, 1) }));
-  if (A.fairShown) lines.push(t("copy.fair", { low: pct(A.fairLow, 2), high: pct(A.fairHigh, 2) }));
+  if (A.fairShown) lines.push(t("copy.fair", { low: formatPercentLoose(A.fairLow, lang, 1), high: formatPercentLoose(A.fairHigh, lang, 1) }));
   if (state.cmp) {
     const B = compute(state, { next: state.next2, disc: state.disc2 });
     if (B.ok) lines.push(t("copy.option_b", { a: formatNumber(state.cur, lang), b: formatNumber(state.next2, lang), disc: pct(B.disc, 1), yn: signed(B.buyerNet), sn: signed(B.supplierNet) }));

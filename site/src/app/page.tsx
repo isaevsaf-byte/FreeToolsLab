@@ -14,7 +14,11 @@ export default function HomePage() {
   const { lang, theme } = useLabStore();
   const t = dictionary[lang];
   const live = registry.tools.filter((tool) => tool.status === "live");
-  const coming = registry.tools.filter((tool) => tool.status === "next" || tool.status === "planned");
+  // "next" (this week, already built) before "planned"
+  const coming = [
+    ...registry.tools.filter((tool) => tool.status === "next"),
+    ...registry.tools.filter((tool) => tool.status === "planned"),
+  ];
   // Landing shows live tools; until the first one ships, it shows what is coming next.
   const shown = live.length ? live : coming;
   const heading = live.length ? t.modules.live : t.modules.coming;

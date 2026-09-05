@@ -13,7 +13,7 @@ export default function ToolsPage() {
   const lang = useLabStore((s) => s.lang);
   const t = dictionary[lang].modules;
   const live = registry.tools.filter((x) => x.status === "live");
-  const coming = registry.tools.filter((x) => x.status === "next" || x.status === "planned");
+  const coming = [...registry.tools.filter((x) => x.status === "next"), ...registry.tools.filter((x) => x.status === "planned")];
 
   return (
     <>

@@ -17,7 +17,7 @@ export const dictionary = {
     },
     mission: {
       title: "The Manifesto",
-      text: "High-level strategic thinking shouldn't be a privilege. We build 'Cognitive Exoskeletons': tools that help you think clearer, faster, and without bias.",
+      text: "Strategic thinking shouldn't be a privilege. We build free tools that take the noise and bias out of business decisions. Nothing leaves your browser.",
     },
     modules: {
       title: "Modules",
@@ -25,7 +25,8 @@ export const dictionary = {
       live: "Live",
       coming: "Coming next",
       empty: "No tools yet.",
-      submit: "Submit a tool idea",
+      submit: "Submit a tool idea on GitHub",
+      submit_email: "or email it",
       status: {
         live: "live",
         next: "next",
@@ -56,6 +57,7 @@ export const dictionary = {
       support: "Support the Lab",
       subscribe: "Get the weekly tool",
       submit: "Submit a tool idea",
+      email: "Email",
     },
   },
   ru: {
@@ -74,7 +76,7 @@ export const dictionary = {
     },
     mission: {
       title: "Манифест",
-      text: "Стратегическое мышление не должно быть привилегией. Мы создаём «Когнитивные Экзоскелеты»: инструменты, которые убирают шум и эмоции из ваших решений.",
+      text: "Стратегическое мышление не должно быть привилегией. Мы делаем бесплатные инструменты, которые убирают шум и предвзятость из бизнес-решений. Ничего не покидает ваш браузер.",
     },
     modules: {
       title: "Модули",
@@ -82,7 +84,8 @@ export const dictionary = {
       live: "Работают",
       coming: "Дальше",
       empty: "Инструментов пока нет.",
-      submit: "Предложить инструмент",
+      submit: "Предложить инструмент на GitHub",
+      submit_email: "или написать на почту",
       status: {
         live: "работает",
         next: "следующий",
@@ -113,6 +116,7 @@ export const dictionary = {
       support: "Поддержать лабораторию",
       subscribe: "Инструмент раз в неделю",
       submit: "Предложить инструмент",
+      email: "Почта",
     },
   },
 } as const;

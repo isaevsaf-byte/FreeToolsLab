@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useLabStore } from "@/store/useLabStore";
 import { dictionary } from "@/lib/dictionary";
-import { SITE, isSet } from "@/lib/config";
+import { SITE, LAB_CONFIG, isSet } from "@/lib/config";
 
 /** Site footer — one of the three places a support link may live (CLAUDE.md). */
 export function Footer() {
@@ -34,6 +34,9 @@ export function Footer() {
               {t.footer.submit}
             </a>
           )}
+          <a href={LAB_CONFIG.links.submitEmail} className="hover:text-ink transition-colors">
+            {t.footer.email}
+          </a>
         </div>
       </div>
     </footer>

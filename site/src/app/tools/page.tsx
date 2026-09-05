@@ -2,7 +2,7 @@
 
 import { useLabStore } from "@/store/useLabStore";
 import { dictionary } from "@/lib/dictionary";
-import { SITE, isSet } from "@/lib/config";
+import { SITE, LAB_CONFIG, isSet } from "@/lib/config";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ToolCard } from "@/components/ToolCard";
@@ -46,16 +46,17 @@ export default function ToolsPage() {
               </>
             )}
 
-            {isSet(SITE.submit_tool) && (
-              <a
-                href={SITE.submit_tool}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-sm text-link underline underline-offset-2"
-              >
-                {t.submit}
+            <p className="font-mono text-sm text-muted">
+              {isSet(SITE.submit_tool) && (
+                <a href={SITE.submit_tool} target="_blank" rel="noopener noreferrer" className="text-link underline underline-offset-2">
+                  {t.submit}
+                </a>
+              )}
+              {isSet(SITE.submit_tool) && " · "}
+              <a href={LAB_CONFIG.links.submitEmail} className="text-link underline underline-offset-2">
+                {t.submit_email}
               </a>
-            )}
+            </p>
           </div>
         </section>
         <Footer />

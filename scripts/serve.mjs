@@ -43,7 +43,7 @@ export function serve(dir, port) {
     }
     if (!fs.existsSync(file)) {
       // repo-root dev server: root-level assets (favicons) live in public/
-      const pub = path.join(root, "public", pathname);
+      const pub = path.join(root, "site", "public", pathname);
       if (root === ROOT && fs.existsSync(pub) && fs.statSync(pub).isFile()) file = pub;
       // static-export convention: /x -> /x.html, else 404.html
       else if (fs.existsSync(file + ".html")) file = file + ".html";

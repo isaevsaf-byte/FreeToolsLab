@@ -77,4 +77,5 @@ ${c.bold("Next (CLAUDE.md checklist):")}
   5. ${c.cyan(`npm run og ${slug}`)}  -> tools/${slug}/og.png
   6. content/posts/YYYY-MM-DD-${slug}.md  ·  content/calendar.md: next -> shipped
   7. ${c.cyan("npm run check")}
+  Post: content/posts/<date>-${slug}.md · video: content/videos/${slug}.md · spec: content/specs/${slug}.md
 `);

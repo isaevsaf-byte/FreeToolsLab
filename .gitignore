@@ -1,5 +1,7 @@
 node_modules/
 .next/
+site/.next/
+site/out/
 out/
 .env
 .env.*
@@ -8,4 +10,4 @@ test-results/
 .DS_Store
 shared/site.js
 *.zip
-tsconfig.tsbuildinfo
+*.tsbuildinfo

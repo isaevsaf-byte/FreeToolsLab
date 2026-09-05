@@ -12,5 +12,7 @@ export const LAB_CONFIG = {
     linkedin: site.author.linkedin,
     email: `mailto:${site.author.email}`,
     submit: site.submit_tool,
+    /** mailto: with a subject, for people without a GitHub account */
+    submitEmail: `mailto:${site.author.email}?subject=${encodeURIComponent("Tool idea for FreeToolsLab")}`,
   },
 };

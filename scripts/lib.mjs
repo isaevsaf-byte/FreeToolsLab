@@ -11,7 +11,8 @@ export const REGISTRY = path.join(TOOLS, "registry.json");
 export const SCHEMA = path.join(TOOLS, "registry.schema.json");
 export const SITE_CONFIG = path.join(ROOT, "site", "config.json");
 export const SHARED = path.join(ROOT, "shared");
-export const OUT = path.join(ROOT, "out");
+export const SITE_DIR = path.join(ROOT, "site");
+export const OUT = path.join(SITE_DIR, "out");
 
 const tty = process.stdout.isTTY;
 const paint = (code) => (s) => (tty ? `\x1b[${code}m${s}\x1b[0m` : String(s));

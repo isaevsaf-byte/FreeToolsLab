@@ -45,8 +45,8 @@ for (const dir of [...slugs.map((s) => path.join(TOOLS, s)), TEMPLATE]) {
   parity(name, bundle);
 }
 try {
-  const dict = (await import(pathToFileURL(path.join(ROOT, "src", "lib", "dictionary.ts")).href)).dictionary;
-  parity("lib/dictionary.ts", dict);
+  const dict = (await import(pathToFileURL(path.join(ROOT, "site", "src", "lib", "dictionary.ts")).href)).dictionary;
+  parity("site/src/lib/dictionary.ts", dict);
 } catch (e) {
   warn(`lib/dictionary.ts could not be imported for parity (${e.message.split("\n")[0]})`);
 }

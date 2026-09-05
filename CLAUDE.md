@@ -65,7 +65,7 @@ Free, local-first tools. freetoolslab.org. Built by Safar Isaev.
 
 ## Repo map
 - `tools/` — one folder per tool; `registry.json` is the catalogue
-- `src/` — the site shell (Next.js static export): app/, components/, lib/, store/; `public/` — favicons
+- `site/` — the website: Next.js static export (src/, public/, config.json, build config); `site/out/` is the build output
 - `content/ideas.md` — backlog with statuses; `content/calendar.md` — 8-week plan; `content/posts/` — post drafts + metrics; `content/videos/` — Remotion scripts; `content/submissions.md` — ideas from people
 - `board/` — AI board prompts (cpo-skeptic, editor, growth)
 - `site/config.json` — support links, contact, socials

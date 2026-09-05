@@ -9,7 +9,7 @@ Free, local-first tools. freetoolslab.org. Built by Safar Isaev.
    - Any tool that accepts pasted/uploaded data has "Anonymise" ON by default (names -> C-001...; mapping kept in memory only, "Show original" toggle).
    - The only way data leaves is the user's explicit export (Copy result / Download CSV / ICS). Never auto-save, never sync.
    - Example data is fictional. Never real companies.
-   - UI wording: "Designed to be usable under strict data policies. Nothing leaves your browser. Check your own policy." Never promise compliance.
+   - UI wording: "Designed to be usable under strict data policies. Nothing leaves your browser. Check your own policy." Never promise compliance. In the header it may be shortened to a pill "local-first · nothing leaves your browser"; the full sentence then lives in the Assumptions block.
 
 ## Stack (build allowed, network not)
 - Static build is fine: Vite + React or Svelte, TypeScript. Libraries are BUNDLED at build time (D3, Papa Parse, date-fns, DuckDB-wasm, etc.) — never loaded from a CDN at runtime. Output is static files on static hosting.

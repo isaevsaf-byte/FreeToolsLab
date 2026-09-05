@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="../../shared/tool.css" />
     <style>
       .tool { gap: 1.25rem; }
+      @media (max-width: 479px) { .pill-extra { display: none; } }
       /* the question */
       .ask { display: grid; gap: 1rem; }
       .ask-grid { display: grid; gap: 1rem; }
@@ -106,7 +107,7 @@
         <div class="row">
           <a href="/" data-prefs-link class="muted" style="font-family: var(--font-mono); font-size: 0.75rem; text-decoration: none">FreeToolsLab</a>
           <div class="row">
-            <span class="pill" data-i18n="status"></span>
+            <span class="pill"><span data-i18n="status"></span><span class="pill-extra">&nbsp;·&nbsp;<span data-i18n="privacy_short"></span></span></span>
             <button type="button" class="btn btn--ghost" data-theme-toggle>
               <span class="when-light" data-i18n="theme.dark"></span><span class="when-dark" data-i18n="theme.light"></span>
             </button>
@@ -114,8 +115,6 @@
           </div>
         </div>
         <h1 data-i18n="name"></h1>
-        <p class="tagline" data-i18n="tagline"></p>
-        <p class="privacy" data-i18n="privacy"></p>
       </header>
 
       <!-- THE QUESTION: three things -->
@@ -350,6 +349,7 @@
         </ul>
         <p data-i18n="assumptions.note"></p>
         <p data-i18n="assumptions.disclaimer"></p>
+        <p data-i18n="privacy"></p>
       </details>
 
       <footer class="credit">

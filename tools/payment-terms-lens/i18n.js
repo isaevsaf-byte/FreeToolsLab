@@ -7,6 +7,7 @@ export default {
     name: "Payment Terms Lens",
     tagline: "What longer payment terms give one side, and what they cost the other.",
     status: "local-first",
+    privacy_short: "nothing leaves your browser",
     privacy: "Designed to be usable under strict data policies. Nothing leaves your browser. Check your own policy.",
     theme: { dark: "Dark", light: "Light" },
     inputs: {
@@ -312,6 +313,7 @@ export default {
     name: "Условия оплаты: обе стороны",
     tagline: "Что даёт отсрочка платежа одной стороне и во что она обходится другой.",
     status: "local-first",
+    privacy_short: "ничего не покидает ваш браузер",
     privacy: "Сделано так, чтобы работать при строгих политиках данных. Ничего не покидает ваш браузер. Сверьтесь со своей политикой.",
     theme: { dark: "Тёмная", light: "Светлая" },
     inputs: {

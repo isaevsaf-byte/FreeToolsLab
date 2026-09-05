@@ -230,7 +230,6 @@ function render() {
   const num = (n, d = 0) => formatNumber(n, lang, d);
   const toYou = A.ok && A.deltaDays > 0;
   const noChange = A.ok && A.deltaDays === 0;
-  const gainSide = toYou || noChange || !A.ok;
   const hasDisc = A.ok && A.disc > 0;
 
   applyLabels();
@@ -266,18 +265,16 @@ function render() {
   // results
   setMoney("cash", A.cashShift, money);
   setText("cashDir", !A.ok ? "" : noChange ? t("results.no_change") : t(toYou ? "results.dir_to_you" : "results.dir_to_supplier", { days: num(Math.abs(A.deltaDays)) }));
-  setText("buyerLabel", t(gainSide ? "results.buyer_gain" : "results.buyer_cost"));
-  setMoney("buyer", A.buyerGain, money);
-  setText("supplierLabel", t(gainSide ? "results.supplier_cost" : "results.supplier_gain"));
-  setMoney("supplier", A.supplierCost, money);
+  setMoney("buyer", A.buyerGain, signed);
+  setMoney("supplier", A.supplierCost === null ? null : -A.supplierCost, signed);
   setText("leakLabel", t(!A.ok || A.leak >= 0 ? "results.leak" : "results.created"));
   setMoney("leak", A.leak, money);
   setText("leakNote", !A.ok || noChange || A.leak === 0 ? (A.ok ? t("results.no_leak_note") : "") : t(A.leak > 0 ? "results.leak_note" : "results.created_note"));
   setMoney("discount", A.discountValue, money);
   setMoney("yourNet", A.buyerNet, signed);
   setMoney("supplierNet", A.supplierNet, signed);
-  $("[data-card='buyer']").className = `result ${gainSide ? "result--go" : "result--stop"}`;
-  $("[data-card='supplier']").className = `result ${gainSide ? "result--stop" : "result--go"}`;
+  $("[data-card='buyer']").className = `result ${!A.ok || A.buyerGain >= 0 ? "result--go" : "result--stop"}`;
+  $("[data-card='supplier']").className = `result ${A.ok && A.supplierCost <= 0 ? "result--go" : "result--stop"}`;
   $$("[data-formula]").forEach((el) => el.setAttribute("title", t(`assumptions.${el.dataset.formula}`)));
 
   // supplier impact
@@ -446,8 +443,8 @@ function resultText() {
   lines.push(
     t("copy.terms", { a: formatNumber(state.cur, lang), b: formatNumber(state.next, lang), spend: money(state.spend) }),
     `${t("results.cash")}: ${money(A.cashShift)}${noChange ? "" : `, ${t(toYou ? "results.dir_to_you" : "results.dir_to_supplier", { days: formatNumber(Math.abs(A.deltaDays), lang) })}`}`,
-    `${t(toYou || noChange ? "results.buyer_gain" : "results.buyer_cost")}: ${money(A.buyerGain)} (${formatNumber(state.br, lang, 1)}%)`,
-    `${t(toYou || noChange ? "results.supplier_cost" : "results.supplier_gain")}: ${money(A.supplierCost)} (${formatNumber(A.effSr, lang, 1)}%)` +
+    `${t("results.buyer")}: ${signed(A.buyerGain)} (${formatNumber(state.br, lang, 1)}%)`,
+    `${t("results.supplier")}: ${signed(-A.supplierCost)} (${formatNumber(A.effSr, lang, 1)}%)` +
       (A.pctOfProfit === null ? "" : `: ${t("copy.supplier_line", { pct: pct(Math.abs(A.pctOfProfit)), days: formatNumber(Math.abs(A.daysOfRevenue), lang, 1) })}`),
     `${t(A.leak >= 0 ? "results.leak" : "results.created")}: ${money(A.leak)}`,
   );

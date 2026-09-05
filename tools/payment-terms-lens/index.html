@@ -26,6 +26,10 @@
       .chip[aria-pressed="true"] { border-color: var(--go); color: var(--go); background: var(--go-soft); }
       .chips-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
       .toggle input { accent-color: var(--go); width: 1rem; height: 1rem; }
+      .why summary { display: inline; cursor: pointer; font-family: var(--font-mono); font-size: 0.75rem; color: var(--link); list-style: none; }
+      .why summary::-webkit-details-marker { display: none; }
+      .why p { margin: 0.25rem 0 0; }
+      .tool { gap: 1.5rem; }
       .inline { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
       .inline .input { max-width: 7rem; }
       table.numbers td.best { color: var(--go); font-weight: 600; }
@@ -105,24 +109,23 @@
           </div>
 
           <div class="field">
-            <label for="spend"><span data-i18n="inputs.spend.label"></span><span class="tag" data-i18n="inputs.required"></span></label>
+            <label for="spend"><span data-i18n="inputs.spend.label"></span></label>
             <div class="input-unit">
               <input id="spend" class="input" type="text" inputmode="numeric" autocomplete="off" data-param="spend" data-money />
               <span class="unit"><span data-ccy-symbol></span> <span data-i18n="inputs.spend.unit"></span></span>
             </div>
-            <span class="hint" data-i18n="inputs.spend.source"></span>
-          </div>
+                      </div>
 
           <div class="grid-2">
             <div class="field">
-              <label for="cur"><span data-i18n="inputs.current.label"></span><span class="tag" data-i18n="inputs.required"></span></label>
+              <label for="cur"><span data-i18n="inputs.current.label"></span></label>
               <div class="input-unit">
                 <input id="cur" class="input" type="number" inputmode="numeric" min="0" max="365" step="1" data-param="cur" />
                 <span class="unit" data-i18n="inputs.current.unit"></span>
               </div>
             </div>
             <div class="field">
-              <label for="next"><span data-i18n="inputs.proposed.label"></span><span class="tag" data-i18n="inputs.required"></span></label>
+              <label for="next"><span data-i18n="inputs.proposed.label"></span></label>
               <div class="input-unit">
                 <input id="next" class="input" type="number" inputmode="numeric" min="0" max="365" step="1" data-param="next" />
                 <span class="unit" data-i18n="inputs.proposed.unit"></span>
@@ -144,13 +147,13 @@
               <input id="disc" class="input" type="number" inputmode="decimal" min="0" max="20" step="0.1" data-param="disc" />
               <span class="unit" data-i18n="inputs.disc.unit"></span>
             </div>
-            <span class="hint" data-i18n="inputs.disc.source"></span>
+            <details class="why"><summary data-i18n="inputs.why"></summary><p class="hint" data-i18n="inputs.disc.source"></p></details>
           </div>
 
           <div class="field">
             <label for="br"><span data-i18n="inputs.buyer_rate.label"></span>: <span class="num" data-out="brLabel"></span><span data-i18n="inputs.buyer_rate.unit"></span></label>
             <input id="br" class="range" type="range" min="0" max="25" step="0.5" data-param="br" />
-            <span class="hint" data-i18n="inputs.buyer_rate.source"></span>
+            <details class="why"><summary data-i18n="inputs.why"></summary><p class="hint" data-i18n="inputs.buyer_rate.source"></p></details>
           </div>
 
           <div class="field">
@@ -159,7 +162,7 @@
               <input id="srev" class="input" type="text" inputmode="numeric" autocomplete="off" data-param="srev" data-money />
               <span class="unit"><span data-ccy-symbol></span> <span data-i18n="inputs.supplier_revenue.unit"></span></span>
             </div>
-            <span class="hint" data-i18n="inputs.supplier_revenue.source"></span>
+            <details class="why"><summary data-i18n="inputs.why"></summary><p class="hint" data-i18n="inputs.supplier_revenue.source"></p></details>
           </div>
           <div class="chips" role="group" aria-labelledby="size-label">
             <span id="size-label" class="chips-label" data-i18n="inputs.size"></span>
@@ -171,12 +174,12 @@
           <div class="field">
             <label for="sr"><span data-i18n="inputs.supplier_rate.label"></span>: <span class="num" data-out="srLabel"></span><span data-i18n="inputs.supplier_rate.unit"></span></label>
             <input id="sr" class="range" type="range" min="0" max="40" step="0.5" data-param="sr" />
-            <span class="hint" data-i18n="inputs.supplier_rate.source"></span>
+            <details class="why"><summary data-i18n="inputs.why"></summary><p class="hint" data-i18n="inputs.supplier_rate.source"></p></details>
           </div>
 
           <div class="field">
             <label class="toggle"><input type="checkbox" id="scf" data-param="scf" /> <span data-i18n="inputs.scf.label"></span></label>
-            <span class="hint" data-i18n="inputs.scf.source"></span>
+            <details class="why"><summary data-i18n="inputs.why"></summary><p class="hint" data-i18n="inputs.scf.source"></p></details>
             <div class="inline" data-scf-only hidden>
               <label for="spread" class="chips-label" data-i18n="inputs.spread.label"></label>
               <input id="spread" class="input" type="number" inputmode="decimal" min="0" max="20" step="0.1" data-param="spread" />
@@ -188,7 +191,7 @@
           <div class="field">
             <label for="m"><span data-i18n="inputs.margin.label"></span><span class="tag" data-i18n="inputs.optional"></span>: <span class="num" data-out="mLabel"></span><span data-i18n="inputs.margin.unit"></span></label>
             <input id="m" class="range" type="range" min="0" max="40" step="0.5" data-param="m" />
-            <span class="hint" data-i18n="inputs.margin.source"></span>
+            <details class="why"><summary data-i18n="inputs.why"></summary><p class="hint" data-i18n="inputs.margin.source"></p></details>
           </div>
           <div class="chips" role="group" aria-labelledby="margin-label">
             <span id="margin-label" class="chips-label" data-i18n="inputs.margin_presets"></span>
@@ -228,11 +231,11 @@
               <span class="dir" data-out="cashDir"></span>
             </div>
             <div class="result result--go" data-card="buyer">
-              <span class="label" data-out="buyerLabel"></span>
+              <span class="label" data-i18n="results.buyer"></span>
               <span class="value" data-out="buyer" data-formula="f2"></span>
             </div>
             <div class="result result--stop" data-card="supplier">
-              <span class="label" data-out="supplierLabel"></span>
+              <span class="label" data-i18n="results.supplier"></span>
               <span class="value" data-out="supplier" data-formula="f3"></span>
             </div>
             <div class="result">
@@ -322,7 +325,7 @@
       </section>
 
       <!-- All numbers -->
-      <details class="card" open>
+      <details class="card">
         <summary data-i18n="table.title"></summary>
         <div class="table-wrap">
           <table class="numbers">
@@ -348,8 +351,8 @@
       </p>
 
       <!-- Assumptions -->
-      <section class="card assumptions" aria-labelledby="assumptions-title">
-        <h2 id="assumptions-title" data-i18n="assumptions.title"></h2>
+      <details class="card assumptions">
+        <summary data-i18n="assumptions.title"></summary>
         <ul>
           <li><code data-i18n="assumptions.f1"></code></li>
           <li><code data-i18n="assumptions.f2"></code></li>
@@ -363,7 +366,7 @@
         </ul>
         <p data-i18n="assumptions.note"></p>
         <p data-i18n="assumptions.disclaimer"></p>
-      </section>
+      </details>
 
       <!-- Credit block -->
       <footer class="credit">

@@ -4,7 +4,7 @@ Statuses: idea → spec → build → live → killed. One line per idea. New id
 
 | # | Tool | One-line problem | Source | Status | Notes |
 |---|------|------------------|--------|--------|-------|
-| 1 | Payment Terms Lens | Terms changes are computed for the buyer only; supplier impact is invisible | Safar | build | Week of 8 Sep · spec: content/specs/payment-terms-lens.md |
+| 1 | Payment Terms Lens | Terms changes are computed for the buyer only; supplier impact is invisible | Safar | live | Week of 8 Sep · spec: content/specs/payment-terms-lens.md |
 | 2 | Tail Spend Simulator | Nobody knows what the supplier tail costs to run | Safar | spec | 15 Sep |
 | 3 | Renewal Radar | Contracts auto-renew before anyone looks; export to calendar | Safar | spec | 22 Sep |
 | 4 | Cost of a PO | Teams don't know their processing cost per order | Safar | idea | 29 Sep · APQC $54/$14 |

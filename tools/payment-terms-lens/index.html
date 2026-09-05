@@ -119,7 +119,10 @@
 
       <!-- THE QUESTION: three things -->
       <section class="card ask" aria-labelledby="ask-title">
-        <h2 id="ask-title" data-i18n="inputs.title"></h2>
+        <div class="row" style="justify-content: space-between">
+          <h2 id="ask-title" data-i18n="inputs.title"></h2>
+          <button type="button" class="btn btn--ghost" data-action="reset" data-i18n="actions.reset"></button>
+        </div>
         <div class="chips" role="group" aria-labelledby="who-label">
           <span id="who-label" class="chips-label" data-i18n="inputs.who"></span>
           <button type="button" class="chip" data-who="buyer" data-i18n="inputs.who_buyer"></button>
@@ -162,11 +165,11 @@
             <span class="value" data-out="cash" data-formula="f1"></span>
           </div>
           <div class="stat" data-card="buyer">
-            <span class="label" data-i18n="results.buyer"></span>
+            <span class="label" data-out="buyerLabel"></span>
             <span class="value" data-out="buyer" data-formula="f2"></span>
           </div>
           <div class="stat" data-card="supplier">
-            <span class="label" data-i18n="results.supplier"></span>
+            <span class="label" data-out="supplierLabel"></span>
             <span class="value" data-out="supplier" data-formula="f3"></span>
           </div>
           <div class="stat">
@@ -186,7 +189,6 @@
             <span class="value" data-out="supplierNet" data-formula="f9"></span>
           </div>
         </div>
-        <p class="note" data-out="leakNote"></p>
         <p class="assumes"><span data-out="assumes"></span> <a href="#refine" data-action="refine" data-i18n="answer.adjust"></a></p>
         <p class="warn" data-out="warnSpend" hidden></p>
       </section>

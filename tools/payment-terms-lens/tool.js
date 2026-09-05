@@ -220,6 +220,12 @@ $("[data-panel='compare']").addEventListener("toggle", (e) => {
   save();
   render();
 });
+$("[data-action='reset']").addEventListener("click", () => {
+  Object.assign(state, { spend: scaled(DEFAULTS.spend, state.ccy), cur: DEFAULTS.cur, next: DEFAULTS.next, disc: 0, br: DEFAULTS.br, srev: scaled(DEFAULTS.srev, state.ccy), sr: DEFAULTS.sr, scf: false, spread: DEFAULTS.spread, m: DEFAULTS.m, cmp: false, next2: DEFAULTS.next2, disc2: 0 });
+  fillInputs();
+  save();
+  render();
+});
 $("[data-action='refine']").addEventListener("click", (e) => {
   e.preventDefault();
   const d = $("#refine");
@@ -284,7 +290,8 @@ function render() {
   setMoney("supplier", A.supplierCost === null ? null : -A.supplierCost, signed);
   setText("leakLabel", t(!A.ok || A.leak >= 0 ? "results.leak" : "results.created"));
   setMoney("leak", A.leak, money);
-  setText("leakNote", !A.ok || noChange || A.leak === 0 ? (A.ok ? t("results.no_leak_note") : "") : t(A.leak > 0 ? "results.leak_note" : "results.created_note"));
+  setText("buyerLabel", t(hasDisc ? "results.buyer_interest" : "results.buyer"));
+  setText("supplierLabel", t(hasDisc ? "results.supplier_interest" : "results.supplier"));
   setMoney("discount", A.discountValue, money);
   setMoney("yourNet", A.buyerNet, signed);
   setMoney("supplierNet", A.supplierNet, signed);
@@ -321,7 +328,7 @@ function render() {
     vis.valR = signed(R);
     vis.note = A.leak > 0.5 ? t("visual.note_leak", { leak: money(A.leak) }) : A.leak < -0.5 ? t("visual.note_created", { created: money(A.leak) }) : t("visual.note_even");
     if (hasDisc) vis.note = t("visual.discount_note", { disc: pctLoose(A.disc), d: money(A.discountValue) }) + " " + vis.note;
-    if (A.pctOfProfit !== null) vis.sub = t("answer.supplier_line", { srev: money(state.srev), m: pctLoose(state.m), pct: pct(Math.abs(A.pctOfProfit)), days: num(Math.abs(A.daysOfRevenue), 1) });
+    if (A.pctOfProfit !== null) vis.sub = t("answer.supplier_line", { pct: pct(Math.abs(A.pctOfProfit)), days: num(Math.abs(A.daysOfRevenue), 0) });
   } else {
     vis.note = A.ok ? t("visual.note_none") : "";
   }

@@ -213,6 +213,19 @@ onChip("[data-preset]", (btn) => { const [a, b, d] = btn.dataset.preset.split(",
 onChip("[data-size]", (btn) => { state.srev = scaled(Number(btn.dataset.size), state.ccy); });
 onChip("[data-margin]", (btn) => { state.m = Number(btn.dataset.margin); });
 onChip("[data-who]", (btn) => { state.who = btn.dataset.who; });
+$("[data-panel='compare']").addEventListener("toggle", (e) => {
+  if (e.target.open === state.cmp) return;
+  state.cmp = e.target.open;
+  save();
+  render();
+});
+$("[data-action='refine']").addEventListener("click", (e) => {
+  e.preventDefault();
+  const d = $("#refine");
+  d.open = true;
+  d.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+  $("#br").focus({ preventScroll: true });
+});
 
 /* ---------- render ---------- */
 const signedMoney = (n, ccy, lang) => (n < 0 ? "−" : "+") + formatMoney(Math.abs(n), ccy, lang);
@@ -243,8 +256,9 @@ function render() {
   $$("[data-margin]").forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.margin) === state.m)));
   $$("[data-size]").forEach((b) => (b.textContent = formatNumber(scaled(Number(b.dataset.size), state.ccy) / 1e6, lang, 0) + "m"));
   $$("[data-scf-only]").forEach((el) => (el.hidden = !state.scf));
-  $$("[data-cmp-only]").forEach((el) => (el.hidden = !state.cmp));
   $$("[data-disc-only]").forEach((el) => (el.hidden = !hasDisc));
+  const cmpPanel = $("[data-panel='compare']");
+  if (cmpPanel.open !== state.cmp) cmpPanel.open = state.cmp;
   setText("scfNote", state.scf ? t("inputs.scf_note", { br: pct(state.br, 1), spread: pct(state.spread || 0, 1), eff: pct(A.effSr, 1) }) : "");
 
   // summary sentence
@@ -264,7 +278,6 @@ function render() {
 
   // results
   setMoney("cash", A.cashShift, money);
-  setText("cashDir", !A.ok ? "" : noChange ? t("results.no_change") : t(toYou ? "results.dir_to_you" : "results.dir_to_supplier", { days: num(Math.abs(A.deltaDays)) }));
   setMoney("buyer", A.buyerGain, signed);
   setMoney("supplier", A.supplierCost === null ? null : -A.supplierCost, signed);
   setText("leakLabel", t(!A.ok || A.leak >= 0 ? "results.leak" : "results.created"));
@@ -273,14 +286,15 @@ function render() {
   setMoney("discount", A.discountValue, money);
   setMoney("yourNet", A.buyerNet, signed);
   setMoney("supplierNet", A.supplierNet, signed);
-  $("[data-card='buyer']").className = `result ${!A.ok || A.buyerGain >= 0 ? "result--go" : "result--stop"}`;
-  $("[data-card='supplier']").className = `result ${A.ok && A.supplierCost <= 0 ? "result--go" : "result--stop"}`;
+  $("[data-card='buyer']").className = `stat ${!A.ok || A.buyerGain >= 0 ? "stat--go" : "stat--stop"}`;
+  $("[data-card='supplier']").className = `stat ${A.ok && A.supplierCost <= 0 ? "stat--go" : "stat--stop"}`;
   $$("[data-formula]").forEach((el) => el.setAttribute("title", t(`assumptions.${el.dataset.formula}`)));
 
-  // supplier impact
-  setText("pctProfit", A.pctOfProfit === null ? na : pct(Math.abs(A.pctOfProfit)));
-  setText("days", A.daysOfRevenue === null ? na : `${num(Math.abs(A.daysOfRevenue), 1)} ${t("impact.days_unit")}`);
-  setText("share", A.share === null ? na : pct(A.share, 0));
+  // what we assumed, in one line (rates always; supplier line only when revenue is known)
+  let assumes = t("answer.assumes", { br: pct(state.br, 1), sr: pct(A.effSr, 1) });
+  if (A.ok && A.pctOfProfit !== null && !noChange)
+    assumes += " " + t("answer.supplier_line", { srev: money(state.srev), m: pct(state.m, 1), pct: pct(Math.abs(A.pctOfProfit)), days: num(Math.abs(A.daysOfRevenue), 1) });
+  setText("assumes", assumes);
   const warnEl = out("warnSpend");
   warnEl.textContent = A.spendExceeds ? t("impact.warn_spend") : "";
   warnEl.hidden = !A.spendExceeds;
@@ -291,32 +305,27 @@ function render() {
   setText("fairText", A.fairShown ? t("fair.text", { low: pct(A.fairLow, 2), high: pct(A.fairHigh, 2), days: num(state.cur) }) : t("fair.hidden"));
   setText("fairValue", A.fairShown ? t("fair.value", { lowMoney: money(A.buyerGain), highMoney: money(A.supplierCost) }) : "");
 
-  // visual: where the money goes
-  const W = 640;
+  // visual: where the money goes (HTML rows; `vis` also feeds the PNG export)
+  const vis = { cash: "", dir: 0, head: "", a: "", b: "", aW: 0, bW: 0, aColor: "--go", bColor: "--stop", discount: "", profit: "", biteW: 0, biteColor: "--stop", note: "" };
   const cashBar = $("[data-bar='cash']");
   const arrowR = $("[data-arrow='right']");
   const arrowL = $("[data-arrow='left']");
   if (!A.ok || noChange) {
-    setText("vCash", A.ok ? t("visual.cash_none") : t("summary.empty"));
-    cashBar.setAttribute("width", "0");
-    arrowR.setAttribute("visibility", "hidden");
-    arrowL.setAttribute("visibility", "hidden");
+    vis.cash = A.ok ? t("visual.cash_none") : t("summary.empty");
+    cashBar.style.width = "0";
+    arrowR.hidden = true;
+    arrowL.hidden = true;
   } else {
-    setText("vCash", t(toYou ? "visual.cash_to_you" : "visual.cash_to_supplier", { cash: money(A.cashShift), days: num(Math.abs(A.deltaDays)) }));
-    cashBar.setAttribute("x", toYou ? "0" : "28");
-    cashBar.setAttribute("width", "612");
-    arrowR.setAttribute("visibility", toYou ? "visible" : "hidden");
-    arrowL.setAttribute("visibility", toYou ? "hidden" : "visible");
+    vis.cash = t(toYou ? "visual.cash_to_you" : "visual.cash_to_supplier", { cash: money(A.cashShift), days: num(Math.abs(A.deltaDays)) });
+    vis.dir = toYou ? 1 : -1;
+    cashBar.style.width = "100%";
+    arrowR.hidden = !toYou;
+    arrowL.hidden = toYou;
   }
+  setText("vCash", vis.cash);
   const segA = $("[data-bar='segA']");
   const segB = $("[data-bar='segB']");
-  if (!A.ok || noChange) {
-    setText("vHead", "");
-    setText("vA", "");
-    setText("vB", "");
-    segA.setAttribute("width", "0");
-    segB.setAttribute("width", "0");
-  } else {
+  if (A.ok && !noChange) {
     const g = Math.abs(A.buyerGain);
     const c = Math.abs(A.supplierCost);
     const big = Math.max(g, c, 1e-9);
@@ -325,44 +334,49 @@ function render() {
     let k;
     if (toYou) k = A.leak >= 0 ? 1 : 2;
     else k = A.leak <= 0 ? 3 : 4;
-    const aColor = k === 1 || k === 3 ? "var(--go)" : "var(--stop)";
-    const bColor = k === 1 || k === 4 ? "var(--stop)" : "var(--go)";
-    segA.setAttribute("width", String((a / big) * W));
-    segA.setAttribute("fill", aColor);
-    segB.setAttribute("x", String((a / big) * W));
-    segB.setAttribute("width", String((b / big) * W));
-    segB.setAttribute("fill", bColor);
-    setText("vHead", t(`visual.head${k}`, { big: money(big) }));
-    setText("vA", t(`visual.a${k}`, { a: money(a) }));
-    setText("vB", b > 0.5 ? t(`visual.b${k}`, { b: money(b) }) : "");
-    out("vA").setAttribute("fill", aColor);
-    out("vB").setAttribute("fill", bColor);
+    vis.aColor = k === 1 || k === 3 ? "--go" : "--stop";
+    vis.bColor = k === 1 || k === 4 ? "--stop" : "--go";
+    vis.aW = (a / big) * 100;
+    vis.bW = (b / big) * 100;
+    vis.head = t(`visual.head${k}`, { big: money(big) });
+    vis.a = t(`visual.a${k}`, { a: money(a) });
+    vis.b = b > 0.5 ? t(`visual.b${k}`, { b: money(b) }) : "";
   }
-  setText("vDiscount", hasDisc ? t("visual.discount_note", { disc: pct(A.disc, 1), d: money(A.discountValue) }) : "");
+  segA.style.width = `${vis.aW}%`;
+  segA.style.background = `var(${vis.aColor})`;
+  segB.style.left = `${vis.aW}%`;
+  segB.style.width = `${vis.bW}%`;
+  segB.style.background = `var(${vis.bColor})`;
+  setText("vHead", vis.head);
+  setText("vA", vis.a);
+  setText("vB", vis.b);
+  out("vA").style.color = `var(${vis.aColor})`;
+  out("vB").style.color = `var(${vis.bColor})`;
+  vis.discount = hasDisc ? t("visual.discount_note", { disc: pct(A.disc, 1), d: money(A.discountValue) }) : "";
+  setText("vDiscount", vis.discount);
   const bite = $("[data-bar='bite']");
   if (A.supplierProfit === null || !A.ok || (noChange && !hasDisc)) {
-    setText("vProfit", A.supplierProfit === null ? t("visual.profit_na") : t("table.profit") + ": " + money(A.supplierProfit));
-    bite.setAttribute("width", "0");
+    vis.profit = A.supplierProfit === null ? t("visual.profit_na") : t("visual.profit", { profit: money(A.supplierProfit) });
+    vis.note = "";
   } else {
     const eats = A.supplierTotalCost >= 0;
-    const frozen = (A.daysOfRevenue ?? 0) >= 0; // cash moved away from the supplier
-    setText("vProfit", t("visual.profit", { profit: money(A.supplierProfit) }));
-    setText(
-      "vProfitNote",
-      t("visual.profit_detail", {
-        eat: t(eats ? "visual.eat_eaten" : "visual.eat_added", { pct: pct(Math.abs(A.pctOfProfit)) }),
-        days: t(frozen ? "visual.days_frozen" : "visual.days_freed", { days: num(Math.abs(A.daysOfRevenue ?? 0), 1) }),
-      }),
-    );
-    out("vProfitNote").setAttribute("fill", eats ? "var(--stop)" : "var(--go)");
-    bite.setAttribute("width", String(Math.min(1, Math.abs(A.pctOfProfit) / 100) * W));
-    bite.setAttribute("fill", eats ? "var(--stop)" : "var(--go)");
+    const frozen = (A.daysOfRevenue ?? 0) >= 0;
+    vis.profit = t("visual.profit", { profit: money(A.supplierProfit) });
+    vis.note = t("visual.profit_detail", {
+      eat: t(eats ? "visual.eat_eaten" : "visual.eat_added", { pct: pct(Math.abs(A.pctOfProfit)) }),
+      days: t(frozen ? "visual.days_frozen" : "visual.days_freed", { days: num(Math.abs(A.daysOfRevenue ?? 0), 1) }),
+    });
+    vis.biteW = Math.min(1, Math.abs(A.pctOfProfit) / 100) * 100;
+    vis.biteColor = eats ? "--stop" : "--go";
   }
-  if (A.supplierProfit === null || !A.ok || (noChange && !hasDisc)) setText("vProfitNote", "");
+  bite.style.width = `${vis.biteW}%`;
+  bite.style.background = `var(${vis.biteColor})`;
+  setText("vProfit", vis.profit);
+  setText("vProfitNote", vis.note);
+  out("vProfitNote").style.color = vis.note ? `var(${vis.biteColor})` : "";
+  lastVis = vis;
 
   // option A vs B
-  const cmpPanel = $("[data-panel='compare']");
-  cmpPanel.hidden = !state.cmp;
   if (B) {
     const termsOf = (r, next) => (r.ok ? `${num(state.cur)} → ${num(next)} ${t("impact.days_unit")}` : na);
     const cell = (r, f) => (r.ok ? f(r) : na);
@@ -424,6 +438,33 @@ function render() {
   $("[data-feedback-github]").href = `${SITE.repo}/issues/new?template=tool-feedback.yml&title=${encodeURIComponent("[payment-terms-lens] ")}`;
 }
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+let lastVis = null;
+
+/** Build the export SVG (640x330) from the last rendered visual. Same numbers, same colours (as CSS vars). */
+function visualSvg() {
+  const v = lastVis;
+  if (!v) return null;
+  const W = 640;
+  const cashRect = v.dir ? `<rect x="${v.dir > 0 ? 0 : 28}" y="30" width="612" height="22" fill="var(--warn)"/>` : "";
+  const arrow = v.dir > 0 ? `<polygon points="612,22 640,41 612,60" fill="var(--warn)"/>` : v.dir < 0 ? `<polygon points="28,22 0,41 28,60" fill="var(--warn)"/>` : "";
+  const aW = (v.aW / 100) * W;
+  const bW = (v.bW / 100) * W;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} 330" width="${W}" height="330">
+  <text x="0" y="18" font-size="17">${esc(v.cash)}</text>${cashRect}${arrow}
+  <text x="0" y="118" font-size="17">${esc(v.head)}</text>
+  <rect x="0" y="130" width="${W}" height="34" fill="var(--panel-2)" stroke="var(--rule-2)"/>
+  <rect x="0" y="130" width="${aW}" height="34" fill="var(${v.aColor})"/>
+  <rect x="${aW}" y="130" width="${bW}" height="34" fill="var(${v.bColor})"/>
+  <text x="0" y="190" font-size="16" fill="var(${v.aColor})">${esc(v.a)}</text>
+  <text x="${W}" y="190" font-size="16" fill="var(${v.bColor})" text-anchor="end">${esc(v.b)}</text>
+  <text x="0" y="222" font-size="14" fill="var(--muted)">${esc(v.discount)}</text>
+  <text x="0" y="262" font-size="17">${esc(v.profit)}</text>
+  <rect x="0" y="274" width="${W}" height="28" fill="var(--rule-2)"/>
+  <rect x="0" y="274" width="${(v.biteW / 100) * W}" height="28" fill="var(${v.biteColor})"/>
+  <text x="0" y="324" font-size="15" fill="var(${v.biteColor})">${esc(v.note)}</text>
+</svg>`;
+  return new DOMParser().parseFromString(svg, "image/svg+xml").documentElement;
+}
 
 /* ---------- actions ---------- */
 function resultText() {
@@ -472,11 +513,12 @@ $("[data-action='png']").addEventListener("click", async () => {
   const title = A.ok
     ? `${tr("name")}: ${tr("copy.terms", { a: formatNumber(state.cur, i18n.lang), b: formatNumber(state.next, i18n.lang), spend: formatMoney(state.spend, state.ccy, i18n.lang) })}`
     : tr("name");
-  const ok = await downloadSvgPng($(".visual"), {
+  const svg = visualSvg();
+  const ok = svg && (await downloadSvgPng(svg, {
     filename: "payment-terms-lens.png",
     title,
     footer: `freetoolslab.org/tools/payment-terms-lens · ${i18n.lang === "ru" ? SITE.credit_ru : SITE.credit_en}`,
-  });
+  }));
   flash(ok ? "actions.png_done" : "actions.png_failed");
 });
 $("[data-action='csv']").addEventListener("click", () => {

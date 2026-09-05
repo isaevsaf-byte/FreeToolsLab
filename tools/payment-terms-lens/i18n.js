@@ -88,6 +88,14 @@ export default {
       your_net: "Your net, per year",
       supplier_net: "Supplier's net, per year",
     },
+    answer: {
+      assumes: "Assumes your money costs {br} and the supplier's {sr}.",
+      supplier_line: "For a {srev} supplier at {m} margin: {pct} of its profit, {days} days of its sales.",
+      adjust: "Adjust",
+      refine: "Refine: rates, supplier size, discount, supply-chain finance",
+      terms: "Payment terms",
+      to: "→",
+    },
     impact: {
       title: "What it means for the supplier",
       pct_profit: "Of its annual profit",
@@ -249,6 +257,11 @@ export default {
         your_net: "Buyer's net, per year",
         supplier_net: "Your net, per year",
       },
+      answer: {
+        assumes: "Assumes the buyer's money costs {br} and yours {sr}.",
+        supplier_line: "At your {srev} revenue and {m} margin: {pct} of your profit, {days} days of your sales.",
+        refine: "Refine: rates, your size, discount, supply-chain finance",
+      },
       impact: {
         title: "What it means for you",
         pct_profit: "Of your annual profit",
@@ -397,6 +410,14 @@ export default {
       discount: "Скидка в деньгах за год",
       your_net: "Ваш итог за год",
       supplier_net: "Итог поставщика за год",
+    },
+    answer: {
+      assumes: "Считаем, что ваши деньги стоят {br}, деньги поставщика {sr}.",
+      supplier_line: "Для поставщика с выручкой {srev} и маржой {m}: {pct} его прибыли, {days} дней его выручки.",
+      adjust: "Изменить",
+      refine: "Уточнить: ставки, размер поставщика, скидка, SCF",
+      terms: "Отсрочка платежа",
+      to: "→",
     },
     impact: {
       title: "Что это значит для поставщика",
@@ -558,6 +579,11 @@ export default {
         no_leak_note: "Потерь нет: деньги покупателя не дешевле ваших.",
         your_net: "Итог покупателя за год",
         supplier_net: "Ваш итог за год",
+      },
+      answer: {
+        assumes: "Считаем, что деньги покупателя стоят {br}, ваши {sr}.",
+        supplier_line: "При вашей выручке {srev} и марже {m}: {pct} вашей прибыли, {days} дней вашей выручки.",
+        refine: "Уточнить: ставки, ваш размер, скидка, SCF",
       },
       impact: {
         title: "Что это значит для вас",

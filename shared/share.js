@@ -158,9 +158,9 @@ function inlineCssVars(root) {
  * Adds the page background, an optional title line and footer line. Colours follow the current theme.
  */
 export async function downloadSvgPng(svgEl, { filename = "chart.png", title = "", footer = "", scale = 2 } = {}) {
-  const vb = svgEl.viewBox.baseVal;
-  const w = vb.width || svgEl.clientWidth;
-  const h = vb.height || svgEl.clientHeight;
+  const vbAttr = (svgEl.getAttribute("viewBox") || "").split(/[\s,]+/).map(Number);
+  const w = (vbAttr.length === 4 && vbAttr[2]) || svgEl.viewBox?.baseVal?.width || svgEl.clientWidth || 640;
+  const h = (vbAttr.length === 4 && vbAttr[3]) || svgEl.viewBox?.baseVal?.height || svgEl.clientHeight || 330;
   const pad = 32;
   const titleH = title ? 40 : 0;
   const footH = footer ? 28 : 0;

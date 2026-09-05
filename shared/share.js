@@ -123,6 +123,7 @@ export function formatMoney(n, ccy = DEFAULT_CURRENCY, lang = "en", digits = 0) 
   return new Intl.NumberFormat(LOCALE[lang] || LOCALE.en, {
     style: "currency",
     currency: ccy,
+    currencyDisplay: "narrowSymbol",
     maximumFractionDigits: digits,
     minimumFractionDigits: digits,
   }).format(n);

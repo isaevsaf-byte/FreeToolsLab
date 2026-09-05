@@ -207,7 +207,10 @@ $$("[data-param]").forEach((el) => {
     save();
     render();
   });
-  if (el.hasAttribute("data-money")) el.addEventListener("change", fillInputs);
+  if (el.hasAttribute("data-money")) {
+    el.addEventListener("change", fillInputs);
+    el.addEventListener("focus", () => el.select());
+  }
 });
 const onChip = (sel, fn) => $$(sel).forEach((btn) => btn.addEventListener("click", () => { fn(btn); fillInputs(); save(); render(); }));
 onChip("[data-preset]", (btn) => { const [a, b, d] = btn.dataset.preset.split(",").map(Number); state.cur = a; state.next = b; state.disc = d || 0; });
@@ -219,6 +222,11 @@ $("[data-panel='compare']").addEventListener("toggle", (e) => {
   state.cmp = e.target.open;
   save();
   render();
+});
+$("[data-action='more']").addEventListener("click", (e) => {
+  const more = $("[data-more]");
+  more.hidden = !more.hidden;
+  e.currentTarget.setAttribute("aria-expanded", String(!more.hidden));
 });
 $("[data-action='reset']").addEventListener("click", () => {
   Object.assign(state, { spend: scaled(DEFAULTS.spend, state.ccy), cur: DEFAULTS.cur, next: DEFAULTS.next, disc: 0, br: DEFAULTS.br, srev: scaled(DEFAULTS.srev, state.ccy), sr: DEFAULTS.sr, scf: false, spread: DEFAULTS.spread, m: DEFAULTS.m, cmp: false, next2: DEFAULTS.next2, disc2: 0 });
@@ -300,7 +308,27 @@ function render() {
   $$("[data-formula]").forEach((el) => el.setAttribute("title", t(`assumptions.${el.dataset.formula}`)));
 
   // what we assumed, in one line (rates always; supplier line only when revenue is known)
-  setText("assumes", t("answer.assumes", { br: pctLoose(state.br), sr: pctLoose(A.effSr) }));
+  // timeline: day 0 → current → proposed
+  const tl = { max: 1, cur: 0, next: 0 };
+  if (A.ok) {
+    tl.max = Math.max(state.cur, state.next, 1) * 1.08;
+    tl.cur = state.cur;
+    tl.next = state.next;
+  }
+  const px = (d) => `${(d / tl.max) * 100}%`;
+  const lo = Math.min(tl.cur, tl.next);
+  const hi = Math.max(tl.cur, tl.next);
+  $("[data-tl='span']").style.left = px(lo);
+  $("[data-tl='span']").style.width = px(hi - lo);
+  $("[data-tl='t1']").style.left = px(tl.cur);
+  $("[data-tl='t2']").style.left = px(tl.next);
+  $("[data-tl='l1']").style.left = px(tl.cur);
+  $("[data-tl='l2']").style.left = px(tl.next);
+  $("[data-tl='l0']").textContent = t("visual.today");
+  $("[data-tl='l1']").textContent = A.ok ? t("visual.day", { d: num(tl.cur) }) : "";
+  $("[data-tl='l2']").textContent = A.ok && tl.next !== tl.cur ? t("visual.day", { d: num(tl.next) }) : "";
+  $("[data-tl='l2']").classList.toggle("edge-r", tl.next / tl.max > 0.9);
+  $("[data-tl='l1']").classList.toggle("edge-r", tl.cur / tl.max > 0.9);
   const warnEl = out("warnSpend");
   warnEl.textContent = A.spendExceeds ? t("impact.warn_spend") : "";
   warnEl.hidden = !A.spendExceeds;
@@ -347,6 +375,7 @@ function render() {
   barR.style.background = `var(${vis.cR})`;
   setText("flyNote", vis.note);
   setText("flySub", vis.sub);
+  vis.tl = tl;
   lastVis = vis;
 
   // option A vs B
@@ -441,8 +470,15 @@ function visualSvg() {
   y += 10;
   const subSvg = subLines.map((l) => `<text x="${mid}" y="${(y += 20)}" font-size="13" fill="var(--muted)" text-anchor="middle">${esc(l)}</text>`).join("");
   const H = y + 24;
+  const tlx = (d) => (d / v.tl.max) * W;
+  const tlLo = Math.min(v.tl.cur, v.tl.next);
+  const tlHi = Math.max(v.tl.cur, v.tl.next);
+  const tlSvg = v.tl.max > 1
+    ? `<rect x="0" y="40" width="${W}" height="2" fill="var(--rule-2)"/><rect x="${tlx(tlLo)}" y="37" width="${tlx(tlHi) - tlx(tlLo)}" height="8" rx="4" fill="var(--link)" opacity="0.35"/>` +
+      `<rect x="${tlx(v.tl.cur) - 1}" y="34" width="2" height="14" fill="var(--ink)"/><rect x="${tlx(v.tl.next) - 1}" y="34" width="2" height="14" fill="var(--ink)"/>`
+    : "";
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
-  <text x="0" y="22" font-size="20">${esc(v.title)}</text>
+  <text x="0" y="22" font-size="20">${esc(v.title)}</text>${tlSvg}
   <text x="0" y="66" font-size="14" fill="var(--muted)">${esc(v.whoL)}</text>
   <text x="${W}" y="66" font-size="14" fill="var(--muted)" text-anchor="end">${esc(v.whoR)}</text>
   <text x="0" y="92" font-size="22" fill="var(${v.cL})">${esc(v.valL)}</text>

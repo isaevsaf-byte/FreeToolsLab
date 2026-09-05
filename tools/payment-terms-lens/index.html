@@ -39,6 +39,21 @@
       .stat--stop .value { color: var(--stop); }
       .stat--warn .value { color: var(--warn); }
       .assumes { font-size: 0.875rem; color: var(--muted); }
+      .rates { display: grid; gap: 0.75rem; }
+      @media (min-width: 640px) { .rates-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; } }
+      .rate label { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted); display: block; margin-bottom: 0.25rem; }
+      .rate label b { color: var(--ink); font-weight: 500; }
+      .example-hint { font-size: 0.8125rem; color: var(--muted); }
+      /* timeline above the butterfly */
+      .timeline { position: relative; height: 34px; margin: 0.25rem 0 0.5rem; }
+      .timeline .line { position: absolute; left: 0; right: 0; top: 22px; height: 2px; background: var(--rule-2); }
+      .timeline .span { position: absolute; top: 19px; height: 8px; background: var(--link); opacity: 0.35; border-radius: 4px; transition: left 0.4s ease, width 0.4s ease; }
+      .timeline .tick { position: absolute; top: 16px; width: 2px; height: 14px; background: var(--ink); transform: translateX(-1px); transition: left 0.4s ease; }
+      .timeline .lbl { position: absolute; top: 0; transform: translateX(-50%); font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); white-space: nowrap; transition: left 0.4s ease; }
+      .timeline .lbl.edge-l { transform: none; }
+      .timeline .lbl.edge-r { transform: translateX(-100%); }
+      .fly-note { font-family: var(--font-sans); font-size: 0.9375rem; text-align: center; }
+      .fly-sub { font-size: 0.875rem; color: var(--muted); text-align: center; }
       .assumes a { color: var(--link); }
       .note { font-size: 0.875rem; color: var(--muted); }
       /* refine */
@@ -69,8 +84,6 @@
       .fly-half.l { justify-content: flex-end; }
       .fly-bar { height: 28px; width: 0; transition: width 0.4s ease; border-radius: 2px; }
       .fly-axis { background: var(--ink); height: 40px; }
-      .fly-note { font-family: var(--font-mono); font-size: 0.875rem; text-align: center; }
-      .fly-sub { font-size: 0.875rem; color: var(--muted); text-align: center; }
       .why summary { display: inline; cursor: pointer; font-family: var(--font-mono); font-size: 0.75rem; color: var(--link); list-style: none; }
       .why summary::-webkit-details-marker { display: none; }
       .why p { margin: 0.25rem 0 0; }
@@ -120,7 +133,7 @@
       <!-- THE QUESTION: three things -->
       <section class="card ask" aria-labelledby="ask-title">
         <div class="row" style="justify-content: space-between">
-          <h2 id="ask-title" data-i18n="inputs.title"></h2>
+          <div class="row"><h2 id="ask-title" data-i18n="inputs.title"></h2><span class="example-hint" data-i18n="inputs.example_hint"></span></div>
           <button type="button" class="btn btn--ghost" data-action="reset" data-i18n="actions.reset"></button>
         </div>
         <div class="chips" role="group" aria-labelledby="who-label">
@@ -189,7 +202,22 @@
             <span class="value" data-out="supplierNet" data-formula="f9"></span>
           </div>
         </div>
-        <p class="assumes"><span data-out="assumes"></span> <a href="#refine" data-action="refine" data-i18n="answer.adjust"></a></p>
+        <div class="rates">
+          <div class="rates-grid">
+            <div class="rate">
+              <label for="br"><span data-i18n="inputs.buyer_rate.label"></span>: <b><span data-out="brLabel"></span><span data-i18n="inputs.buyer_rate.unit"></span></b></label>
+              <input id="br" class="range" type="range" min="0" max="25" step="0.5" data-param="br" />
+              <details class="why"><summary data-i18n="inputs.why"></summary><p class="hint" data-i18n="inputs.buyer_rate.source"></p></details>
+            </div>
+            <div class="rate">
+              <label for="sr"><span data-i18n="inputs.supplier_rate.label"></span>: <b><span data-out="srLabel"></span><span data-i18n="inputs.supplier_rate.unit"></span></b></label>
+              <input id="sr" class="range" type="range" min="0" max="40" step="0.5" data-param="sr" />
+              <span class="hint" data-out="scfNote"></span>
+              <details class="why"><summary data-i18n="inputs.why"></summary><p class="hint" data-i18n="inputs.supplier_rate.source"></p></details>
+            </div>
+          </div>
+          <p class="assumes"><span data-i18n="answer.rates"></span> <a href="#refine" data-action="refine" data-i18n="answer.adjust"></a></p>
+        </div>
         <p class="warn" data-out="warnSpend" hidden></p>
       </section>
 
@@ -197,6 +225,16 @@
       <section class="card" aria-labelledby="visual-title">
         <h2 id="visual-title" data-out="vTitle"></h2>
         <div class="fly" data-visual>
+          <div class="timeline" aria-hidden="true">
+            <div class="line"></div>
+            <div class="span" data-tl="span"></div>
+            <div class="tick" data-tl="t0" style="left: 0"></div>
+            <span class="lbl edge-l" data-tl="l0"></span>
+            <div class="tick" data-tl="t1"></div>
+            <span class="lbl" data-tl="l1"></span>
+            <div class="tick" data-tl="t2"></div>
+            <span class="lbl" data-tl="l2"></span>
+          </div>
           <div class="fly-head">
             <div class="l"><span class="who" data-out="flyWhoL"></span><span class="val" data-out="flyValL"></span></div>
             <div class="r"><span class="who" data-out="flyWhoR"></span><span class="val" data-out="flyValR"></span></div>
@@ -223,25 +261,12 @@
         <summary data-i18n="answer.refine"></summary>
 
         <div class="field">
-          <label for="br"><span data-i18n="inputs.buyer_rate.label"></span>: <span class="num" data-out="brLabel"></span><span data-i18n="inputs.buyer_rate.unit"></span></label>
-          <input id="br" class="range" type="range" min="0" max="25" step="0.5" data-param="br" />
-          <details class="why"><summary data-i18n="inputs.why"></summary><p class="hint" data-i18n="inputs.buyer_rate.source"></p></details>
-        </div>
-
-        <div class="field">
-          <label for="sr"><span data-i18n="inputs.supplier_rate.label"></span>: <span class="num" data-out="srLabel"></span><span data-i18n="inputs.supplier_rate.unit"></span></label>
-          <input id="sr" class="range" type="range" min="0" max="40" step="0.5" data-param="sr" />
-          <details class="why"><summary data-i18n="inputs.why"></summary><p class="hint" data-i18n="inputs.supplier_rate.source"></p></details>
-        </div>
-
-        <div class="field">
           <label class="toggle"><input type="checkbox" id="scf" data-param="scf" /> <span data-i18n="inputs.scf.label"></span></label>
           <div class="inline" data-scf-only hidden>
             <label for="spread" class="chips-label" data-i18n="inputs.spread.label"></label>
             <input id="spread" class="input" type="number" inputmode="decimal" min="0" max="20" step="0.1" data-param="spread" />
             <span class="chips-label" data-i18n="inputs.spread.unit"></span>
           </div>
-          <span class="hint" data-out="scfNote"></span>
           <details class="why"><summary data-i18n="inputs.why"></summary><p class="hint" data-i18n="inputs.scf.source"></p></details>
         </div>
 
@@ -314,9 +339,12 @@
       <!-- Actions -->
       <section class="row">
         <button type="button" class="btn btn--primary" data-action="copy"><span data-i18n="actions.copy"></span></button>
-        <button type="button" class="btn" data-action="link"><span data-i18n="actions.link"></span></button>
         <button type="button" class="btn" data-action="png"><span data-i18n="actions.png"></span></button>
-        <button type="button" class="btn" data-action="csv"><span data-i18n="actions.csv"></span></button>
+        <button type="button" class="btn btn--ghost" data-action="more" aria-expanded="false"><span data-i18n="actions.more"></span> ▾</button>
+        <span data-more hidden style="display: contents">
+          <button type="button" class="btn" data-action="link"><span data-i18n="actions.link"></span></button>
+          <button type="button" class="btn" data-action="csv"><span data-i18n="actions.csv"></span></button>
+        </span>
         <span class="muted" style="font-family: var(--font-mono); font-size: 0.75rem" data-out="status" role="status"></span>
       </section>
       <p class="feedback-line">

@@ -22,6 +22,7 @@ export default {
       quick: "Quick picks",
       optional: "optional",
       why: "why?",
+      example_hint: "Example numbers. Put your own.",
       disc: {
         label: "Discount for paying at the proposed terms",
         unit: "%",
@@ -99,8 +100,9 @@ export default {
     answer: {
       assumes: "Assumes your money costs {br} and the supplier's {sr}.",
       supplier_line: "For the supplier that is {pct} of a year's profit and {days} days of sales.",
-      adjust: "Adjust",
-      refine: "Refine: rates, supplier size, discount, supply-chain finance",
+      adjust: "More assumptions",
+      rates: "Assumed rates, illustrative. Drag to yours.",
+      refine: "More: supplier size, margin, discount, supply-chain finance",
       terms: "Payment terms",
       to: "→",
     },
@@ -145,6 +147,8 @@ export default {
       you: "You",
       supplier: "Supplier",
       net: "net",
+      day: "day {d}",
+      today: "today",
       note_leak: "{leak} a year leaves the pair: it goes to the supplier's lender.",
       note_created: "{created} a year is created: your money is cheaper than the supplier's.",
       note_even: "No leak: both sides borrow at the same rate.",
@@ -179,6 +183,7 @@ export default {
       copied: "Copied",
       copy_failed: "Copy failed. Select the text manually",
       reset: "Reset",
+      more: "More",
       link: "Copy link",
       link_copied: "Link copied",
       png: "Download PNG",
@@ -260,7 +265,7 @@ export default {
       answer: {
         assumes: "Assumes the buyer's money costs {br} and yours {sr}.",
         supplier_line: "For you that is {pct} of a year's profit and {days} days of sales.",
-        refine: "Refine: rates, your size, discount, supply-chain finance",
+        refine: "More: your size, margin, discount, supply-chain finance",
       },
       impact: {
         title: "What it means for you",
@@ -333,6 +338,7 @@ export default {
       quick: "Быстрый выбор",
       optional: "необязательно",
       why: "зачем?",
+      example_hint: "Цифры для примера. Подставьте свои.",
       disc: {
         label: "Скидка за оплату в предлагаемый срок",
         unit: "%",
@@ -410,8 +416,9 @@ export default {
     answer: {
       assumes: "Считаем, что ваши деньги стоят {br}, деньги поставщика {sr}.",
       supplier_line: "Для поставщика это {pct} годовой прибыли и {days} дней выручки.",
-      adjust: "Изменить",
-      refine: "Уточнить: ставки, размер поставщика, скидка, SCF",
+      adjust: "Ещё допущения",
+      rates: "Ставки взяты для примера. Подвиньте под свои.",
+      refine: "Ещё: размер поставщика, маржа, скидка, SCF",
       terms: "Отсрочка платежа",
       to: "→",
     },
@@ -456,6 +463,8 @@ export default {
       you: "Вы",
       supplier: "Поставщик",
       net: "итог",
+      day: "день {d}",
+      today: "сегодня",
       note_leak: "{leak} в год уходит из пары: их получает банк поставщика.",
       note_created: "{created} в год создаётся: ваши деньги дешевле денег поставщика.",
       note_even: "Потерь нет: обе стороны занимают по одной ставке.",
@@ -490,6 +499,7 @@ export default {
       copied: "Скопировано",
       copy_failed: "Не скопировалось. Выделите текст вручную",
       reset: "Сбросить",
+      more: "Ещё",
       link: "Скопировать ссылку",
       link_copied: "Ссылка скопирована",
       png: "Скачать PNG",
@@ -571,7 +581,7 @@ export default {
       answer: {
         assumes: "Считаем, что деньги покупателя стоят {br}, ваши {sr}.",
         supplier_line: "Для вас это {pct} годовой прибыли и {days} дней выручки.",
-        refine: "Уточнить: ставки, ваш размер, скидка, SCF",
+        refine: "Ещё: ваш размер, маржа, скидка, SCF",
       },
       impact: {
         title: "Что это значит для вас",

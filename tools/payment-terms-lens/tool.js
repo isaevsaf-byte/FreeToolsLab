@@ -242,6 +242,7 @@ function render() {
   const moneyOrNa = (n) => (n === null ? na : money(n));
   const pct = (n, d = 1) => formatPercent(n, lang, d);
   const num = (n, d = 0) => formatNumber(n, lang, d);
+  const pctLoose = (n) => formatPercentLoose(n, lang, 1);
   const toYou = A.ok && A.deltaDays > 0;
   const noChange = A.ok && A.deltaDays === 0;
   const hasDisc = A.ok && A.disc > 0;
@@ -267,7 +268,7 @@ function render() {
   if (!A.ok) [head, sub] = [t("summary.head_empty"), t("summary.sub_empty")];
   else if (noChange && !hasDisc) [head, sub] = [t("summary.head_none"), t("summary.sub_none")];
   else if (hasDisc) {
-    const v = { b: num(state.next), disc: pct(A.disc, 1), yn: signed(A.buyerNet), sn: signed(A.supplierNet), yi: signed(A.buyerGain), si: signed(-A.supplierCost), d: money(A.discountValue) };
+    const v = { b: num(state.next), disc: pctLoose(A.disc), yn: signed(A.buyerNet), sn: signed(A.supplierNet), yi: signed(A.buyerGain), si: signed(-A.supplierCost), d: money(A.discountValue) };
     [head, sub] = [t("summary.head_discount", v), t("summary.sub_discount", v)];
   } else {
     const v = { b: num(state.next), gain: money(A.buyerGain), cost: money(A.supplierCost), leak: money(A.leak), created: money(A.leak) };
@@ -292,7 +293,6 @@ function render() {
   $$("[data-formula]").forEach((el) => el.setAttribute("title", t(`assumptions.${el.dataset.formula}`)));
 
   // what we assumed, in one line (rates always; supplier line only when revenue is known)
-  const pctLoose = (n) => formatPercentLoose(n, lang, 1);
   setText("assumes", t("answer.assumes", { br: pctLoose(state.br), sr: pctLoose(A.effSr) }));
   const warnEl = out("warnSpend");
   warnEl.textContent = A.spendExceeds ? t("impact.warn_spend") : "";
@@ -320,7 +320,7 @@ function render() {
     vis.valL = signed(L);
     vis.valR = signed(R);
     vis.note = A.leak > 0.5 ? t("visual.note_leak", { leak: money(A.leak) }) : A.leak < -0.5 ? t("visual.note_created", { created: money(A.leak) }) : t("visual.note_even");
-    if (hasDisc) vis.note = t("visual.discount_note", { disc: pct(A.disc, 1), d: money(A.discountValue) }) + " " + vis.note;
+    if (hasDisc) vis.note = t("visual.discount_note", { disc: pctLoose(A.disc), d: money(A.discountValue) }) + " " + vis.note;
     if (A.pctOfProfit !== null) vis.sub = t("answer.supplier_line", { srev: money(state.srev), m: pctLoose(state.m), pct: pct(Math.abs(A.pctOfProfit)), days: num(Math.abs(A.daysOfRevenue), 1) });
   } else {
     vis.note = A.ok ? t("visual.note_none") : "";
@@ -493,7 +493,7 @@ $("[data-action='link']").addEventListener("click", async () => flash((await cop
 $("[data-action='png']").addEventListener("click", async () => {
   const A = compute(state);
   const title = A.ok
-    ? `${tr("name")}: ${tr("copy.terms", { a: formatNumber(state.cur, i18n.lang), b: formatNumber(state.next, i18n.lang), spend: formatMoney(state.spend, state.ccy, i18n.lang) })}`
+    ? tr("copy.terms", { a: formatNumber(state.cur, i18n.lang), b: formatNumber(state.next, i18n.lang), spend: formatMoney(state.spend, state.ccy, i18n.lang) })
     : tr("name");
   const svg = visualSvg();
   const ok = svg && (await downloadSvgPng(svg, {

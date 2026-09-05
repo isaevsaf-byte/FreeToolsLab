@@ -19,4 +19,4 @@ One principle.
 
 Question?
 
-Live: freetoolslab.org/tools/<slug>/ — tell me what broke.
+Live: freetoolslab.org/tools/<slug>/ · Tell me what broke.

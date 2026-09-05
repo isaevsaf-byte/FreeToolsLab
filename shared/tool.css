@@ -342,3 +342,14 @@ body[data-og="1"] .og {
     animation: none !important;
   }
 }
+
+/* theme toggle labels (CSS-only, no JS coupling) */
+.when-dark {
+  display: none;
+}
+:root[data-theme="dark"] .when-dark {
+  display: inline;
+}
+:root[data-theme="dark"] .when-light {
+  display: none;
+}

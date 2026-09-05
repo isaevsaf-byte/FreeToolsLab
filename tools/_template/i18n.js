@@ -4,7 +4,7 @@ export default {
     name: "__NAME_EN__",
     tagline: "__TAGLINE_EN__",
     status: "local-first",
-    privacy: "Designed to be usable under strict data policies — nothing leaves your browser. Check your own policy.",
+    privacy: "Designed to be usable under strict data policies. Nothing leaves your browser. Check your own policy.",
     inputs: {
       title: "Inputs",
       currency: "Currency",
@@ -27,7 +27,7 @@ export default {
     actions: {
       copy: "Copy result",
       copied: "Copied",
-      copy_failed: "Copy failed — select the text manually",
+      copy_failed: "Copy failed. Select the text manually",
       csv: "Download CSV",
       downloaded: "CSV downloaded",
     },
@@ -39,6 +39,7 @@ export default {
       note: "Defaults are illustrative, not benchmarks. Edit every number.",
       disclaimer: "This is a calculator, not advice. Check the numbers against your own data.",
     },
+    theme: { dark: "Dark", light: "Light" },
     credit: {
       support: "Support the Lab",
       subscribe: "Get the weekly tool",
@@ -52,7 +53,7 @@ export default {
     name: "__NAME_RU__",
     tagline: "__TAGLINE_RU__",
     status: "local-first",
-    privacy: "Сделано так, чтобы работать при строгих политиках данных — ничего не покидает ваш браузер. Сверьтесь со своей политикой.",
+    privacy: "Сделано так, чтобы работать при строгих политиках данных. Ничего не покидает ваш браузер. Сверьтесь со своей политикой.",
     inputs: {
       title: "Входные данные",
       currency: "Валюта",
@@ -75,7 +76,7 @@ export default {
     actions: {
       copy: "Скопировать результат",
       copied: "Скопировано",
-      copy_failed: "Не скопировалось — выделите текст вручную",
+      copy_failed: "Не скопировалось. Выделите текст вручную",
       csv: "Скачать CSV",
       downloaded: "CSV скачан",
     },
@@ -87,6 +88,7 @@ export default {
       note: "Значения по умолчанию иллюстративные, не бенчмарки. Измените каждую цифру.",
       disclaimer: "Это калькулятор, а не рекомендация. Сверьте цифры со своими данными.",
     },
+    theme: { dark: "Тёмная", light: "Светлая" },
     credit: {
       support: "Поддержать лабораторию",
       subscribe: "Инструмент раз в неделю",

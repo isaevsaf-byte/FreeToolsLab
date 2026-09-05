@@ -38,7 +38,7 @@ The loan costs what the lender pays, not what the borrower saves.
 
 What rate does your smallest strategic supplier borrow at?
 
-Live: freetoolslab.org/tools/payment-terms-lens/ — tell me what broke.
+Live: freetoolslab.org/tools/payment-terms-lens/ · Tell me what broke.
 Free, no tracking. Nothing leaves your browser.
 
 #procurement #workingcapital #supplierrisk

@@ -22,6 +22,7 @@ import {
   CURRENCIES,
   DEFAULT_CURRENCY,
 } from "../../shared/share.js";
+import { initTheme, prefsQuery } from "../../shared/theme.js";
 import { SITE } from "../../shared/site.js";
 import bundle from "./i18n.js";
 
@@ -54,13 +55,19 @@ const out = (name) => $(`[data-out="${name}"]`);
 if (params.get("og") === "1") document.body.dataset.og = "1";
 
 // site-wide values (credit line, LinkedIn) come from site/config.json via shared/site.js
+const theme = initTheme();
 const i18n = initI18n(bundle);
+const syncLinks = () =>
+  $$("[data-prefs-link]").forEach((a) => a.setAttribute("href", a.getAttribute("href").split("?")[0] + prefsQuery(i18n.lang, theme.theme)));
+theme.onChange(syncLinks);
 $$("[data-site='credit']").forEach((el) => (el.textContent = i18n.lang === "ru" ? SITE.credit_ru : SITE.credit_en));
 $$("[data-site='linkedin']").forEach((el) => (el.href = SITE.author.linkedin));
 i18n.onChange((lang) => {
   $$("[data-site='credit']").forEach((el) => (el.textContent = lang === "ru" ? SITE.credit_ru : SITE.credit_en));
+  syncLinks();
   render();
 });
+syncLinks();
 
 // inputs -> state
 $$("[data-param]").forEach((el) => {

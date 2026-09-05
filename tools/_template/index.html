@@ -1,16 +1,19 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="dark" />
-    <title>__NAME_EN__ — FreeToolsLab</title>
+    <meta name="color-scheme" content="light dark" />
+    <title>__NAME_EN__ · FreeToolsLab</title>
     <meta name="description" content="__TAGLINE_EN__" />
-    <meta property="og:title" content="__NAME_EN__ — FreeToolsLab" />
+    <meta property="og:title" content="__NAME_EN__ · FreeToolsLab" />
     <meta property="og:description" content="__TAGLINE_EN__" />
     <meta property="og:image" content="https://www.freetoolslab.org/tools/__SLUG__/og.png" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="stylesheet" href="../../shared/tokens.css" />
     <link rel="stylesheet" href="../../shared/tool.css" />
   </head>
@@ -32,11 +35,14 @@
       <!-- 1. Header -->
       <header class="tool-header">
         <div class="row">
-          <a href="/" class="muted" style="font-family: var(--font-mono); font-size: 0.75rem; text-decoration: none">
+          <a href="/" data-prefs-link class="muted" style="font-family: var(--font-mono); font-size: 0.75rem; text-decoration: none">
             FreeToolsLab
           </a>
           <div class="row">
             <span class="pill" data-i18n="status"></span>
+            <button type="button" class="btn btn--ghost" data-theme-toggle>
+              <span class="when-light" data-i18n="theme.dark"></span><span class="when-dark" data-i18n="theme.light"></span>
+            </button>
             <button type="button" class="btn btn--ghost" data-lang-toggle></button>
           </div>
         </div>
@@ -96,15 +102,15 @@
           <h2 id="results-title" data-i18n="results.title"></h2>
           <div class="result result--stop">
             <span class="label" data-i18n="results.annual"></span>
-            <span class="value" data-out="annual">—</span>
+            <span class="value" data-out="annual"></span>
           </div>
           <div class="result result--go">
             <span class="label" data-i18n="results.after"></span>
-            <span class="value" data-out="after">—</span>
+            <span class="value" data-out="after"></span>
           </div>
           <div class="result">
             <span class="label" data-i18n="results.delta"></span>
-            <span class="value" data-out="delta">—</span>
+            <span class="value" data-out="delta"></span>
           </div>
         </section>
       </div>
@@ -151,8 +157,8 @@
       <!-- 10. Credit block — text links only. Support link lives ONLY here (and /support, footer). -->
       <footer class="credit">
         <a data-site="linkedin" rel="noopener noreferrer" target="_blank"><span data-site="credit"></span></a>
-        <a href="/support/" data-i18n="credit.support"></a>
-        <a href="/subscribe/" data-i18n="credit.subscribe"></a>
+        <a href="/support/" data-prefs-link data-i18n="credit.support"></a>
+        <a href="/subscribe/" data-prefs-link data-i18n="credit.subscribe"></a>
       </footer>
     </main>
 

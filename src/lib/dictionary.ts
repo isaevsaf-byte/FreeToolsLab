@@ -6,6 +6,8 @@ export const dictionary = {
       tools: "Modules",
       support: "Support",
       lang: "Switch language",
+      theme_dark: "Switch to dark theme",
+      theme_light: "Switch to light theme",
     },
     hero: {
       badge: "SYSTEM: OPERATIONAL",
@@ -15,11 +17,11 @@ export const dictionary = {
     },
     mission: {
       title: "The Manifesto",
-      text: "High-level strategic thinking shouldn't be a privilege. We build 'Cognitive Exoskeletons' — tools that help you think clearer, faster, and without bias.",
+      text: "High-level strategic thinking shouldn't be a privilege. We build 'Cognitive Exoskeletons': tools that help you think clearer, faster, and without bias.",
     },
     modules: {
       title: "Modules",
-      sub: "Free, local-first tools. Designed to be usable under strict data policies — nothing leaves your browser. Check your own policy.",
+      sub: "Free, local-first tools. Designed to be usable under strict data policies. Nothing leaves your browser. Check your own policy.",
       live: "Live",
       coming: "Coming next",
       empty: "No tools yet.",
@@ -34,7 +36,7 @@ export const dictionary = {
     },
     support: {
       title: "Support the Lab",
-      kofi: "Ko-fi — one-off or monthly",
+      kofi: "Ko-fi, one-off or monthly",
       github: "GitHub Sponsors",
       bmc: "Buy Me a Coffee",
       not_set: "Support links are not set up yet.",
@@ -46,7 +48,7 @@ export const dictionary = {
     },
     subscribe: {
       title: "Get the weekly tool",
-      text: "One new tool every Tuesday. One email a week, no tracking pixels, unsubscribe in one click. The newsletter lives on its own page — never inside a tool.",
+      text: "One new tool every Tuesday. One email a week, no tracking pixels, unsubscribe in one click. The newsletter lives on its own page, never inside a tool.",
       cta: "Subscribe",
       not_set: "The newsletter is not set up yet.",
     },
@@ -61,6 +63,8 @@ export const dictionary = {
       tools: "Модули",
       support: "Поддержать",
       lang: "Переключить язык",
+      theme_dark: "Тёмная тема",
+      theme_light: "Светлая тема",
     },
     hero: {
       badge: "СТАТУС: АКТИВЕН",
@@ -70,11 +74,11 @@ export const dictionary = {
     },
     mission: {
       title: "Манифест",
-      text: "Стратегическое мышление не должно быть привилегией. Мы создаём «Когнитивные Экзоскелеты» — инструменты, которые убирают шум и эмоции из ваших решений.",
+      text: "Стратегическое мышление не должно быть привилегией. Мы создаём «Когнитивные Экзоскелеты»: инструменты, которые убирают шум и эмоции из ваших решений.",
     },
     modules: {
       title: "Модули",
-      sub: "Бесплатные local-first инструменты. Сделаны так, чтобы работать при строгих политиках данных — ничего не покидает ваш браузер. Сверьтесь со своей политикой.",
+      sub: "Бесплатные local-first инструменты. Сделаны так, чтобы работать при строгих политиках данных. Ничего не покидает ваш браузер. Сверьтесь со своей политикой.",
       live: "Работают",
       coming: "Дальше",
       empty: "Инструментов пока нет.",
@@ -89,7 +93,7 @@ export const dictionary = {
     },
     support: {
       title: "Поддержать лабораторию",
-      kofi: "Ko-fi — разово или ежемесячно",
+      kofi: "Ko-fi, разово или ежемесячно",
       github: "GitHub Sponsors",
       bmc: "Buy Me a Coffee",
       not_set: "Ссылки для поддержки ещё не настроены.",
@@ -101,7 +105,7 @@ export const dictionary = {
     },
     subscribe: {
       title: "Инструмент раз в неделю",
-      text: "Один новый инструмент каждый вторник. Одно письмо в неделю, без трекинг-пикселей, отписка в один клик. Рассылка живёт на отдельной странице — никогда внутри инструмента.",
+      text: "Один новый инструмент каждый вторник. Одно письмо в неделю, без трекинг-пикселей, отписка в один клик. Рассылка живёт на отдельной странице, никогда внутри инструмента.",
       cta: "Подписаться",
       not_set: "Рассылка ещё не настроена.",
     },

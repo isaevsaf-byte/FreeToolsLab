@@ -6,7 +6,7 @@ import { SITE, isSet } from "@/lib/config";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ToolCard } from "@/components/ToolCard";
-import registry from "@/tools/registry.json";
+import registry from "@tools/registry.json";
 
 /** Modules page — generated from tools/registry.json. Do not hand-edit tool lists. */
 export default function ToolsPage() {

@@ -31,6 +31,7 @@ import {
   CURRENCIES,
   DEFAULT_CURRENCY,
 } from "../../shared/share.js";
+import { initTheme, prefsQuery } from "../../shared/theme.js";
 import { SITE } from "../../shared/site.js";
 import bundle from "./i18n.js";
 
@@ -80,13 +81,18 @@ const setText = (name, value) => { const el = out(name); if (el) el.textContent 
 
 if (params.get("og") === "1") document.body.dataset.og = "1";
 
+const theme = initTheme();
 const i18n = initI18n(bundle);
+const syncLinks = () =>
+  $$("[data-prefs-link]").forEach((a) => a.setAttribute("href", a.getAttribute("href").split("?")[0] + prefsQuery(i18n.lang, theme.theme)));
+theme.onChange(syncLinks);
 const applySite = (lang) => {
   $$("[data-site='credit']").forEach((el) => (el.textContent = lang === "ru" ? SITE.credit_ru : SITE.credit_en));
   $$("[data-site='linkedin']").forEach((el) => (el.href = SITE.author.linkedin));
 };
 applySite(i18n.lang);
-i18n.onChange((lang) => { applySite(lang); render(); });
+i18n.onChange((lang) => { applySite(lang); syncLinks(); render(); });
+syncLinks();
 
 $$("[data-param]").forEach((el) => {
   const key = el.dataset.param;
@@ -135,9 +141,9 @@ function render() {
   $("[data-card='supplier']").className = `result ${toYou || noChange ? "result--stop" : "result--go"}`;
 
   // supplier impact
-  setText("pctProfit", r.pctOfProfit === null ? "—" : pct(Math.abs(r.pctOfProfit)));
-  setText("days", r.daysOfRevenue === null ? "—" : `${num(Math.abs(r.daysOfRevenue), 1)} ${t("impact.days_unit")}`);
-  setText("share", r.share === null ? "—" : pct(r.share, 0));
+  setText("pctProfit", r.pctOfProfit === null ? t("impact.na") : pct(Math.abs(r.pctOfProfit)));
+  setText("days", r.daysOfRevenue === null ? t("impact.na") : `${num(Math.abs(r.daysOfRevenue), 1)} ${t("impact.days_unit")}`);
+  setText("share", r.share === null ? t("impact.na") : pct(r.share, 0));
   const warnEl = out("warnSpend");
   warnEl.textContent = r.spendExceeds ? t("impact.warn_spend") : "";
   warnEl.hidden = !r.spendExceeds;
@@ -171,11 +177,11 @@ function render() {
   barBuyer.setAttribute("fill", toYou || noChange ? "var(--go)" : "var(--stop)");
   barSupplier.setAttribute("fill", toYou || noChange ? "var(--stop)" : "var(--go)");
   bite.setAttribute("fill", toYou || noChange ? "var(--stop)" : "var(--go)");
-  setText("vBuyer", `${t(toYou || noChange ? "visual.buyer_gain" : "visual.buyer_cost")} — ${money(r.buyerGain)}`);
-  setText("vSupplier", `${t(toYou || noChange ? "visual.supplier_cost" : "visual.supplier_gain")} — ${money(r.supplierCost)}`);
+  setText("vBuyer", `${t(toYou || noChange ? "visual.buyer_gain" : "visual.buyer_cost")}: ${money(r.buyerGain)}`);
+  setText("vSupplier", `${t(toYou || noChange ? "visual.supplier_cost" : "visual.supplier_gain")}: ${money(r.supplierCost)}`);
   setText(
     "vProfit",
-    `${t("visual.profit")} — ${money(r.supplierProfit)}${
+    `${t("visual.profit")}: ${money(r.supplierProfit)}${
       r.pctOfProfit === null || noChange ? "" : ` · ${t(toYou ? "visual.bite" : "visual.added", { pct: pct(Math.abs(r.pctOfProfit)) })}`
     }`,
   );
@@ -192,12 +198,12 @@ function resultText() {
   const lines = [
     t("name"),
     t("copy.terms", { a: formatNumber(state.cur, lang), b: formatNumber(state.next, lang), spend: money(state.spend) }),
-    `${t("results.cash")}: ${money(r.cashShift)}${noChange ? "" : ` — ${t(toYou ? "results.dir_to_you" : "results.dir_to_supplier", { days: formatNumber(Math.abs(r.deltaDays), lang) })}`}`,
+    `${t("results.cash")}: ${money(r.cashShift)}${noChange ? "" : `, ${t(toYou ? "results.dir_to_you" : "results.dir_to_supplier", { days: formatNumber(Math.abs(r.deltaDays), lang) })}`}`,
     `${t(toYou || noChange ? "results.buyer_gain" : "results.buyer_cost")}: ${money(r.buyerGain)} (${formatNumber(state.br, lang, 1)}%)`,
     `${t(toYou || noChange ? "results.supplier_cost" : "results.supplier_gain")}: ${money(r.supplierCost)} (${formatNumber(state.sr, lang, 1)}%)` +
       (r.pctOfProfit === null
         ? ""
-        : ` — ${t("copy.supplier_line", { pct: formatPercent(Math.abs(r.pctOfProfit), lang, 1), days: formatNumber(Math.abs(r.daysOfRevenue), lang, 1) })}`),
+        : `: ${t("copy.supplier_line", { pct: formatPercent(Math.abs(r.pctOfProfit), lang, 1), days: formatNumber(Math.abs(r.daysOfRevenue), lang, 1) })}`),
     `${t(r.leak >= 0 ? "results.leak" : "results.created")}: ${money(r.leak)}`,
   ];
   if (r.fairShown) lines.push(t("copy.fair", { low: formatPercent(r.fairLow, lang, 2), high: formatPercent(r.fairHigh, lang, 2) }));

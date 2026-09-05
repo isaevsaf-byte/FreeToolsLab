@@ -19,7 +19,7 @@ try {
   const srv = await serve(OUT);
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
-  await page.goto(`${srv.url}/tools/${slug}/?og=1&lang=en`, { waitUntil: "networkidle" });
+  await page.goto(`${srv.url}/tools/${slug}/?og=1&lang=en&theme=dark`, { waitUntil: "networkidle" });
   await page.waitForSelector("body[data-ready='1']", { timeout: 10000 });
   await page.evaluate(() => document.fonts.ready);
   const target = path.join(TOOLS, slug, "og.png");

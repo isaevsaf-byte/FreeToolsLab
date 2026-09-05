@@ -2,6 +2,8 @@
 
 import type { Language } from "@/lib/dictionary";
 import { dictionary } from "@/lib/dictionary";
+import { useLabStore } from "@/store/useLabStore";
+import { prefsQuery } from "@shared/theme.js";
 
 export type RegistryTool = {
   id: string;
@@ -19,7 +21,9 @@ export type RegistryTool = {
 /** Plain <a>: tool pages are static HTML outside Next routing. */
 export function ToolCard({ tool, lang }: { tool: RegistryTool; lang: Language }) {
   const t = dictionary[lang].modules.status as Record<string, string>;
+  const theme = useLabStore((s) => s.theme);
   const live = tool.status === "live";
+  const href = `${tool.url}${prefsQuery(lang, theme)}`;
   const name = lang === "ru" ? tool.name_ru : tool.name_en;
   const tagline = lang === "ru" ? tool.tagline_ru : tool.tagline_en;
   const body = (
@@ -39,7 +43,7 @@ export function ToolCard({ tool, lang }: { tool: RegistryTool; lang: Language })
   );
   const cls = "group block p-6 border border-rule rounded-token transition-all";
   return live ? (
-    <a href={tool.url} className={`${cls} hover:border-rule-2 hover:bg-panel`}>
+    <a href={href} className={`${cls} hover:border-rule-2 hover:bg-panel`}>
       {body}
     </a>
   ) : (

@@ -7,6 +7,7 @@
     "strict": false,
     "noEmit": true,
     "incremental": true,
+    "tsBuildInfoFile": ".next/tsconfig.tsbuildinfo",
     "module": "esnext",
     "esModuleInterop": true,
     "moduleResolution": "bundler",
@@ -14,16 +15,18 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "plugins": [{ "name": "next" }],
-    "paths": { "@/*": ["./*"] }
+    "paths": {
+      "@/*": ["./src/*"],
+      "@shared/*": ["./shared/*"],
+      "@tools/*": ["./tools/*"],
+      "@site/*": ["./site/*"]
+    }
   },
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "app/**/*",
-    "components/**/*",
-    "lib/**/*",
-    "store/**/*",
+    "src/**/*",
     "shared/**/*.js",
     "next.config.ts",
     "tailwind.config.ts"

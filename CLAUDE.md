@@ -9,7 +9,7 @@ Free, local-first tools. freetoolslab.org. Built by Safar Isaev.
    - Any tool that accepts pasted/uploaded data has "Anonymise" ON by default (names -> C-001...; mapping kept in memory only, "Show original" toggle).
    - The only way data leaves is the user's explicit export (Copy result / Download CSV / ICS). Never auto-save, never sync.
    - Example data is fictional. Never real companies.
-   - UI wording: "Designed to be usable under strict data policies — nothing leaves your browser. Check your own policy." Never promise compliance.
+   - UI wording: "Designed to be usable under strict data policies. Nothing leaves your browser. Check your own policy." Never promise compliance.
 
 ## Stack (build allowed, network not)
 - Static build is fine: Vite + React or Svelte, TypeScript. Libraries are BUNDLED at build time (D3, Papa Parse, date-fns, DuckDB-wasm, etc.) — never loaded from a CDN at runtime. Output is static files on static hosting.
@@ -23,7 +23,7 @@ Free, local-first tools. freetoolslab.org. Built by Safar Isaev.
 - Mobile first. Test at 375px width.
 
 ## Design
-- Match the site: near-black `#0A0D14` ground, monospace headings ("IBM Plex Mono", ui-monospace), system sans body, green status pill `#22C55E`. Tokens in `shared/tokens.css` — never hardcode colours in a tool.
+- Light theme by default (white `#FFFFFF` ground, ink `#0F141B`); dark theme (`#0A0D14` ground) via `<html data-theme="dark">`, toggled in every header, state in `?theme=` (no localStorage). Monospace headings ("IBM Plex Mono", ui-monospace), system sans body, green status pill. Tokens in `shared/tokens.css`, never hardcode colours in a tool.
 - Semantic colours: green = good/after, amber = caution, red = risk/before. Accent is separate from semantics.
 - Numbers use `font-variant-numeric: tabular-nums`. Currency symbol follows a selector (GBP/USD/EUR), default GBP.
 
@@ -44,8 +44,8 @@ Free, local-first tools. freetoolslab.org. Built by Safar Isaev.
 - The lab is free and stays free. Supporters fund the AI subscriptions and hosting that make the next tool possible.
 - Links live in exactly three places: the `/support` page, the site footer ("Support the Lab"), and the last line of a tool's credit block. Never in the tool's working area, never as a popup, never gating a feature.
 - Platforms come from `site/config.json` (single source): Ko-fi (one-off + monthly), GitHub Sponsors, Buy Me a Coffee.
-- Wording EN: "Free forever. If a tool saved you an hour, buy the lab a coffee — it pays for the AI subscriptions behind the next one."
-  RU: "Бесплатно навсегда. Если инструмент сэкономил вам час — купите лаборатории кофе: это оплачивает AI-подписки, на которых делается следующий."
+- Wording EN: "Free forever. If a tool saved you an hour, buy the lab a coffee: it pays for the AI subscriptions behind the next one."
+  RU: "Бесплатно навсегда. Если инструмент сэкономил вам час, купите лаборатории кофе: это оплачивает AI-подписки, на которых делается следующий."
 - BYOK and support are explained together on `/support`: "Your key pays for your own usage. Your coffee pays for building the next tool."
 - Transparency block on `/support`: what the money covers (Claude/Cursor/Vercel/Remotion/domain) and a line "Tools shipped this month: N".
 
@@ -55,6 +55,7 @@ Free, local-first tools. freetoolslab.org. Built by Safar Isaev.
 - Never make a network request the user didn't explicitly trigger with their own key.
 - Never ship without both languages.
 - Never invent a benchmark. If unsure, label "illustrative".
+- Never use em-dashes (—) in UI strings, taglines or posts. Use a period, colon or comma.
 
 ## Commands (create these first if missing)
 - `npm run dev` — static dev server
@@ -64,6 +65,7 @@ Free, local-first tools. freetoolslab.org. Built by Safar Isaev.
 
 ## Repo map
 - `tools/` — one folder per tool; `registry.json` is the catalogue
+- `src/` — the site shell (Next.js static export): app/, components/, lib/, store/; `public/` — favicons
 - `content/ideas.md` — backlog with statuses; `content/calendar.md` — 8-week plan; `content/posts/` — post drafts + metrics; `content/videos/` — Remotion scripts; `content/submissions.md` — ideas from people
 - `board/` — AI board prompts (cpo-skeptic, editor, growth)
 - `site/config.json` — support links, contact, socials

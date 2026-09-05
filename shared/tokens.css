@@ -1,24 +1,25 @@
-/* FreeToolsLab design tokens — the only place colours live */
+/* FreeToolsLab design tokens — the only place colours live.
+   Light is the default. <html data-theme="dark"> switches to dark (toggle in the header; state in ?theme=). */
 :root{
-  --bg:#0A0D14; --panel:#10141D; --panel-2:#151B26;
-  --ink:#E6EAF0; --muted:#8B95A5;
-  --rule:#1F2735; --rule-2:#2A3446;
-  --go:#22C55E; --go-soft:#0F2A1B;      /* good / after */
-  --warn:#F59E0B; --warn-soft:#2A1F0A;  /* caution */
-  --stop:#EF4444; --stop-soft:#2A1212;  /* risk / before */
-  --link:#7DD3FC;
+  --bg:#FFFFFF; --panel:#F5F7FA; --panel-2:#EEF2F7;
+  --ink:#0F141B; --muted:#5B6675;
+  --rule:#D9E0E8; --rule-2:#C4CDD8;
+  --go:#15803D; --go-soft:#E6F6EC;      /* good / after */
+  --warn:#B45309; --warn-soft:#FDF3E1;  /* caution */
+  --stop:#B91C1C; --stop-soft:#FDECEC;  /* risk / before */
+  --link:#0369A1;
   --font-mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-sans:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --radius:6px;
+  color-scheme: light;
 }
-@media (prefers-color-scheme: light){
-  :root:not([data-theme="dark"]){
-    --bg:#F5F7FA; --panel:#FFFFFF; --panel-2:#EEF2F7;
-    --ink:#0F141B; --muted:#5B6675;
-    --rule:#D9E0E8; --rule-2:#C4CDD8;
-    --go:#15803D; --go-soft:#E6F6EC;
-    --warn:#B45309; --warn-soft:#FDF3E1;
-    --stop:#B91C1C; --stop-soft:#FDECEC;
-    --link:#0369A1;
-  }
+:root[data-theme="dark"]{
+  --bg:#0A0D14; --panel:#10141D; --panel-2:#151B26;
+  --ink:#E6EAF0; --muted:#8B95A5;
+  --rule:#1F2735; --rule-2:#2A3446;
+  --go:#22C55E; --go-soft:#0F2A1B;
+  --warn:#F59E0B; --warn-soft:#2A1F0A;
+  --stop:#EF4444; --stop-soft:#2A1212;
+  --link:#7DD3FC;
+  color-scheme: dark;
 }

@@ -6,7 +6,7 @@ import { dictionary } from "@/lib/dictionary";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ToolCard } from "@/components/ToolCard";
-import registry from "@/tools/registry.json";
+import registry from "@tools/registry.json";
 
 export default function HomePage() {
   const lang = useLabStore((s) => s.lang);

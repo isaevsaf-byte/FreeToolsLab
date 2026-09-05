@@ -1,4 +1,4 @@
-import site from "@/site/config.json";
+import site from "@site/config.json";
 
 /** Single source of truth: site/config.json (support links, contact, credit lines). */
 export const SITE = site;

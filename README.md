@@ -7,16 +7,20 @@ Two principles: **local-first** (zero network requests at runtime) and **corpora
 ## Layout
 
 ```
+CLAUDE.md, PROJECT_INSTRUCTIONS.md   rules for Claude Code / the chat project
 tools/            one folder per tool: index.html + tool.js + i18n.js (+ og.png)
-  registry.json   the catalogue — Modules page and landing are generated from it
+  registry.json   the catalogue; Modules page and landing are generated from it
   _template/      scaffold source for `npm run new`
-shared/           tokens.css · tool.css · i18n.js · share.js · anonymise.js · site.js (generated)
-site/config.json  support links, contact, credit lines (single source)
-app/, components/ the site shell (Next.js, static export): /, /tools, /support, /subscribe
-content/          ideas.md · calendar.md · posts/ · videos/ · submissions.md
-board/            AI board prompts
+shared/           tokens.css · tool.css · i18n.js · theme.js · share.js · anonymise.js · site.js (generated)
+content/          ideas.md · calendar.md · specs/ · posts/ · videos/ · submissions.md
+board/            AI board prompts (cpo-skeptic, editor, growth)
 remotion/         separate package for tool videos
+site/config.json  support links, contact, credit lines (single source)
+src/              the site shell (Next.js, static export): app/ components/ lib/ store/
+public/           favicons
 scripts/          gen · new · serve · build · check · og
+next.config.ts, tailwind.config.ts, postcss.config.js, tsconfig.json   site build config
+out/              build output (git-ignored)
 ```
 
 A tool is plain HTML + ES modules: it imports `../../shared/i18n.js` and `../../shared/share.js` directly, no framework, no bundler. Heavier tools may add a build step, as long as the output is static and nothing loads from a CDN.

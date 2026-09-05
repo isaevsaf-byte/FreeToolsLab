@@ -1,16 +1,19 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="dark" />
-    <title>Payment Terms Lens — FreeToolsLab</title>
-    <meta name="description" content="What a change in payment terms does to you — and to a supplier this size." />
-    <meta property="og:title" content="Payment Terms Lens — FreeToolsLab" />
-    <meta property="og:description" content="What a change in payment terms does to you — and to a supplier this size." />
+    <meta name="color-scheme" content="light dark" />
+    <title>Payment Terms Lens · FreeToolsLab</title>
+    <meta name="description" content="What a change in payment terms does to you, and to a supplier this size." />
+    <meta property="og:title" content="Payment Terms Lens · FreeToolsLab" />
+    <meta property="og:description" content="What a change in payment terms does to you, and to a supplier this size." />
     <meta property="og:image" content="https://www.freetoolslab.org/tools/payment-terms-lens/og.png" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="stylesheet" href="../../shared/tokens.css" />
     <link rel="stylesheet" href="../../shared/tool.css" />
     <style>
@@ -37,9 +40,12 @@
     <main class="tool">
       <header class="tool-header">
         <div class="row">
-          <a href="/" class="muted" style="font-family: var(--font-mono); font-size: 0.75rem; text-decoration: none">FreeToolsLab</a>
+          <a href="/" data-prefs-link class="muted" style="font-family: var(--font-mono); font-size: 0.75rem; text-decoration: none">FreeToolsLab</a>
           <div class="row">
             <span class="pill" data-i18n="status"></span>
+            <button type="button" class="btn btn--ghost" data-theme-toggle>
+              <span class="when-light" data-i18n="theme.dark"></span><span class="when-dark" data-i18n="theme.light"></span>
+            </button>
             <button type="button" class="btn btn--ghost" data-lang-toggle></button>
           </div>
         </div>
@@ -122,20 +128,20 @@
             <h2 id="results-title" data-i18n="results.title"></h2>
             <div class="result result--warn">
               <span class="label" data-i18n="results.cash"></span>
-              <span class="value" data-out="cash">—</span>
+              <span class="value" data-out="cash"></span>
               <span class="dir" data-out="cashDir"></span>
             </div>
             <div class="result result--go" data-card="buyer">
               <span class="label" data-out="buyerLabel"></span>
-              <span class="value" data-out="buyer">—</span>
+              <span class="value" data-out="buyer"></span>
             </div>
             <div class="result result--stop" data-card="supplier">
               <span class="label" data-out="supplierLabel"></span>
-              <span class="value" data-out="supplier">—</span>
+              <span class="value" data-out="supplier"></span>
             </div>
             <div class="result">
               <span class="label" data-out="leakLabel"></span>
-              <span class="value" data-out="leak">—</span>
+              <span class="value" data-out="leak"></span>
               <span class="hint muted" data-out="leakNote"></span>
             </div>
           </section>
@@ -145,15 +151,15 @@
             <h2 id="impact-title" data-i18n="impact.title"></h2>
             <div class="result">
               <span class="label" data-i18n="impact.pct_profit"></span>
-              <span class="value" data-out="pctProfit">—</span>
+              <span class="value" data-out="pctProfit"></span>
             </div>
             <div class="result">
               <span class="label" data-i18n="impact.days"></span>
-              <span class="value" data-out="days">—</span>
+              <span class="value" data-out="days"></span>
             </div>
             <div class="result">
               <span class="label" data-i18n="impact.share"></span>
-              <span class="value" data-out="share">—</span>
+              <span class="value" data-out="share"></span>
             </div>
             <p class="warn" data-out="warnSpend" hidden></p>
           </section>
@@ -209,8 +215,8 @@
       <!-- Credit block -->
       <footer class="credit">
         <a data-site="linkedin" rel="noopener noreferrer" target="_blank"><span data-site="credit"></span></a>
-        <a href="/support/" data-i18n="credit.support"></a>
-        <a href="/subscribe/" data-i18n="credit.subscribe"></a>
+        <a href="/support/" data-prefs-link data-i18n="credit.support"></a>
+        <a href="/subscribe/" data-prefs-link data-i18n="credit.subscribe"></a>
       </footer>
     </main>
 

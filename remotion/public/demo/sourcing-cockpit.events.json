@@ -1,12 +1,18 @@
 {
   "slug": "sourcing-cockpit",
-  "duration": 39.62339115142822,
+  "video": "demo/sourcing-cockpit.mp4",
   "width": 1080,
   "height": 1350,
+  "footage": 39.623,
   "events": [
     {
-      "t": 0.20739102363586426,
-      "caption": "One link. The whole sourcing project.",
+      "t": 0.207,
+      "dur": 4.33,
+      "caption": "One link. The whole sourcing project."
+    },
+    {
+      "t": 0.207,
+      "dur": 3.4,
       "zoom": {
         "x": 168,
         "y": 392,
@@ -14,25 +20,35 @@
       }
     },
     {
-      "t": 4.738391160964966,
+      "t": 4.738,
+      "dur": 3.99,
       "caption": "Six stages. Six vendors. One number."
     },
     {
-      "t": 8.926391124725342,
+      "t": 8.926,
       "x": 460,
       "y": 476,
-      "tap": true,
+      "tap": true
+    },
+    {
+      "t": 8.926,
+      "dur": 2.25,
       "caption": "Legal slipped a week. Log it."
     },
     {
-      "t": 9.186391115188599,
+      "t": 9.186,
       "x": 429,
       "y": 620,
       "tap": true
     },
     {
-      "t": 11.21639108657837,
-      "caption": "The award date moves. Nobody rewrites a slide.",
+      "t": 11.216,
+      "dur": 4.5,
+      "caption": "The award date moves. Nobody rewrites a slide."
+    },
+    {
+      "t": 11.216,
+      "dur": 3.4,
       "zoom": {
         "x": 61,
         "y": 772,
@@ -40,18 +56,24 @@
       }
     },
     {
-      "t": 16.232391119003296,
+      "t": 16.232,
+      "dur": 3.49,
       "caption": "Plan vs actual. The slip is red."
     },
     {
-      "t": 19.920391082763672,
+      "t": 19.92,
       "x": 561,
       "y": 674,
-      "tap": true,
+      "tap": true
+    },
+    {
+      "t": 19.92,
+      "dur": 4.5,
       "caption": "Award. The list becomes a recommendation."
     },
     {
-      "t": 21.249391078948975,
+      "t": 21.249,
+      "dur": 3.4,
       "zoom": {
         "x": 540,
         "y": 676,
@@ -59,21 +81,30 @@
       }
     },
     {
-      "t": 25.93839120864868,
+      "t": 25.938,
       "x": 146,
       "y": 675,
-      "tap": true,
+      "tap": true
+    },
+    {
+      "t": 25.938,
+      "dur": 3.0,
       "caption": "Legal signed. One click."
     },
     {
-      "t": 29.135390996932983,
+      "t": 29.135,
       "x": 787,
       "y": 675,
-      "tap": true,
+      "tap": true
+    },
+    {
+      "t": 29.135,
+      "dur": 4.5,
       "caption": "One PNG for the steering email."
     },
     {
-      "t": 30.38839101791382,
+      "t": 30.388,
+      "dur": 3.4,
       "zoom": {
         "x": 540,
         "y": 675,
@@ -81,14 +112,19 @@
       }
     },
     {
-      "t": 34.59239101409912,
+      "t": 34.592,
       "x": 932,
       "y": 1225,
       "tap": true
     },
     {
-      "t": 35.119391202926636,
-      "caption": "keep this cockpit updated from my Friday notes",
+      "t": 35.119,
+      "dur": 4.3,
+      "caption": "keep this cockpit updated from my Friday notes"
+    },
+    {
+      "t": 35.119,
+      "dur": 3.4,
       "zoom": {
         "x": 540,
         "y": 1460,

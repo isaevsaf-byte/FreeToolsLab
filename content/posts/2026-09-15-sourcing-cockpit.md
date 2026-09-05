@@ -11,28 +11,27 @@ metrics_7d:  { impressions: , reactions: , comments: , link_clicks: }
 board: { skeptic: , editor_hook_score: , growth_targets: [] }
 ---
 
-<!-- v4 draft 2026-09-05, ~160 words, opens with the Claude Code artifacts background, from Safar's brief: SaaS vs AI companies, Claude Code artifacts, a couple of prompts,
+<!-- v5 draft 2026-09-05, per Safar: no "replaced four tools" claim, project is run with Claude Code as co-pilot, SaaS point = speed of AI, no "break it", ending question, from Safar's brief: SaaS vs AI companies, Claude Code artifacts, a couple of prompts,
      a live cockpit updated by hand or by the agent. Storytelling added. English. No em-dashes.
      The artifact is fictional (enterprise AI platform, £4.2m). Vendor names are real companies used only as
      recognisable examples; nothing in the risks or decisions is a claim about them. Link in the first comment. -->
 
-Claude Code can now publish artifacts: a real web page, on a link, that keeps working after the chat ends.
-I used it to replace four tools on one sourcing project.
+Claude Code can now publish artifacts: a real web page on a link that keeps working after the chat ends.
+I run personal projects with it. Today's example is a sourcing project.
 
-Tracker, slide deck, funnel spreadsheet, risk register.
-Every Friday I copied numbers from three of them into the fourth.
+The project already lives in Claude Code. It is my co-pilot: notes, supplier emails, scoring, drafts, all in one place.
+So I asked it for one more thing. Two prompts.
 
-This week: one paragraph describing the process. Two prompts. Out came a live cockpit. Stages, plan vs actual, vendor funnel, savings vs target, sign-offs, risks, decisions.
-
+Out came a live cockpit. Stages, plan vs actual, vendor funnel, savings vs target, sign-offs, risks, decisions.
 Negotiation slipped a week: one click, the award date moved.
 A vendor won: the list folded into a recommendation.
 Friday notes in, cockpit updated. Same link, new state.
 
-Here is what changed. A SaaS tool sells a fixed shape and I bend my project to fit it.
-An agent builds the shape around my project, then keeps it current, because it read every note.
+Here is what keeps me up at night, in a good way.
+The speed of AI is the story. Six months ago this was a product with a roadmap and a sales team.
+Today it is an afternoon with an agent that already knows my project.
+SaaS will find it harder and harder to compete with that. Not because the tools are bad, but because the ground under them moves every month.
 
-The dashboard stopped being a product you buy. It is now something your agent makes.
+The cockpit is in the first comment. It is an example to inspire you to make your own.
 
-Live cockpit in the first comment. Click things, break it, tell me what broke.
-
-Which tool would you replace first?
+Which project would you try to run with Claude Code?

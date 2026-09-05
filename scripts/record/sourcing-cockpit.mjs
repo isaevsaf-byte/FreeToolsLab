@@ -17,7 +17,7 @@ export async function steps({ goto, hold, note, tap, fill, waitFor, scrollTo }) 
   await tap("[data-apply='4']");
   await hold(1.5);
   await scrollTo(".asof", "center");
-  await note("The award date moves. Nobody rewrites a slide.", { zoom: "#awardDate", scale: 1.2 });
+  await note("The award date moves. Nobody rewrites a slide.", { zoom: "#days", scale: 1.15 });
   await hold(4.5);
 
   await scrollTo("#gantt");
@@ -34,6 +34,8 @@ export async function steps({ goto, hold, note, tap, fill, waitFor, scrollTo }) 
   await hold(3);
 
   await tap("#snap", "One PNG for the steering email.");
+  await hold(1.2);
+  await note(undefined, { zoom: "#shot .box", scale: 1.25 });
   await waitFor("#shot.open");
   await hold(4);
   await tap("#shotClose");

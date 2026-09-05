@@ -17,3 +17,5 @@ remotion/public/*/demo.mp4
 remotion/out/
 remotion/public/demo/*.mp4
 remotion/public/demo/*.webm
+remotion/public/music/
+remotion/public/demo/*.frames/

@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, Easing, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Audio, Easing, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { tokens } from "./tokens";
 
 export type DemoEvent = {
@@ -22,14 +22,20 @@ export type ToolDemoProps = {
   credit: string;
   titleSec: number;
   creditSec: number;
+  /** optional music bed under public/, e.g. "music/cockpit.mp3"; faded in over 1 s and out over the credit */
+  music?: string;
+  musicVolume?: number;
+  /** third line of the end card; defaults to the site promise, pass "" for non-tool videos */
+  tagline?: string;
 };
 
 const sans = '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
 
 /** Real screen recording of the tool + title, captions, tap ripples, one zoom at a time, PNG reveal, credit. */
-export const ToolDemo: React.FC<ToolDemoProps> = ({ video, events, footage, title, kicker, url, credit, titleSec, creditSec }) => {
+export const ToolDemo: React.FC<ToolDemoProps> = ({ video, events, footage, title, kicker, url, credit, titleSec, creditSec, music, musicVolume = 0.35, tagline = "Free · local-first · no tracking" }) => {
   const frame = useCurrentFrame();
-  const { fps, width, height } = useVideoConfig();
+  const { fps, width, height, durationInFrames } = useVideoConfig();
+  const musicVol = (f: number) => musicVolume * interpolate(f, [0, fps, durationInFrames - Math.round(creditSec * fps), durationInFrames - 4], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const t = frame / fps;
   const ft = t - titleSec; // time inside the footage
   const titleFrames = Math.round(titleSec * fps);
@@ -66,6 +72,7 @@ export const ToolDemo: React.FC<ToolDemoProps> = ({ video, events, footage, titl
 
   return (
     <AbsoluteFill style={{ backgroundColor: tokens.bg }}>
+      {music && <Audio src={staticFile(music)} volume={musicVol} />}
       {/* title card */}
       <Sequence from={0} durationInFrames={titleFrames}>
         <TitleCard title={title} kicker={kicker} />
@@ -111,7 +118,7 @@ export const ToolDemo: React.FC<ToolDemoProps> = ({ video, events, footage, titl
 
       {/* credit */}
       <Sequence from={titleFrames + footageFrames} durationInFrames={Math.round(creditSec * fps)}>
-        <CreditCard url={url} credit={credit} />
+        <CreditCard url={url} credit={credit} tagline={tagline} />
       </Sequence>
     </AbsoluteFill>
   );
@@ -129,7 +136,7 @@ const TitleCard: React.FC<{ title: string; kicker: string }> = ({ title, kicker 
   );
 };
 
-const CreditCard: React.FC<{ url: string; credit: string }> = ({ url, credit }) => {
+const CreditCard: React.FC<{ url: string; credit: string; tagline: string }> = ({ url, credit, tagline }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const opacity = interpolate(frame, [0, fps * 0.5], [0, 1], { extrapolateRight: "clamp" });
@@ -137,7 +144,7 @@ const CreditCard: React.FC<{ url: string; credit: string }> = ({ url, credit }) 
     <AbsoluteFill style={{ backgroundColor: tokens.bg, color: tokens.ink, justifyContent: "center", alignItems: "center", gap: 22, opacity, fontFamily: tokens.fontMono }}>
       <div style={{ fontSize: 40 }}>{url}</div>
       <div style={{ fontSize: 30, color: tokens.muted }}>{credit}</div>
-      <div style={{ fontSize: 26, color: tokens.muted, marginTop: 30 }}>Free · local-first · no tracking</div>
+      {tagline && <div style={{ fontSize: 26, color: tokens.muted, marginTop: 30 }}>{tagline}</div>}
     </AbsoluteFill>
   );
 };

@@ -103,6 +103,8 @@ function compute(s, sc = { next: s.next, disc: s.disc }) {
   const buyerNet = ok ? buyerGain + discountValue : null;
   const supplierNet = ok ? -supplierCost - discountValue : null;
   const supplierTotalCost = ok ? supplierCost + discountValue : null;
+  // classic "cost of trade credit": 2/10 net 30 -> 2/98 × 365/20 = 37.2% a year
+  const apr = ok && disc > 0 && deltaDays < 0 ? (disc / (100 - disc)) * (365 / Math.abs(deltaDays)) * 100 : null;
   const hasRev = has(s.srev) && s.srev > 0;
   const supplierProfit = hasRev && s.m > 0 ? s.srev * (s.m / 100) : null;
   const pctOfProfit = ok && supplierProfit ? (supplierTotalCost / supplierProfit) * 100 : null;
@@ -113,7 +115,7 @@ function compute(s, sc = { next: s.next, disc: s.disc }) {
   const fairHigh = ok ? (deltaDays / 365) * effSr : null;
   const fairShown = ok && deltaDays > 0 && effSr > s.br;
   return {
-    ok, effSr, disc, dailySpend, deltaDays, cashShift, buyerGain, supplierCost, leak, discountValue, buyerNet, supplierNet,
+    ok, effSr, disc, apr, dailySpend, deltaDays, cashShift, buyerGain, supplierCost, leak, discountValue, buyerNet, supplierNet,
     supplierTotalCost, supplierProfit, pctOfProfit, daysOfRevenue, share, spendExceeds, fairLow, fairHigh, fairShown,
   };
 }
@@ -216,6 +218,7 @@ const onChip = (sel, fn) => $$(sel).forEach((btn) => btn.addEventListener("click
 onChip("[data-preset]", (btn) => { const [a, b, d] = btn.dataset.preset.split(",").map(Number); state.cur = a; state.next = b; state.disc = d || 0; });
 onChip("[data-size]", (btn) => { state.srev = scaled(Number(btn.dataset.size), state.ccy); });
 onChip("[data-margin]", (btn) => { state.m = Number(btn.dataset.margin); });
+onChip("[data-sr-plus]", (btn) => { state.sr = Math.min(40, state.br + Number(btn.dataset.srPlus)); });
 onChip("[data-who]", (btn) => { state.who = btn.dataset.who; });
 $("[data-panel='compare']").addEventListener("toggle", (e) => {
   if (e.target.open === state.cmp) return;
@@ -270,6 +273,7 @@ function render() {
   $$("[data-preset]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.preset === `${state.cur},${state.next},${state.disc || 0}`)));
   $$("[data-size]").forEach((b) => b.setAttribute("aria-pressed", String(state.srev === scaled(Number(b.dataset.size), state.ccy))));
   $$("[data-margin]").forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.margin) === state.m)));
+  $$("[data-sr-plus]").forEach((b) => b.setAttribute("aria-pressed", String(state.sr === Math.min(40, state.br + Number(b.dataset.srPlus)))));
   $$("[data-size]").forEach((b) => (b.textContent = formatNumber(scaled(Number(b.dataset.size), state.ccy) / 1e6, lang, 0) + "m"));
   $$("[data-scf-only]").forEach((el) => (el.hidden = !state.scf));
   $$("[data-disc-only]").forEach((el) => (el.hidden = !hasDisc));
@@ -287,7 +291,8 @@ function render() {
   } else {
     const v = { b: num(state.next), gain: money(A.buyerGain), cost: money(A.supplierCost), leak: money(A.leak), created: money(A.leak) };
     head = t(toYou ? "summary.head_extend" : "summary.head_shorten", v);
-    sub = toYou ? t(A.leak >= 0 ? "summary.sub_extend" : "summary.sub_extend_created", v) : t(A.leak <= 0 ? "summary.sub_shorten" : "summary.sub_shorten_lost", v);
+    if (Math.abs(A.leak) < 0.5) sub = t("summary.sub_even", v);
+    else sub = toYou ? t(A.leak >= 0 ? "summary.sub_extend" : "summary.sub_extend_created", v) : t(A.leak <= 0 ? "summary.sub_shorten" : "summary.sub_shorten_lost", v);
   }
   setText("headline", head);
   setText("subline", sub);
@@ -301,6 +306,7 @@ function render() {
   setText("buyerLabel", t(hasDisc ? "results.buyer_interest" : "results.buyer"));
   setText("supplierLabel", t(hasDisc ? "results.supplier_interest" : "results.supplier"));
   setMoney("discount", A.discountValue, money);
+  setText("apr", A.apr === null ? na : pct(A.apr, 0));
   setMoney("yourNet", A.buyerNet, signed);
   setMoney("supplierNet", A.supplierNet, signed);
   $("[data-card='buyer']").className = `stat ${!A.ok || A.buyerGain >= 0 ? "stat--go" : "stat--stop"}`;
@@ -325,10 +331,13 @@ function render() {
   $("[data-tl='l1']").style.left = px(tl.cur);
   $("[data-tl='l2']").style.left = px(tl.next);
   $("[data-tl='l0']").textContent = t("visual.today");
-  $("[data-tl='l1']").textContent = A.ok ? t("visual.day", { d: num(tl.cur) }) : "";
-  $("[data-tl='l2']").textContent = A.ok && tl.next !== tl.cur ? t("visual.day", { d: num(tl.next) }) : "";
-  $("[data-tl='l2']").classList.toggle("edge-r", tl.next / tl.max > 0.9);
-  $("[data-tl='l1']").classList.toggle("edge-r", tl.cur / tl.max > 0.9);
+  const close = A.ok && Math.abs(tl.next - tl.cur) / tl.max < 0.14;
+  const nearStart = (d) => d / tl.max < 0.1;
+  $("[data-tl='l1']").textContent = !A.ok || nearStart(tl.cur) ? "" : close ? `${t("visual.day", { d: num(lo) })} → ${num(hi)}` : t("visual.day", { d: num(tl.cur) });
+  $("[data-tl='l2']").textContent = !A.ok || close || nearStart(tl.next) || tl.next === tl.cur ? "" : t("visual.day", { d: num(tl.next) });
+  if (close) $("[data-tl='l1']").style.left = px((lo + hi) / 2);
+  $("[data-tl='l2']").classList.toggle("edge-r", tl.next / tl.max > 0.88);
+  $("[data-tl='l1']").classList.toggle("edge-r", (close ? hi : tl.cur) / tl.max > 0.88);
   const warnEl = out("warnSpend");
   warnEl.textContent = A.spendExceeds ? t("impact.warn_spend") : "";
   warnEl.hidden = !A.spendExceeds;
@@ -363,16 +372,36 @@ function render() {
   setText("vTitle", vis.title);
   setText("flyWhoL", vis.whoL);
   setText("flyWhoR", vis.whoR);
-  setText("flyValL", vis.valL);
-  setText("flyValR", vis.valR);
-  out("flyValL").style.color = `var(${vis.cL})`;
-  out("flyValR").style.color = `var(${vis.cR})`;
   const barL = $("[data-bar='left']");
   const barR = $("[data-bar='right']");
   barL.style.width = `${vis.wL}%`;
   barL.style.background = `var(${vis.cL})`;
   barR.style.width = `${vis.wR}%`;
   barR.style.background = `var(${vis.cR})`;
+  // value label: inside the bar if it fits, else just outside it, else (narrow screens) in the head row
+  const placeVal = (el, headEl, text, wPct, color, side) => {
+    el.textContent = text;
+    el.hidden = false;
+    const half = el.parentElement.clientWidth || 300;
+    const barPx = (wPct / 100) * half;
+    const w = el.offsetWidth;
+    const inside = !!text && barPx >= w + 12;
+    const outside = !inside && !!text && barPx + w + 8 <= half;
+    el.classList.toggle("inside", inside);
+    el.style.color = inside ? "" : `var(${color})`;
+    if (inside || outside) {
+      if (side === "l") { el.style.right = inside ? `${barPx - w}px` : `${barPx}px`; el.style.left = "auto"; }
+      else { el.style.left = inside ? `${barPx - w}px` : `${barPx}px`; el.style.right = "auto"; }
+      headEl.hidden = true;
+    } else {
+      el.hidden = true;
+      headEl.hidden = false;
+      headEl.textContent = text;
+      headEl.style.color = `var(${color})`;
+    }
+  };
+  placeVal(out("flyValL"), out("flyHeadValL"), vis.valL, vis.wL, vis.cL, "l");
+  placeVal(out("flyValR"), out("flyHeadValR"), vis.valR, vis.wR, vis.cR, "r");
   setText("flyNote", vis.note);
   setText("flySub", vis.sub);
   vis.tl = tl;
@@ -421,6 +450,7 @@ function render() {
     ["table.supplier_cost", A.supplierCost === null ? na : signed(A.supplierCost), "f3"],
     ["table.leak", A.leak === null ? na : signed(A.leak), "f4"],
     ["table.discount", moneyOrNa(A.discountValue), "f9"],
+    ["table.apr", A.apr === null ? na : pct(A.apr, 1), "f10"],
     ["table.your_net", A.buyerNet === null ? na : signed(A.buyerNet), "f9"],
     ["table.supplier_net", A.supplierNet === null ? na : signed(A.supplierNet), "f9"],
     ["table.profit", moneyOrNa(A.supplierProfit), "f5"],
@@ -514,7 +544,7 @@ function resultText() {
       (A.pctOfProfit === null ? "" : `: ${t("copy.supplier_line", { pct: pct(Math.abs(A.pctOfProfit)), days: formatNumber(Math.abs(A.daysOfRevenue), lang, 1) })}`),
     `${t(A.leak >= 0 ? "results.leak" : "results.created")}: ${money(A.leak)}`,
   );
-  if (A.disc > 0) lines.push(t("copy.discount", { disc: pct(A.disc, 1), b: formatNumber(state.next, lang), d: money(A.discountValue), yn: signed(A.buyerNet), sn: signed(A.supplierNet) }));
+  if (A.disc > 0) lines.push(t("copy.discount", { disc: pct(A.disc, 1), b: formatNumber(state.next, lang), d: money(A.discountValue), apr: A.apr === null ? na : pct(A.apr, 0), yn: signed(A.buyerNet), sn: signed(A.supplierNet) }));
   if (state.scf) lines.push(t("copy.scf", { eff: pct(A.effSr, 1), br: pct(state.br, 1), spread: pct(state.spread || 0, 1) }));
   if (A.fairShown) lines.push(t("copy.fair", { low: formatPercentLoose(A.fairLow, lang, 1), high: formatPercentLoose(A.fairHigh, lang, 1) }));
   if (state.cmp) {

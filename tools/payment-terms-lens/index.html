@@ -75,15 +75,17 @@
       .stat--cash .value { color: var(--link); }
       /* butterfly: both sides from one axis; PNG export builds its own SVG */
       .fly { display: grid; gap: 0.75rem; }
-      .fly-head { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-family: var(--font-mono); font-size: 0.875rem; }
+      .fly-head { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted); }
       .fly-head .r { text-align: right; }
-      .fly-head .who { color: var(--muted); }
-      .fly-head .val { font-variant-numeric: tabular-nums; font-size: 1.125rem; display: block; }
-      .fly-track { display: grid; grid-template-columns: 1fr 2px 1fr; align-items: center; height: 40px; }
-      .fly-half { display: flex; height: 100%; align-items: center; }
-      .fly-half.l { justify-content: flex-end; }
-      .fly-bar { height: 28px; width: 0; transition: width 0.4s ease; border-radius: 2px; }
-      .fly-axis { background: var(--ink); height: 40px; }
+      .fly-head .val { display: block; font-size: 1.0625rem; font-variant-numeric: tabular-nums; }
+      .fly-track { display: grid; grid-template-columns: 1fr 2px 1fr; align-items: stretch; height: 52px; background: var(--panel-2); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+      .fly-half { position: relative; height: 100%; }
+      .fly-bar { position: absolute; top: 8px; bottom: 8px; width: 0; transition: width 0.4s ease; }
+      .fly-half.l .fly-bar { right: 0; border-radius: 6px 0 0 6px; }
+      .fly-half.r .fly-bar { left: 0; border-radius: 0 6px 6px 0; }
+      .fly-axis { background: var(--ink); }
+      .fly-val { position: absolute; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: 1.0625rem; font-variant-numeric: tabular-nums; white-space: nowrap; padding: 0 0.5rem; transition: right 0.4s ease, left 0.4s ease; }
+      .fly-val.inside { color: #fff; }
       .why summary { display: inline; cursor: pointer; font-family: var(--font-mono); font-size: 0.75rem; color: var(--link); list-style: none; }
       .why summary::-webkit-details-marker { display: none; }
       .why p { margin: 0.25rem 0 0; }
@@ -194,6 +196,10 @@
             <span class="value" data-out="discount" data-formula="f9"></span>
           </div>
           <div class="stat" data-disc-only hidden>
+            <span class="label" data-i18n="results.apr"></span>
+            <span class="value" data-out="apr" data-formula="f10"></span>
+          </div>
+          <div class="stat" data-disc-only hidden>
             <span class="label" data-i18n="results.your_net"></span>
             <span class="value" data-out="yourNet" data-formula="f9"></span>
           </div>
@@ -212,6 +218,12 @@
             <div class="rate">
               <label for="sr"><span data-i18n="inputs.supplier_rate.label"></span>: <b><span data-out="srLabel"></span><span data-i18n="inputs.supplier_rate.unit"></span></b></label>
               <input id="sr" class="range" type="range" min="0" max="40" step="0.5" data-param="sr" />
+              <div class="chips" role="group" aria-labelledby="sr-size-label">
+                <span id="sr-size-label" class="chips-label" data-i18n="inputs.sr_by_size"></span>
+                <button type="button" class="chip" data-sr-plus="1" data-i18n="inputs.sr_large"></button>
+                <button type="button" class="chip" data-sr-plus="4" data-i18n="inputs.sr_mid"></button>
+                <button type="button" class="chip" data-sr-plus="8" data-i18n="inputs.sr_small"></button>
+              </div>
               <span class="hint" data-out="scfNote"></span>
               <details class="why"><summary data-i18n="inputs.why"></summary><p class="hint" data-i18n="inputs.supplier_rate.source"></p></details>
             </div>
@@ -236,13 +248,13 @@
             <span class="lbl" data-tl="l2"></span>
           </div>
           <div class="fly-head">
-            <div class="l"><span class="who" data-out="flyWhoL"></span><span class="val" data-out="flyValL"></span></div>
-            <div class="r"><span class="who" data-out="flyWhoR"></span><span class="val" data-out="flyValR"></span></div>
+            <div class="l"><span class="who" data-out="flyWhoL"></span><span class="val" data-out="flyHeadValL" hidden></span></div>
+            <div class="r"><span class="who" data-out="flyWhoR"></span><span class="val" data-out="flyHeadValR" hidden></span></div>
           </div>
-          <div class="fly-track" aria-hidden="true">
-            <div class="fly-half l"><div class="fly-bar" data-bar="left"></div></div>
-            <div class="fly-axis"></div>
-            <div class="fly-half"><div class="fly-bar" data-bar="right"></div></div>
+          <div class="fly-track">
+            <div class="fly-half l"><div class="fly-bar" data-bar="left"></div><span class="fly-val" data-out="flyValL"></span></div>
+            <div class="fly-axis" aria-hidden="true"></div>
+            <div class="fly-half r"><div class="fly-bar" data-bar="right"></div><span class="fly-val" data-out="flyValR"></span></div>
           </div>
           <p class="fly-note" data-out="flyNote"></p>
           <p class="fly-sub" data-out="flySub"></p>
@@ -376,6 +388,7 @@
           <li><code data-i18n="assumptions.f7"></code></li>
           <li><code data-i18n="assumptions.f8"></code></li>
           <li><code data-i18n="assumptions.f9"></code></li>
+          <li><code data-i18n="assumptions.f10"></code></li>
         </ul>
         <p data-i18n="assumptions.note"></p>
         <p data-i18n="assumptions.disclaimer"></p>

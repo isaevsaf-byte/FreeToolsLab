@@ -2,11 +2,15 @@
 
 Thu 2026-09-10 15:15 UK · 1080×1350 · 30fps · 28 s · no emojis on screen · numbers are the tool's illustrative defaults (GBP).
 
+## Status
+
+Pipeline built 2026-09-05: `scripts/record.mjs` + `scripts/record/payment-terms-lens.mjs` + Remotion `ToolDemo`. First render: `remotion/out/payment-terms-lens.mp4`, 30.8 s (1.5 s title + 27.3 s footage + 2 s credit). Timings below are the plan; actual tap times are in `remotion/public/payment-terms-lens/events.json`. Open: trim footage holds by ~3 s to land on 28 s; title font falls back to system sans until Manrope is bundled; no sound yet.
+
 ## Approach: real screen recording + Remotion on top (chosen)
 
 The footage IS the tool. Playwright drives the real page at a phone-size viewport (540×675 @2x → 1080×1350) and records it; every tap is logged with a timestamp and coordinates. Remotion adds what a raw recording lacks: a 1.5 s title, short captions synced to the taps, a tap ripple, one zoom on the number that changes, and the credit card. Nothing is re-drawn by hand, so the video can never drift from the product, and the same pipeline films every future tool.
 
-Pipeline: `scripts/record.mjs` (Playwright: interactions + `recordVideo` → `demo.webm` + `events.json`) → Remotion composition `ToolDemo` (`<OffthreadVideo src=demo.mp4>` + overlays driven by `events.json`) → `render` → mp4.
+Pipeline: `scripts/record.mjs` (Playwright + CDP screencast: interactions → `demo.mp4` + `events.json` + `export.png`) → Remotion composition `ToolDemo` (`<OffthreadVideo src=demo.mp4>` + overlays driven by `events.json`) → `render` → mp4.
 
 ## Shot list (what the script does, second by second)
 

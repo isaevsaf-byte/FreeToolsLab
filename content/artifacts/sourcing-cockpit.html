@@ -1,0 +1,560 @@
+<title>AI Platform Sourcing Cockpit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  :root {
+    --bg: #0B1020; --panel: #121A2E; --panel-2: #182238; --rule: #22304B; --rule-2: #2F3F60;
+    --ink: #E8ECF5; --muted: #8D97B0; --accent: #F5B942; --accent-ink: #1A1200;
+    --go: #34D399; --warn: #F5B942; --stop: #F87171;
+    --go-soft: rgba(52,211,153,.14); --warn-soft: rgba(245,185,66,.14); --stop-soft: rgba(248,113,113,.16);
+    --sans: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --radius: 10px;
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #F4F6FB; --panel: #FFFFFF; --panel-2: #EEF1F8; --rule: #D9DFEC; --rule-2: #C3CCE0;
+      --ink: #111633; --muted: #5C6680; --accent: #B7791F; --accent-ink: #FFFFFF;
+      --go: #15803D; --warn: #B45309; --stop: #B91C1C;
+      --go-soft: rgba(21,128,61,.10); --warn-soft: rgba(180,83,9,.12); --stop-soft: rgba(185,28,28,.10);
+      color-scheme: light;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #F4F6FB; --panel: #FFFFFF; --panel-2: #EEF1F8; --rule: #D9DFEC; --rule-2: #C3CCE0;
+    --ink: #111633; --muted: #5C6680; --accent: #B7791F; --accent-ink: #FFFFFF;
+    --go: #15803D; --warn: #B45309; --stop: #B91C1C;
+    --go-soft: rgba(21,128,61,.10); --warn-soft: rgba(180,83,9,.12); --stop-soft: rgba(185,28,28,.10);
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.45; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 20px 40px; display: grid; gap: 16px; }
+  h1, h2, h3 { margin: 0; text-wrap: balance; }
+  h1 { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; letter-spacing: -.01em; line-height: 1.1; }
+  h2 { font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .eyebrow { font-family: var(--mono); font-size: .72rem; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
+  .meta { color: var(--muted); font-size: .88rem; margin: 6px 0 0; }
+  .card { background: var(--panel); border: 1px solid var(--rule); border-radius: var(--radius); padding: 16px; display: grid; gap: 12px; align-content: start; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button { font: inherit; color: inherit; }
+  .btn { font-family: var(--mono); font-size: .76rem; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--rule-2); background: var(--panel); color: var(--ink); cursor: pointer; white-space: nowrap; }
+  .btn:hover { border-color: var(--accent); }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  .btn.ghost { border-color: transparent; color: var(--muted); padding: 3px 8px; }
+  .btn.ghost:hover { color: var(--accent); }
+  .btn.tiny { font-size: .68rem; padding: 3px 8px; }
+
+  /* top */
+  .top { display: grid; grid-template-columns: 1fr auto auto; gap: 20px; align-items: center; }
+  .ring { position: relative; width: 128px; height: 128px; }
+  .ring svg { width: 128px; height: 128px; transform: rotate(-90deg); }
+  .ring .track { stroke: var(--rule-2); }
+  .ring .fill { stroke: var(--accent); stroke-linecap: round; transition: stroke-dashoffset .7s cubic-bezier(.2,.7,.2,1); }
+  .ring .label { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+  .ring .pct { font-family: var(--mono); font-size: 1.8rem; font-weight: 600; line-height: 1; }
+  .ring .cap { font-size: .66rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px; }
+  .asof { display: grid; gap: 8px; justify-items: end; text-align: right; }
+  .asof .date { font-family: var(--mono); font-size: .82rem; color: var(--muted); }
+  .pill { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: .76rem; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--rule-2); background: var(--panel); white-space: nowrap; }
+  .pill .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .pill.stage { border-color: var(--accent); color: var(--accent); }
+  .pill.go { color: var(--go); border-color: var(--go); background: var(--go-soft); }
+  .pill.warn { color: var(--warn); border-color: var(--warn); background: var(--warn-soft); }
+  .pill.stop { color: var(--stop); border-color: var(--stop); background: var(--stop-soft); }
+  .days { font-family: var(--mono); font-size: .82rem; color: var(--muted); }
+  .days b { color: var(--ink); font-weight: 600; font-size: 1.1rem; }
+  .days .slip { color: var(--stop); }
+
+  /* toolbar */
+  .bar-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; background: var(--panel-2); border: 1px solid var(--rule); border-radius: var(--radius); padding: 10px 14px; }
+  .bar-row .hint { font-family: var(--mono); font-size: .74rem; color: var(--muted); }
+  .bar-row .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .toast { font-family: var(--mono); font-size: .74rem; color: var(--go); min-height: 1em; }
+
+  /* stages */
+  .stages { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+  .stage { position: relative; text-align: left; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--rule); background: var(--panel); display: grid; gap: 3px; cursor: pointer; transition: border-color .3s, background .3s; }
+  .stage:hover { border-color: var(--rule-2); }
+  .stage .n { font-family: var(--mono); font-size: .68rem; color: var(--muted); display: flex; justify-content: space-between; }
+  .stage .t { font-weight: 600; font-size: .88rem; }
+  .stage .s { font-family: var(--mono); font-size: .68rem; color: var(--muted); }
+  .stage.done { border-color: var(--go); }
+  .stage.done .s { color: var(--go); }
+  .stage.in { border-color: var(--accent); background: var(--panel-2); box-shadow: 0 0 0 3px var(--warn-soft); }
+  .stage.in .s { color: var(--accent); }
+  .stage .slipTag { color: var(--stop); font-weight: 600; }
+  .stage .slipBtn { position: absolute; right: 6px; bottom: 6px; opacity: 0; font-family: var(--mono); font-size: .66rem; border: 1px solid var(--rule-2); background: var(--panel); border-radius: 6px; padding: 2px 6px; cursor: pointer; }
+  .stage:hover .slipBtn, .stage:focus-within .slipBtn { opacity: 1; }
+  .slipBox { display: none; position: absolute; z-index: 5; left: 0; top: calc(100% + 6px); background: var(--panel); border: 1px solid var(--rule-2); border-radius: 8px; padding: 10px; gap: 6px; grid-template-columns: 1fr auto; box-shadow: 0 12px 30px rgba(0,0,0,.3); width: 230px; }
+  .slipBox.open { display: grid; }
+  .slipBox label { grid-column: 1 / -1; font-family: var(--mono); font-size: .7rem; color: var(--muted); }
+  .slipBox input { font: inherit; font-family: var(--mono); font-size: .8rem; width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--rule-2); background: var(--panel-2); color: var(--ink); }
+
+  /* gantt */
+  .gantt { display: grid; gap: 6px; }
+  .grow { display: grid; grid-template-columns: 120px 1fr; gap: 10px; align-items: center; font-family: var(--mono); font-size: .72rem; color: var(--muted); }
+  .grow .track { position: relative; height: 16px; background: var(--panel-2); border: 1px solid var(--rule); border-radius: 4px; }
+  .grow .plan { position: absolute; top: 2px; bottom: 2px; background: var(--rule-2); border-radius: 3px; }
+  .grow .plan.done { background: var(--go); }
+  .grow .plan.in { background: var(--accent); }
+  .grow .slipB { position: absolute; top: 2px; bottom: 2px; background: var(--stop); border-radius: 0 3px 3px 0; }
+  .gaxis { position: relative; height: 16px; margin-left: 130px; font-family: var(--mono); font-size: .64rem; color: var(--muted); }
+  .gaxis span { position: absolute; transform: translateX(-50%); }
+  .today { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--ink); opacity: .6; }
+  .today::after { content: "today"; position: absolute; top: -14px; left: -14px; font-size: .6rem; letter-spacing: .06em; color: var(--ink); }
+
+  /* main grid */
+  .grid { display: grid; grid-template-columns: 1.05fr 1.35fr 1fr; gap: 16px; }
+  ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+  li { display: grid; grid-template-columns: 18px 1fr auto; gap: 6px; align-items: start; font-size: .9rem; animation: rise .35s ease both; }
+  li .k { font-family: var(--mono); font-size: .8rem; margin-top: 2px; }
+  li.done .k { color: var(--go); }
+  li.next .k { color: var(--accent); }
+  li.block .k { color: var(--stop); }
+  li .x { opacity: 0; }
+  li:hover .x { opacity: 1; }
+  .empty { color: var(--muted); font-size: .88rem; }
+  .add { display: grid; grid-template-columns: 1fr auto; gap: 6px; }
+  .add input { font: inherit; font-size: .85rem; padding: 6px 9px; border-radius: 6px; border: 1px dashed var(--rule-2); background: transparent; color: var(--ink); }
+  .add input::placeholder { color: var(--muted); }
+  @keyframes rise { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  /* kpi */
+  .kpi { display: grid; gap: 8px; }
+  .kpi .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .kpi .big { font-family: var(--mono); font-size: 1.6rem; font-weight: 600; line-height: 1; }
+  .kpi .sub { font-family: var(--mono); font-size: .76rem; color: var(--muted); }
+  .bar { position: relative; height: 14px; border-radius: 7px; background: var(--panel-2); border: 1px solid var(--rule); }
+  .bar .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 7px; background: var(--go); transition: width .7s cubic-bezier(.2,.7,.2,1); }
+  .bar .target { position: absolute; top: -5px; bottom: -5px; width: 2px; background: var(--accent); }
+  .bar .target::after { content: "target"; position: absolute; bottom: -16px; left: -18px; font-family: var(--mono); font-size: .62rem; color: var(--accent); letter-spacing: .06em; }
+
+  /* suppliers */
+  .tbl { width: 100%; border-collapse: collapse; font-size: .84rem; }
+  .tbl th { font-family: var(--mono); font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--rule); font-weight: 600; }
+  .tbl td { padding: 6px 6px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+  .tbl tr.out td { opacity: .45; }
+  .tbl .id { font-family: var(--mono); font-size: .78rem; }
+  .steps { display: flex; gap: 3px; }
+  .step { width: 22px; height: 18px; border-radius: 4px; border: 1px solid var(--rule-2); background: var(--panel-2); cursor: pointer; padding: 0; font-family: var(--mono); font-size: .62rem; color: var(--muted); }
+  .step.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  .step.win { background: var(--go); border-color: var(--go); color: #062B1A; }
+  .offer { width: 64px; font: inherit; font-family: var(--mono); font-size: .8rem; padding: 3px 6px; border-radius: 6px; border: 1px solid var(--rule-2); background: var(--panel-2); color: var(--ink); text-align: right; }
+  .offer.best { border-color: var(--go); color: var(--go); font-weight: 600; }
+  .funnel { display: grid; gap: 5px; }
+  .funnel .f { display: grid; grid-template-columns: 84px 1fr 30px; gap: 10px; align-items: center; font-size: .82rem; }
+  .funnel .f .lbl { color: var(--muted); font-family: var(--mono); font-size: .72rem; }
+  .funnel .f .tr { height: 10px; background: var(--panel-2); border-radius: 5px; overflow: hidden; border: 1px solid var(--rule); }
+  .funnel .f .fl { height: 100%; background: var(--accent); transition: width .6s cubic-bezier(.2,.7,.2,1); }
+  .funnel .f .v { font-family: var(--mono); text-align: right; }
+  .legend { font-family: var(--mono); font-size: .68rem; color: var(--muted); }
+
+  /* risks & decisions */
+  .risk { display: grid; grid-template-columns: 22px 1fr auto auto; gap: 8px; align-items: center; font-size: .88rem; animation: rise .35s ease both; }
+  .rag { width: 14px; height: 14px; border-radius: 50%; border: 0; cursor: pointer; padding: 0; }
+  .rag.red { background: var(--stop); box-shadow: 0 0 0 3px var(--stop-soft); }
+  .rag.amber { background: var(--warn); box-shadow: 0 0 0 3px var(--warn-soft); }
+  .rag.green { background: var(--go); box-shadow: 0 0 0 3px var(--go-soft); }
+  .risk .o { font-family: var(--mono); font-size: .7rem; color: var(--muted); white-space: nowrap; }
+  .dec { display: grid; grid-template-columns: 52px 1fr; gap: 10px; font-size: .86rem; animation: rise .35s ease both; }
+  .dec .d { font-family: var(--mono); font-size: .7rem; color: var(--muted); padding-top: 2px; }
+  .dec.new .d { color: var(--accent); }
+
+  .award { border: 1px solid var(--go); background: var(--go-soft); border-radius: 10px; padding: 14px 16px; display: grid; gap: 10px; }
+  .award .who { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .award .name { font-size: 1.4rem; font-weight: 800; letter-spacing: -.01em; }
+  .award .tag { font-family: var(--mono); font-size: .7rem; color: var(--go); letter-spacing: .08em; text-transform: uppercase; }
+  .award .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .award .facts div { display: grid; gap: 2px; }
+  .award .facts .l { font-family: var(--mono); font-size: .64rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .award .facts .v { font-family: var(--mono); font-size: 1rem; font-weight: 600; }
+  .award .why { font-size: .86rem; color: var(--ink); }
+  .award .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; font-family: var(--mono); font-size: .72rem; color: var(--muted); }
+  .trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .trio > div { border: 1px solid var(--rule); border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; }
+  .trio .l { font-family: var(--mono); font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .trio .v { font-size: 1.35rem; font-weight: 600; line-height: 1.1; }
+  .trio .s { font-size: .72rem; color: var(--muted); }
+  .trio .v.good { color: var(--go); } .trio .v.bad { color: var(--stop); }
+  .signs { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sign { font-family: var(--mono); font-size: .74rem; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--rule-2); background: var(--panel-2); cursor: pointer; color: var(--muted); }
+  .sign.on { border-color: var(--go); color: var(--go); background: var(--go-soft); }
+  .shot { position: fixed; inset: 0; z-index: 50; background: rgba(4,8,20,.8); display: none; place-items: center; padding: 24px; }
+  .shot.open { display: grid; }
+  .shot .box { background: var(--panel); border: 1px solid var(--rule-2); border-radius: var(--radius); padding: 14px; display: grid; gap: 10px; max-width: min(96vw, 1100px); max-height: 92vh; }
+  .shot img { max-width: 100%; max-height: 74vh; object-fit: contain; border-radius: 6px; border: 1px solid var(--rule); }
+  .shot .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; font-family: var(--mono); font-size: .74rem; color: var(--muted); }
+  /* history */
+  .hist { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: end; }
+  .spark { width: 100%; height: 56px; }
+  .hist .cap { font-family: var(--mono); font-size: .7rem; color: var(--muted); text-align: right; }
+
+  /* footer */
+  .how { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; border-top: 1px solid var(--rule); padding-top: 14px; color: var(--muted); font-size: .84rem; }
+  .prompt { font-family: var(--mono); font-size: .76rem; padding: 8px 12px; border-radius: 8px; background: var(--panel-2); border: 1px dashed var(--rule-2); color: var(--ink); }
+  .prompt b { color: var(--accent); font-weight: 600; }
+
+  @media (max-width: 960px) {
+    .top { grid-template-columns: 1fr auto; }
+    .asof { grid-column: 1 / -1; justify-items: start; text-align: left; }
+    .grid { grid-template-columns: 1fr; }
+    .stages { grid-template-columns: repeat(3, 1fr); }
+    .how { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .stages { grid-template-columns: repeat(2, 1fr); }
+    .top { grid-template-columns: 1fr; }
+    .grow { grid-template-columns: 84px 1fr; }
+    .gaxis { margin-left: 94px; }
+    .stage .slipBtn { opacity: 1; }
+    li .x { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+</style>
+
+<main class="wrap">
+  <header class="top">
+    <div>
+      <span class="eyebrow">Sourcing project · Group IT · live cockpit</span>
+      <h1>Enterprise AI platform</h1>
+      <p class="meta">Baseline <span class="num">£4.2m</span> a year across 3 business units · Target <span class="num">−10%</span> · Owner: Category lead, Technology</p>
+    </div>
+    <div class="ring" role="img" aria-label="Project completion">
+      <svg viewBox="0 0 128 128" aria-hidden="true">
+        <circle class="track" cx="64" cy="64" r="56" fill="none" stroke-width="10"></circle>
+        <circle class="fill" id="ringFill" cx="64" cy="64" r="56" fill="none" stroke-width="10" stroke-dasharray="351.9" stroke-dashoffset="351.9"></circle>
+      </svg>
+      <div class="label"><div class="pct" id="pct">0%</div><div class="cap">complete</div></div>
+    </div>
+    <div class="asof">
+      <span class="date">today <b id="asofDate"></b></span>
+      <span class="pill stage" id="stagePill"><span class="dot"></span><span id="stageText"></span></span>
+      <span class="pill" id="healthPill"><span class="dot"></span><span id="healthText"></span></span>
+      <span class="days"><b class="num" id="days">0</b> days to award · <span id="awardDate" class="num"></span> <span class="slip num" id="slipTotal"></span></span>
+      <span class="days" id="milestone"></span>
+    </div>
+  </header>
+
+  <section class="bar-row" aria-label="Actions">
+    <span class="hint">Click a stage to move it. Hover a stage for "+ delay". Click vendor steps to move them down the funnel; A turns the list into an award recommendation.</span>
+    <span class="toast" id="toast" role="status" aria-live="polite"></span>
+    <span class="acts">
+      <button type="button" class="btn" id="closeWeek">Close the week</button>
+      <button type="button" class="btn" id="copy">Copy Friday update</button>
+      <button type="button" class="btn primary" id="snap">Snapshot PNG</button>
+      <button type="button" class="btn ghost" id="reset">Reset demo</button>
+    </span>
+  </section>
+
+  <section class="stages" id="stages" aria-label="Stages"></section>
+
+  <section class="card">
+    <h2>Plan vs actual <span class="legend">grey planned · green done · amber in progress · red slip</span></h2>
+    <div class="gantt" id="gantt"></div>
+    <div class="gaxis" id="gaxis"></div>
+  </section>
+
+  <section class="grid">
+    <article class="card">
+      <h2>This week</h2>
+      <ul id="done"></ul>
+      <form class="add" data-list="done"><input placeholder="Add what got done…" aria-label="Add a done item"><button class="btn tiny" type="submit">Add</button></form>
+      <h2>Next week</h2>
+      <ul id="next"></ul>
+      <form class="add" data-list="next"><input placeholder="Add a next step…" aria-label="Add a next step"><button class="btn tiny" type="submit">Add</button></form>
+      <h2>Blockers</h2>
+      <ul id="blockers"></ul>
+      <form class="add" data-list="blockers"><input placeholder="Add a blocker…" aria-label="Add a blocker"><button class="btn tiny" type="submit">Add</button></form>
+      <h2>Sign-offs for award <span class="legend">click to tick</span></h2>
+      <div class="signs" id="signs"></div>
+    </article>
+
+    <article class="card">
+      <h2>Savings vs target</h2>
+      <div class="trio">
+        <div><span class="l">Target</span><span class="v num" id="tgtV"></span><span class="s num">−10% of £4.2m</span></div>
+        <div><span class="l">Best offer</span><span class="v num" id="bestV"></span><span class="s num" id="bestS"></span></div>
+        <div><span class="l">Gap</span><span class="v num" id="gapV"></span><span class="s num" id="gapS"></span></div>
+      </div>
+      <h2>Suppliers <span class="legend">L long · I invited · R responded · S shortlist · F finalist · A awarded</span></h2>
+      <div class="award" id="award" hidden></div>
+      <div style="overflow-x:auto" id="supWrap">
+        <table class="tbl" aria-label="Supplier funnel">
+          <thead><tr><th>Supplier</th><th>Funnel</th><th>Offer vs baseline</th><th></th></tr></thead>
+          <tbody id="sup"></tbody>
+        </table>
+      </div>
+      <div class="row" style="display:flex;justify-content:space-between;align-items:center">
+        <span class="legend">Example vendors, illustrative offers. Not a real project.</span>
+        <button type="button" class="btn tiny" id="addSup">+ Supplier</button>
+      </div>
+      <div class="legend num" id="funnelLine"></div>
+    </article>
+
+    <article class="card">
+      <h2>Risks <span class="legend">click the dot to change RAG</span></h2>
+      <div id="risks" style="display:grid;gap:9px"></div>
+      <form class="add" data-list="risk"><input placeholder="Add a risk (owner after |)…" aria-label="Add a risk"><button class="btn tiny" type="submit">Add</button></form>
+      <h2>Decision log</h2>
+      <div id="decisions" style="display:grid;gap:7px"></div>
+      <form class="add" data-list="decision"><input placeholder="Log a decision…" aria-label="Log a decision"><button class="btn tiny" type="submit">Add</button></form>
+    </article>
+  </section>
+
+  <div class="shot" id="shot" role="dialog" aria-label="Snapshot">
+    <div class="box">
+      <img id="shotImg" alt="Cockpit snapshot">
+      <div class="row"><span id="shotMsg"></span><span style="display:flex;gap:8px"><button type="button" class="btn" id="shotDl" hidden>Download PNG</button><button type="button" class="btn ghost" id="shotClose">Close</button></span></div>
+    </div>
+  </div>
+  <footer class="how">
+    <span>One link, no slides. Updated every Friday in the Claude Project: paste the week's notes and the cockpit rebuilds. Your edits here stay in this browser. Figures are illustrative.</span>
+    <span class="prompt"><b>Prompt:</b> keep this cockpit updated from my Friday notes</span>
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+  // ---- model ----------------------------------------------------------
+  const KEY = "sourcing-cockpit-v4";
+  const BASELINE = 4200000, TARGET_PCT = 10;
+  const STAGE_NAMES = ["Scope & baseline", "Market scan", "RFP", "Evaluation", "Negotiation", "Award & contract"];
+  const FUNNEL = ["L", "I", "R", "S", "F", "A"];
+  const FUNNEL_FULL = ["longlisted", "invited", "responded", "shortlisted", "finalists", "awarded"];
+  const TODAY = "2026-08-28";
+
+  const demo = () => ({
+    start: "2026-07-13",
+    stages: [
+      { plan: 7, slip: 0, status: "done" },
+      { plan: 7, slip: 0, status: "done" },
+      { plan: 10, slip: 2, status: "done" },
+      { plan: 7, slip: 0, status: "done" },
+      { plan: 14, slip: 0, status: "done" },
+      { plan: 7, slip: 0, status: "in" },
+    ],
+    suppliers: [
+      { id: "Anthropic", step: 5, offer: 10.4 }, { id: "Microsoft", step: 4, offer: 9.1 }, { id: "OpenAI", step: 4, offer: 8.6 },
+      { id: "Google", step: 3, offer: 6.2 }, { id: "Mistral", step: 2, offer: 4.0 }, { id: "Cohere", step: 1, out: true },
+    ],
+    done: ["Round 2 closed: Anthropic best at −10.4%, target beaten", "Steering approved the award recommendation", "Contract terms drafted, legal reviewing"],
+    next: ["Contract signature", "Transition plan kick-off with BU leads"],
+    blockers: ["Legal redline on liability cap still open"],
+    risks: [["green", "Single-vendor lock-in, covered by exit clause", "Architecture"], ["amber", "Usage forecast uncertainty for BU 3", "Finance"], ["green", "EU data residency confirmed in the DPA", "Legal"]],
+    decisions: [["28 Aug", "Award to Anthropic, Microsoft kept as runner-up"], ["21 Aug", "Round 2 with the top 3 only"], ["14 Aug", "Shortlist 4"], ["7 Aug", "Late response accepted and documented"], ["28 Jul", "Response deadline 8 Aug"], ["22 Jul", "Longlist 6"], ["13 Jul", "Dual-vendor strategy for the category"]],
+    signs: { Legal: false, Finance: true, Steering: true, "Security": true },
+    history: [["17 Jul", 8, 0], ["24 Jul", 18, 0], ["31 Jul", 30, 0], ["7 Aug", 40, 0], ["14 Aug", 55, 6.5], ["21 Aug", 68, 8.9]],
+  });
+
+  let S, showAll = false;
+  const load = () => { try { const r = localStorage.getItem(KEY); if (r) return JSON.parse(r); } catch {} return demo(); };
+  const save = () => { if (new URLSearchParams(location.search).has("seed")) return; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} };
+  const Q = new URLSearchParams(location.search);
+  if (Q.get("theme") === "dark" || Q.get("theme") === "light") document.documentElement.dataset.theme = Q.get("theme");
+  S = load(); if (!S.signs) S.signs = demo().signs;
+  if (Q.get("seed") === "negotiation") { // pre-award state for demos and the video
+    S = demo(); S.stages[4].status = "in"; S.stages[5].status = "next"; S.suppliers[0].step = 4;
+    S.done = ["Round 1 negotiations with all 4 shortlisted", "Security review passed for the top 3", "Best offer −10.4% vs baseline"];
+    S.next = ["Round 2 with the top 3", "Draft contract terms and data-processing addendum"]; S.blockers = ["Legal review slot not booked"];
+    S.decisions = S.decisions.slice(1); S.signs = { Legal: false, Finance: true, Steering: false, Security: true };
+  }
+
+  // ---- derived ---------------------------------------------------------
+  const $ = (s) => document.querySelector(s);
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const fmtGBP = (n) => "£" + (Math.abs(n) >= 1e6 ? (n / 1e6).toFixed(2) + "m" : Math.round(n / 1000) + "k");
+  const fmtD = (d) => d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+  const addDays = (iso, n) => { const d = new Date(iso); d.setDate(d.getDate() + n); return d; };
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  function derive() {
+    const st = S.stages;
+    const total = st.reduce((a, s) => a + s.plan + s.slip, 0);
+    const planTotal = st.reduce((a, s) => a + s.plan, 0);
+    const slipTotal = total - planTotal;
+    const progress = Math.round(st.reduce((a, s) => a + (s.status === "done" ? s.plan : s.status === "in" ? s.plan / 2 : 0), 0) / planTotal * 100);
+    const award = addDays(S.start, total);
+    const days = Math.max(0, Math.round((award - new Date(TODAY)) / 86400000));
+    const cur = st.findIndex((s) => s.status === "in");
+    const alive = S.suppliers.filter((s) => !s.out && s.step >= 3 && s.offer != null);
+    const best = alive.length ? Math.max(...alive.map((s) => s.offer)) : 0;
+    const funnel = FUNNEL.map((_, i) => S.suppliers.filter((s) => i === 0 || (!s.out && s.step >= i)).length);
+    const health = st.every((s) => s.status === "done") ? ["go", "Awarded"] : slipTotal > 7 || S.risks.some((r) => r[0] === "red") && S.blockers.length ? ["stop", "At risk"] : slipTotal > 0 || S.blockers.length ? ["warn", "Watch"] : ["go", "On track"];
+    let off = 0, msEnd = null; st.forEach((s, i) => { off += s.plan + s.slip; if (i === cur) msEnd = addDays(S.start, off); });
+    return { total, planTotal, slipTotal, progress, award, days, cur, best, funnel, health, msEnd };
+  }
+
+  // ---- tween ----------------------------------------------------------
+  const tweens = new Map();
+  function tween(el, to, fmt) {
+    const from = tweens.get(el) ?? 0; tweens.set(el, to);
+    if (reduced || from === to) { el.textContent = fmt(to); return; }
+    const t0 = performance.now();
+    const step = (now) => { const k = Math.min(1, (now - t0) / 550), e = 1 - Math.pow(1 - k, 3); el.textContent = fmt(from + (to - from) * e); if (k < 1 && tweens.get(el) === to) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  let toastT; function toast(msg) { $("#toast").textContent = msg; clearTimeout(toastT); toastT = setTimeout(() => ($("#toast").textContent = ""), 2400); }
+
+  // ---- render ---------------------------------------------------------
+  function render() {
+    const D = derive();
+    save();
+    $("#asofDate").textContent = new Date(TODAY).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+    $("#ringFill").style.strokeDashoffset = String(351.9 * (1 - D.progress / 100));
+    tween($("#pct"), D.progress, (v) => Math.round(v) + "%");
+    $("#stageText").textContent = D.cur < 0 ? "Awarded · complete" : `Stage ${D.cur + 1} of 6 · ${STAGE_NAMES[D.cur]}`;
+    const hp = $("#healthPill"); hp.className = "pill " + D.health[0]; $("#healthText").textContent = D.health[1];
+    tween($("#days"), D.days, (v) => String(Math.round(v)));
+    $("#awardDate").textContent = fmtD(D.award);
+    $("#slipTotal").textContent = D.slipTotal ? `(+${D.slipTotal}d slipped)` : "";
+    $("#milestone").textContent = D.cur < 0 ? "All stages complete" : `Next milestone: ${STAGE_NAMES[D.cur]} ends ${fmtD(D.msEnd)}`;
+
+    // stages
+    $("#stages").innerHTML = S.stages.map((s, i) => {
+      const lbl = s.status === "done" ? "done" : s.status === "in" ? "in progress" : "next";
+      return `<div class="stage ${s.status}" role="button" tabindex="0" data-i="${i}" aria-label="${STAGE_NAMES[i]}, ${lbl}">
+        <span class="n"><span>${i + 1} · ${s.plan}d</span>${s.slip ? `<span class="slipTag">+${s.slip}d</span>` : ""}</span>
+        <span class="t">${STAGE_NAMES[i]}</span><span class="s">${lbl}</span>
+        <button type="button" class="slipBtn" data-slip="${i}" aria-label="Log a delay on ${STAGE_NAMES[i]}">+ delay</button>
+        <div class="slipBox" data-box="${i}"><label>Delay on ${STAGE_NAMES[i]}, in days</label><input type="number" min="0" max="60" value="${s.slip}" aria-label="Delay in days"><button type="button" class="btn tiny primary" data-apply="${i}">Apply</button></div>
+      </div>`;
+    }).join("");
+
+    // gantt
+    let x = 0; const W = D.total;
+    const startD = new Date(S.start), todayOff = Math.round((new Date(TODAY) - startD) / 86400000);
+    $("#gantt").innerHTML = S.stages.map((s, i) => {
+      const left = x / W * 100, pw = s.plan / W * 100, sw = s.slip / W * 100; x += s.plan + s.slip;
+      return `<div class="grow"><span>${STAGE_NAMES[i]}</span><div class="track"><div class="plan ${s.status}" style="left:${left}%;width:${pw}%"></div>${s.slip ? `<div class="slipB" style="left:${left + pw}%;width:${sw}%"></div>` : ""}${i === 0 ? `<div class="today" style="left:${Math.min(100, Math.max(0, todayOff / W * 100))}%"></div>` : ""}</div></div>`;
+    }).join("");
+    $("#gaxis").innerHTML = [0, .25, .5, .75, 1].map((k) => `<span style="left:${k * 100}%">${fmtD(addDays(S.start, Math.round(k * W)))}</span>`).join("");
+
+    // lists
+    const li = (items, cls, mark, list) => items.length ? items.map((t, i) => `<li class="${cls}"><span class="k">${mark}</span><span>${esc(t)}</span><button type="button" class="btn ghost tiny x" data-rm="${list}:${i}" aria-label="Remove">×</button></li>`).join("") : `<li class="empty"><span class="k">·</span><span>none</span><span></span></li>`;
+    $("#done").innerHTML = li(S.done, "done", "✓", "done");
+    $("#next").innerHTML = li(S.next, "next", "→", "next");
+    $("#blockers").innerHTML = li(S.blockers, "block", "!", "blockers");
+
+    // savings
+    const savings = BASELINE * D.best / 100, target = BASELINE * TARGET_PCT / 100, gap = savings - target;
+    $("#tgtV").textContent = fmtGBP(target) + "/yr";
+    tween($("#bestV"), savings, (v) => fmtGBP(v) + "/yr");
+    $("#bestS").textContent = D.best ? `−${D.best}% · from the shortlist` : "no shortlisted offer yet";
+    const gv = $("#gapV"); gv.textContent = D.best ? (gap >= 0 ? "+" : "−") + fmtGBP(Math.abs(gap)) : "—"; gv.className = "v num " + (D.best ? (gap >= 0 ? "good" : "bad") : "");
+    $("#gapS").textContent = D.best ? (gap >= 0 ? "target beaten" : "still to find in round 2") : "";
+
+    // award recommendation
+    const winner = S.suppliers.find((s) => !s.out && s.step >= 5);
+    const aw = $("#award");
+    if (winner && (D.cur < 0 || D.cur >= 5)) {
+      const others = S.suppliers.filter((s) => s !== winner && !s.out && s.offer != null && s.step >= 3).sort((a, b) => b.offer - a.offer);
+      const ru = others[0];
+      const wSav = BASELINE * (winner.offer ?? 0) / 100, tgt = BASELINE * TARGET_PCT / 100;
+      const signed = Object.values(S.signs).filter(Boolean).length, signAll = Object.keys(S.signs).length;
+      const pending = Object.entries(S.signs).filter(([, v]) => !v).map(([k]) => k);
+      aw.innerHTML = `<div class="who"><span><span class="tag">Award recommendation</span><br><span class="name">${esc(winner.id)}</span></span><span class="pill go"><span class="dot"></span>${winner.offer != null ? `−${winner.offer}% vs baseline` : "offer not entered"}</span></div>
+        <div class="facts">
+          <div><span class="l">Savings</span><span class="v">${fmtGBP(wSav)}/yr</span></div>
+          <div><span class="l">vs target</span><span class="v" style="color:${wSav >= tgt ? "var(--go)" : "var(--stop)"}">${wSav >= tgt ? "+" : "−"}${fmtGBP(Math.abs(wSav - tgt))}</span></div>
+          <div><span class="l">Runner-up</span><span class="v">${ru ? `${esc(ru.id)} · −${ru.offer}%` : "none"}</span></div>
+        </div>
+        <div class="why">${ru ? `${esc(winner.id)} leads ${esc(ru.id)} by ${(winner.offer - ru.offer).toFixed(1)} points (${fmtGBP(BASELINE * (winner.offer - ru.offer) / 100)}/yr). ` : ""}${pending.length ? `Sign-offs ${signed} of ${signAll}: waiting on ${pending.join(", ")}.` : "All sign-offs in place. Ready for signature."}</div>
+        <div class="row"><span>${S.suppliers.filter((s) => !s.out).length} vendors in the process · ${others.length} kept as fallback</span><button type="button" class="btn tiny" id="showAll" aria-expanded="${showAll}">${showAll ? "Hide the list" : "Show all vendors"}</button></div>`;
+      aw.hidden = false;
+      $("#supWrap").hidden = !showAll;
+    } else { aw.hidden = true; $("#supWrap").hidden = false; }
+    // suppliers
+    $("#sup").innerHTML = S.suppliers.map((s, i) => `<tr class="${s.out ? "out" : ""}">
+      <td class="id">${esc(s.id)}${s.out ? " · out" : ""}</td>
+      <td><span class="steps">${FUNNEL.map((f, k) => `<button type="button" class="step ${!s.out && s.step >= k ? (k === 5 ? "win" : "on") : ""}" data-sup="${i}:${k}" title="${FUNNEL_FULL[k]}" aria-label="${s.id} ${FUNNEL_FULL[k]}">${f}</button>`).join("")}</span></td>
+      <td><input class="offer ${!s.out && s.step >= 3 && s.offer === D.best && D.best ? "best" : ""}" type="number" step="0.1" min="0" max="40" value="${s.offer ?? ""}" placeholder="—" data-offer="${i}" aria-label="${s.id} offer, percent below baseline"> <span class="legend">%</span></td>
+      <td><button type="button" class="btn ghost tiny" data-out="${i}">${s.out ? "restore" : "drop"}</button></td>
+    </tr>`).join("");
+
+    // funnel line
+    $("#funnelLine").textContent = FUNNEL_FULL.map((l, i) => `${D.funnel[i]} ${l}`).join("  →  ");
+    // sign-offs
+    $("#signs").innerHTML = Object.entries(S.signs).map(([k, v]) => `<button type="button" class="sign ${v ? "on" : ""}" data-sign="${k}" aria-pressed="${v}">${v ? "✓" : "○"} ${k}</button>`).join("");
+
+    // risks + decisions
+    $("#risks").innerHTML = S.risks.length ? S.risks.map(([rag, t, o], i) => `<div class="risk"><button type="button" class="rag ${rag}" data-rag="${i}" aria-label="Risk status ${rag}, click to change"></button><span>${esc(t)}</span><span class="o">${esc(o)}</span><button type="button" class="btn ghost tiny" data-rmrisk="${i}" aria-label="Remove risk">×</button></div>`).join("") : `<span class="empty">none</span>`;
+    $("#decisions").innerHTML = S.decisions.map(([dt, t], i) => `<div class="dec ${i === 0 ? "new" : ""}"><span class="d">${dt}</span><span>${esc(t)}</span></div>`).join("");
+
+    return D;
+  }
+
+  // ---- interactions ---------------------------------------------------
+  document.addEventListener("click", (e) => {
+    if (e.target.id === "showAll") { showAll = !showAll; render(); return; }
+    const t = e.target.closest("[data-slip],[data-apply],[data-i],[data-rm],[data-sup],[data-out],[data-rag],[data-rmrisk],[data-sign]");
+    if (!t) { document.querySelectorAll(".slipBox.open").forEach((b) => b.classList.remove("open")); return; }
+    if (t.dataset.slip != null) { e.stopPropagation(); const b = document.querySelector(`[data-box="${t.dataset.slip}"]`); b.classList.toggle("open"); b.querySelector("input").focus(); return; }
+    if (t.dataset.apply != null) { e.stopPropagation(); const i = +t.dataset.apply, v = Math.max(0, +document.querySelector(`[data-box="${i}"] input`).value || 0); const was = S.stages[i].slip; S.stages[i].slip = v; render(); toast(v > was ? `+${v - was} days on ${STAGE_NAMES[i]}. Award moves to ${fmtD(derive().award)}.` : `Delay updated on ${STAGE_NAMES[i]}.`); return; }
+    if (e.target.closest(".slipBox")) { e.stopPropagation(); return; }
+    if (t.dataset.i != null) { const i = +t.dataset.i; const s = S.stages[i];
+      if (s.status === "in") { s.status = "done"; if (S.stages[i + 1]) S.stages[i + 1].status = "in"; toast(`${STAGE_NAMES[i]} done.${S.stages[i + 1] ? ` Now in ${STAGE_NAMES[i + 1]}.` : " Project complete."}`); }
+      else { S.stages.forEach((x, k) => (x.status = k < i ? "done" : k === i ? "in" : "next")); if (i < 5) S.suppliers.forEach((o) => { if (o.step >= 5) o.step = 4; }); toast(`Back in ${STAGE_NAMES[i]}.${i < 5 ? " Award cleared." : ""}`); }
+      render(); return; }
+    if (t.dataset.rm) { const [l, i] = t.dataset.rm.split(":"); S[l].splice(+i, 1); render(); return; }
+    if (t.dataset.sup) { const [i, k] = t.dataset.sup.split(":").map(Number); const s = S.suppliers[i]; s.out = false; s.step = s.step === k ? k - 1 : k; if (s.step < 0) s.step = 0;
+      if (s.step === 5) { S.suppliers.forEach((o) => { if (o !== s && o.step >= 5) o.step = 4; }); showAll = false; if (S.stages.some((x) => x.status !== "done") && S.stages[5].status !== "in") S.stages.forEach((x, k) => (x.status = k < 5 ? "done" : "in")); }
+      render(); toast(s.step === 5 ? `Awarded to ${s.id}. Recommendation ready.` : `${s.id}: ${FUNNEL_FULL[s.step]}.`); return; }
+    if (t.dataset.out != null) { const s = S.suppliers[+t.dataset.out]; s.out = !s.out; render(); toast(s.out ? `${s.id} dropped.` : `${s.id} restored.`); return; }
+    if (t.dataset.rag != null) { const r = S.risks[+t.dataset.rag]; r[0] = { red: "amber", amber: "green", green: "red" }[r[0]]; render(); return; }
+    if (t.dataset.rmrisk != null) { S.risks.splice(+t.dataset.rmrisk, 1); render(); return; }
+    if (t.dataset.sign != null) { S.signs[t.dataset.sign] = !S.signs[t.dataset.sign]; render(); return; }
+  });
+  document.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.matches(".stage")) { e.preventDefault(); e.target.click(); } });
+  document.addEventListener("change", (e) => { if (e.target.dataset.offer != null) { const v = e.target.value; S.suppliers[+e.target.dataset.offer].offer = v === "" ? null : +v; render(); } });
+  document.querySelectorAll("form.add").forEach((f) => f.addEventListener("submit", (e) => {
+    e.preventDefault(); const v = f.querySelector("input").value.trim(); if (!v) return; const l = f.dataset.list;
+    if (l === "risk") { const [txt, own = "Owner tbc"] = v.split("|").map((s) => s.trim()); S.risks.unshift(["amber", txt, own]); }
+    else if (l === "decision") S.decisions.unshift([fmtD(new Date(TODAY)), v]);
+    else S[l].push(v);
+    f.reset(); render();
+  }));
+  $("#addSup").addEventListener("click", () => { const n = prompt("Supplier name"); if (n && n.trim()) S.suppliers.push({ id: n.trim().slice(0, 24), step: 0 }); render(); });
+  $("#closeWeek").addEventListener("click", () => { const D = derive(); S.history.push([fmtD(new Date(TODAY)), D.progress, D.best]); S.done = []; S.next.forEach((n) => S.done.push(n)); S.next = []; render(); toast(`Week closed at ${D.progress}%. Next week's steps moved to this week.`); });
+  $("#reset").addEventListener("click", () => { S = demo(); render(); toast("Demo state restored."); });
+  $("#copy").addEventListener("click", async () => {
+    const D = derive();
+    const txt = [`Enterprise AI platform · sourcing update · ${fmtD(new Date(TODAY))}`,
+      `Progress ${D.progress}% · ${D.health[1]} · stage ${D.cur < 0 ? "complete" : (D.cur + 1) + "/6 " + STAGE_NAMES[D.cur]} · award ${fmtD(D.award)}${D.slipTotal ? ` (+${D.slipTotal}d)` : ""}`,
+      `Savings: best offer −${D.best}% (${fmtGBP(BASELINE * D.best / 100)}/yr) vs target −${TARGET_PCT}%`,
+      `Funnel: ${FUNNEL_FULL.map((l, i) => `${D.funnel[i]} ${l}`).join(" · ")}`,
+      ...(S.suppliers.some((s) => !s.out && s.step >= 5) && (D.cur < 0 || D.cur >= 5) ? [`Award recommendation: ${S.suppliers.find((s) => !s.out && s.step >= 5).id}`] : []),
+      "", "Done:", ...S.done.map((x) => "  ✓ " + x), "Next:", ...S.next.map((x) => "  → " + x), "Blockers:", ...(S.blockers.length ? S.blockers.map((x) => "  ! " + x) : ["  none"]),
+      "Risks:", ...S.risks.map(([r, t, o]) => `  [${r.toUpperCase()}] ${t} (${o})`),
+      `Sign-offs: ${Object.entries(S.signs).map(([k, v]) => `${k} ${v ? "✓" : "○"}`).join(" · ")}`].join("\n");
+    try { await navigator.clipboard.writeText(txt); toast("Friday update copied. Paste it into the email or the Claude Project."); } catch { toast("Copy blocked by the browser. Select the text manually."); }
+  });
+  // ---- snapshot ------------------------------------------------------
+  const shot = $("#shot");
+  let lastShot = null, dl = null;
+  if (window.claude?.use) claude.use("downloads").then((d) => { dl = d; if (d) $("#shotDl").hidden = false; });
+  $("#shotDl").addEventListener("click", async () => {
+    if (!dl || !lastShot) return;
+    try { await dl.save({ filename: `sourcing-cockpit-${TODAY}.png`, data: lastShot }); $("#shotMsg").textContent = "Saved."; }
+    catch (e) { $("#shotMsg").textContent = e?.code === "declined" ? "Save cancelled." : "Save is not available here. Right-click the image instead."; }
+  });
+  $("#shotClose").addEventListener("click", () => shot.classList.remove("open"));
+  shot.addEventListener("click", (e) => { if (e.target === shot) shot.classList.remove("open"); });
+  $("#snap").addEventListener("click", async () => {
+    if (typeof html2canvas !== "function") { toast("Snapshot needs the html2canvas library, which did not load."); return; }
+    toast("Rendering snapshot…");
+    document.querySelectorAll(".slipBox.open").forEach((b) => b.classList.remove("open"));
+    const bg = getComputedStyle(document.body).backgroundColor;
+    const canvas = await html2canvas($(".wrap"), { backgroundColor: bg, scale: 2, useCORS: true, ignoreElements: (el) => el.classList?.contains("bar-row") || el.classList?.contains("add") || el.classList?.contains("shot") });
+    const blob = await new Promise((r) => canvas.toBlob(r, "image/png"));
+    $("#shotImg").src = canvas.toDataURL("image/png");
+    lastShot = blob;
+    let msg = "Right-click or long-press the image to save it.";
+    try { await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]); msg = "Copied to clipboard. Paste it into Teams or the email."; } catch {}
+    $("#shotMsg").textContent = msg; shot.classList.add("open"); toast("");
+  });
+  render();
+  document.body.dataset.ready = "1";
+</script>

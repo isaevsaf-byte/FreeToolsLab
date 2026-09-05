@@ -1,8 +1,8 @@
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { tokens } from "./tokens";
 
-/** End card: "Safar Isaev · FreeToolsLab" — fades in over the last second. */
-export const Credit: React.FC<{ line?: string }> = ({ line = "Safar Isaev · FreeToolsLab" }) => {
+/** End card: "Safar Isaev · FreeToolsLab" (or a tool URL + author) — fades in over the last second. */
+export const Credit: React.FC<{ line?: string; sub?: string }> = ({ line = "Safar Isaev · FreeToolsLab", sub }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const opacity = interpolate(frame, [0, fps * 0.6], [0, 1], { extrapolateRight: "clamp" });
@@ -14,11 +14,13 @@ export const Credit: React.FC<{ line?: string }> = ({ line = "Safar Isaev · Fre
         justifyContent: "center",
         alignItems: "center",
         fontFamily: tokens.fontMono,
-        fontSize: 44,
+        padding: 80,
+        gap: 28,
         opacity,
       }}
     >
-      {line}
+      <div style={{ fontSize: line.length > 30 ? 36 : 44, textAlign: "center", overflowWrap: "anywhere" }}>{line}</div>
+      {sub && <div style={{ fontSize: 30, color: tokens.muted, textAlign: "center" }}>{sub}</div>}
     </AbsoluteFill>
   );
 };

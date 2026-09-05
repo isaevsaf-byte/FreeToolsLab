@@ -1,0 +1,88 @@
+{
+  "slug": "sourcing-cockpit",
+  "duration": 35.76544213294983,
+  "width": 1080,
+  "height": 1350,
+  "events": [
+    {
+      "t": 0.709442138671875,
+      "caption": "One link. The whole sourcing project.",
+      "zoom": {
+        "x": 168,
+        "y": 392,
+        "scale": 1.15
+      }
+    },
+    {
+      "t": 4.749442100524902,
+      "caption": "Six stages. Six vendors. One number."
+    },
+    {
+      "t": 8.43244218826294,
+      "x": 460,
+      "y": 719,
+      "tap": true
+    },
+    {
+      "t": 8.714442014694214,
+      "x": 429,
+      "y": 864,
+      "tap": true,
+      "caption": "Legal slipped a week. Log it."
+    },
+    {
+      "t": 10.74744200706482,
+      "caption": "The award date moves. Nobody rewrites a slide.",
+      "zoom": {
+        "x": 405,
+        "y": 776,
+        "scale": 1.2
+      }
+    },
+    {
+      "t": 15.275442123413086,
+      "caption": "Plan vs actual. The slip is red."
+    },
+    {
+      "t": 18.99744200706482,
+      "x": 561,
+      "y": 476,
+      "tap": true,
+      "caption": "Award. The list becomes a recommendation.",
+      "zoom": {
+        "x": 216,
+        "y": 391,
+        "scale": 1.15
+      }
+    },
+    {
+      "t": 24.297442197799683,
+      "x": 146,
+      "y": 675,
+      "tap": true,
+      "caption": "Legal signed. One click."
+    },
+    {
+      "t": 27.496442079544067,
+      "x": 787,
+      "y": 214,
+      "tap": true,
+      "caption": "One PNG for the steering email."
+    },
+    {
+      "t": 31.732442140579224,
+      "x": 932,
+      "y": 1185,
+      "tap": true
+    },
+    {
+      "t": 32.26144218444824,
+      "caption": "keep this cockpit updated from my Friday notes",
+      "zoom": {
+        "x": 540,
+        "y": 1386,
+        "scale": 1.15
+      }
+    }
+  ]
+}

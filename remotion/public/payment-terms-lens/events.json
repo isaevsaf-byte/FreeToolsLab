@@ -1,0 +1,73 @@
+{
+  "slug": "payment-terms-lens",
+  "duration": 27.28740692138672,
+  "width": 1080,
+  "height": 1350,
+  "events": [
+    {
+      "t": 0.6254069805145264,
+      "caption": "£1.2m a year. Terms 30 → 60."
+    },
+    {
+      "t": 3.1274068355560303,
+      "caption": "Your side.",
+      "zoom": {
+        "x": 540,
+        "y": 890,
+        "scale": 1.15
+      }
+    },
+    {
+      "t": 7.644407033920288,
+      "caption": "The supplier pays £11,836."
+    },
+    {
+      "t": 11.873406887054443,
+      "x": 544,
+      "y": 90,
+      "tap": true,
+      "caption": "Smaller supplier, dearer money.",
+      "zoom": {
+        "x": 914,
+        "y": 696,
+        "scale": 1.2
+      }
+    },
+    {
+      "t": 16.084406852722168,
+      "x": 428,
+      "y": 434,
+      "tap": true,
+      "caption": "Now read it as the supplier."
+    },
+    {
+      "t": 19.28740692138672,
+      "x": 540,
+      "y": 674,
+      "tap": true
+    },
+    {
+      "t": 19.4844069480896,
+      "x": 437,
+      "y": 676,
+      "tap": true,
+      "caption": "2% for 20 days is 37% a year."
+    },
+    {
+      "t": 20.016407012939453,
+      "zoom": {
+        "x": 800,
+        "y": 667,
+        "scale": 1.25
+      }
+    },
+    {
+      "t": 24.202406883239746,
+      "x": 412,
+      "y": 675,
+      "tap": true,
+      "caption": "Copy the picture into your next call.",
+      "file": "export.png"
+    }
+  ]
+}

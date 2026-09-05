@@ -1,0 +1,109 @@
+{
+  "slug": "payment-terms-lens",
+  "video": "demo/payment-terms-lens.mp4",
+  "width": 1080,
+  "height": 1350,
+  "footage": 32.56,
+  "events": [
+    {
+      "t": 1.154,
+      "dur": 3,
+      "caption": "£1.2m a year. Terms 30 → 60."
+    },
+    {
+      "t": 3.56,
+      "dur": 3.2,
+      "zoom": {
+        "x": 540,
+        "y": 890.34375,
+        "scale": 1.18
+      }
+    },
+    {
+      "t": 3.56,
+      "dur": 3,
+      "caption": "Your side."
+    },
+    {
+      "t": 7.767,
+      "dur": 3.2,
+      "caption": "The supplier pays £11,836."
+    },
+    {
+      "t": 7.77,
+      "dur": 3,
+      "zoom": {
+        "x": 913.890625,
+        "y": 816,
+        "scale": 1.15
+      }
+    },
+    {
+      "t": 11.172,
+      "dur": 4,
+      "caption": "Smaller supplier, dearer money."
+    },
+    {
+      "t": 12.727,
+      "dur": 2.6,
+      "zoom": {
+        "x": 913.890625,
+        "y": 816,
+        "scale": 1.15
+      }
+    },
+    {
+      "t": 16.332,
+      "dur": 3.2,
+      "caption": "Now read it as the supplier."
+    },
+    {
+      "t": 16.842,
+      "x": 428.140625,
+      "y": 433.96875,
+      "tap": true
+    },
+    {
+      "t": 20.591,
+      "x": 222.03125,
+      "y": 433.96875,
+      "tap": true
+    },
+    {
+      "t": 22.627,
+      "dur": 4.2,
+      "caption": "2% for 20 days is 37% a year."
+    },
+    {
+      "t": 23.136,
+      "x": 437.140625,
+      "y": 675.84375,
+      "tap": true
+    },
+    {
+      "t": 24.784,
+      "dur": 3,
+      "zoom": {
+        "x": 800,
+        "y": 433.296875,
+        "scale": 1.2
+      }
+    },
+    {
+      "t": 28.787,
+      "dur": 3.4,
+      "caption": "Copy the picture into your next call."
+    },
+    {
+      "t": 29.295,
+      "x": 412.109375,
+      "y": 674.8125,
+      "tap": true
+    },
+    {
+      "t": 29.759,
+      "dur": 2.6,
+      "image": "demo/payment-terms-lens.export.png"
+    }
+  ]
+}

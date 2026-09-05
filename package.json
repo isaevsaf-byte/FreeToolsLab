@@ -18,8 +18,10 @@
     "preview": "node scripts/serve.mjs site/out --port 4173",
     "check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check.mjs",
     "og": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/og.mjs",
+    "record": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/record.mjs",
     "new": "node scripts/new.mjs",
-    "typecheck": "npm --workspace site run typecheck"
+    "typecheck": "npm --workspace site run typecheck",
+    "video": "npm --workspace remotion run render --"
   },
   "devDependencies": {
     "lighthouse": "^13.4.1",

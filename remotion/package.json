@@ -2,12 +2,13 @@
   "name": "@freetoolslab/remotion",
   "private": true,
   "version": "0.1.0",
-  "description": "Remotion compositions for FreeToolsLab tool videos (20–40s, 1080x1350, 30fps).",
+  "description": "Remotion compositions for FreeToolsLab tool videos (20\u201340s, 1080x1350, 30fps).",
   "type": "module",
   "scripts": {
     "studio": "remotion studio src/index.ts",
     "render": "remotion render src/index.ts",
-    "still": "remotion still src/index.ts"
+    "still": "remotion still src/index.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.0",

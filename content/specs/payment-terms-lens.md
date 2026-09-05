@@ -82,3 +82,12 @@ Fair instead: 0.49%–0.99% early-payment discount
 
 ## Post hook (for editor)
 "A 30-day terms extension is a loan. You borrow at 6%. The supplier lends at 12%. Half the money evaporates."
+
+## v1.2 (2026-09-05, approved by Safar)
+- **Perspective**: "I am the buyer / the supplier" chip. Numbers identical, wording flips (`sup.*` overrides in i18n.js). URL `who=supplier`.
+- **Discount**: "Discount for paying at the proposed terms" (%), preset `2/10 net 30`. `discount_value = spend × discount`; `buyer_net = buyer_interest + discount_value`; `supplier_net = − supplier_interest − discount_value`. The leak is unchanged (a discount transfers 1:1).
+- **SCF toggle** + bank spread (illustrative 1.5%): `supplier_rate_eff = buyer_rate + spread`; the leak collapses to `cash × spread`.
+- **Option B**: second proposed terms + discount on the same inputs; table A vs B with nets per side and a verdict (better for both / split).
+- **Missing data**: spend + both terms required; everything else optional, outputs show n/a.
+- Visual "Where the money goes": loan band with arrow, yearly cost split into "reaches you" vs "goes to its lender", supplier profit bite. Download PNG renders it client-side.
+- Currencies: GBP USD EUR CNY RUB UZS (defaults scaled by rough FX, user numbers untouched).

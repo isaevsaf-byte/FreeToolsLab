@@ -25,6 +25,10 @@
       .chip:hover { border-color: var(--link); }
       .chip[aria-pressed="true"] { border-color: var(--go); color: var(--go); background: var(--go-soft); }
       .chips-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
+      .toggle input { accent-color: var(--go); width: 1rem; height: 1rem; }
+      .inline { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+      .inline .input { max-width: 7rem; }
+      table.numbers td.best { color: var(--go); font-weight: 600; }
       [data-panel="fair"][data-shown="0"] .fair-value { display: none; }
       [data-panel="fair"][data-shown="0"] { color: var(--muted); }
       .warn { color: var(--warn); font-family: var(--font-mono); font-size: 0.8125rem; }
@@ -82,6 +86,12 @@
         <section class="card" aria-labelledby="inputs-title">
           <h2 id="inputs-title" data-i18n="inputs.title"></h2>
 
+          <div class="chips" role="group" aria-labelledby="who-label">
+            <span id="who-label" class="chips-label" data-i18n="inputs.who"></span>
+            <button type="button" class="chip" data-who="buyer" data-i18n="inputs.who_buyer"></button>
+            <button type="button" class="chip" data-who="supplier" data-i18n="inputs.who_supplier"></button>
+          </div>
+
           <div class="field">
             <label for="ccy" data-i18n="inputs.currency"></label>
             <select id="ccy" class="select" data-param="ccy">
@@ -121,10 +131,20 @@
           </div>
           <div class="chips" role="group" aria-labelledby="quick-label">
             <span id="quick-label" class="chips-label" data-i18n="inputs.quick"></span>
-            <button type="button" class="chip" data-preset="30,60">30 → 60</button>
-            <button type="button" class="chip" data-preset="30,90">30 → 90</button>
-            <button type="button" class="chip" data-preset="60,120">60 → 120</button>
-            <button type="button" class="chip" data-preset="60,30">60 → 30</button>
+            <button type="button" class="chip" data-preset="30,60,0">30 → 60</button>
+            <button type="button" class="chip" data-preset="30,90,0">30 → 90</button>
+            <button type="button" class="chip" data-preset="60,120,0">60 → 120</button>
+            <button type="button" class="chip" data-preset="60,30,0">60 → 30</button>
+            <button type="button" class="chip" data-preset="30,10,2" data-i18n="inputs.preset_early"></button>
+          </div>
+
+          <div class="field">
+            <label for="disc"><span data-i18n="inputs.disc.label"></span><span class="tag" data-i18n="inputs.optional"></span></label>
+            <div class="input-unit">
+              <input id="disc" class="input" type="number" inputmode="decimal" min="0" max="20" step="0.1" data-param="disc" />
+              <span class="unit" data-i18n="inputs.disc.unit"></span>
+            </div>
+            <span class="hint" data-i18n="inputs.disc.source"></span>
           </div>
 
           <div class="field">
@@ -155,6 +175,17 @@
           </div>
 
           <div class="field">
+            <label class="toggle"><input type="checkbox" id="scf" data-param="scf" /> <span data-i18n="inputs.scf.label"></span></label>
+            <span class="hint" data-i18n="inputs.scf.source"></span>
+            <div class="inline" data-scf-only hidden>
+              <label for="spread" class="chips-label" data-i18n="inputs.spread.label"></label>
+              <input id="spread" class="input" type="number" inputmode="decimal" min="0" max="20" step="0.1" data-param="spread" />
+              <span class="unit" style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted)" data-i18n="inputs.spread.unit"></span>
+            </div>
+            <span class="hint" data-out="scfNote"></span>
+          </div>
+
+          <div class="field">
             <label for="m"><span data-i18n="inputs.margin.label"></span><span class="tag" data-i18n="inputs.optional"></span>: <span class="num" data-out="mLabel"></span><span data-i18n="inputs.margin.unit"></span></label>
             <input id="m" class="range" type="range" min="0" max="40" step="0.5" data-param="m" />
             <span class="hint" data-i18n="inputs.margin.source"></span>
@@ -164,6 +195,26 @@
             <button type="button" class="chip" data-margin="3" data-i18n="inputs.preset_distributor"></button>
             <button type="button" class="chip" data-margin="8" data-i18n="inputs.preset_manufacturer"></button>
             <button type="button" class="chip" data-margin="15" data-i18n="inputs.preset_services"></button>
+          </div>
+
+          <div class="field">
+            <label class="toggle"><input type="checkbox" id="cmp" data-param="cmp" /> <span data-i18n="inputs.cmp"></span></label>
+          </div>
+          <div class="grid-2" data-cmp-only hidden>
+            <div class="field">
+              <label for="next2" data-i18n="inputs.next2.label"></label>
+              <div class="input-unit">
+                <input id="next2" class="input" type="number" inputmode="numeric" min="0" max="365" step="1" data-param="next2" />
+                <span class="unit" data-i18n="inputs.next2.unit"></span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="disc2" data-i18n="inputs.disc2.label"></label>
+              <div class="input-unit">
+                <input id="disc2" class="input" type="number" inputmode="decimal" min="0" max="20" step="0.1" data-param="disc2" />
+                <span class="unit" data-i18n="inputs.disc2.unit"></span>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -188,6 +239,18 @@
               <span class="label" data-out="leakLabel"></span>
               <span class="value" data-out="leak" data-formula="f4"></span>
               <span class="hint muted" data-out="leakNote"></span>
+            </div>
+            <div class="result" data-disc-only hidden>
+              <span class="label" data-i18n="results.discount"></span>
+              <span class="value" data-out="discount" data-formula="f9"></span>
+            </div>
+            <div class="result" data-disc-only hidden>
+              <span class="label" data-i18n="results.your_net"></span>
+              <span class="value" data-out="yourNet" data-formula="f9"></span>
+            </div>
+            <div class="result" data-disc-only hidden>
+              <span class="label" data-i18n="results.supplier_net"></span>
+              <span class="value" data-out="supplierNet" data-formula="f9"></span>
             </div>
           </section>
 
@@ -230,11 +293,12 @@
           <rect class="bar" x="0" y="130" height="34" width="0" fill="var(--stop)" data-bar="segB"></rect>
           <text x="0" y="190" font-size="16" fill="var(--go)" data-out="vA"></text>
           <text x="640" y="190" font-size="16" fill="var(--stop)" text-anchor="end" data-out="vB"></text>
+          <text x="0" y="222" font-size="14" fill="var(--muted)" data-out="vDiscount"></text>
           <!-- row C: the supplier's profit -->
           <text x="0" y="262" font-size="17" data-out="vProfit"></text>
           <rect x="0" y="274" height="28" width="640" fill="var(--rule-2)"></rect>
           <rect class="bar" x="0" y="274" height="28" width="0" fill="var(--stop)" data-bar="bite"></rect>
-          <text x="0" y="324" font-size="13" fill="var(--muted)" data-out="vProfitNote"></text>
+          <text x="0" y="324" font-size="15" data-out="vProfitNote"></text>
         </svg>
       </section>
 
@@ -243,6 +307,18 @@
         <h2 id="fair-title" data-i18n="fair.title"></h2>
         <p data-out="fairText"></p>
         <p class="fair-value num" style="font-family: var(--font-mono)" data-out="fairValue"></p>
+      </section>
+
+      <!-- Option A vs option B -->
+      <section class="card" aria-labelledby="compare-title" data-panel="compare" hidden>
+        <h2 id="compare-title" data-i18n="compare.title"></h2>
+        <div class="table-wrap">
+          <table class="numbers">
+            <thead><tr><th></th><th data-i18n="compare.a"></th><th data-i18n="compare.b"></th></tr></thead>
+            <tbody data-out="compareBody"></tbody>
+          </table>
+        </div>
+        <p style="font-family: var(--font-mono); font-size: 0.875rem" data-out="compareVerdict"></p>
       </section>
 
       <!-- All numbers -->
@@ -283,6 +359,7 @@
           <li><code data-i18n="assumptions.f6"></code></li>
           <li><code data-i18n="assumptions.f7"></code></li>
           <li><code data-i18n="assumptions.f8"></code></li>
+          <li><code data-i18n="assumptions.f9"></code></li>
         </ul>
         <p data-i18n="assumptions.note"></p>
         <p data-i18n="assumptions.disclaimer"></p>

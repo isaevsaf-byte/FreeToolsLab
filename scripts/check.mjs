@@ -126,17 +126,23 @@ for (const p of pages) {
       if (text.replace(/\s+/g, "").length < 40) fail(`${label}: page rendered (almost) empty`);
 
       // interaction: every input, select, range, button — then network must still be silent
-      for (const el of await page.$$("input[type=number]")) {
+      for (const el of await page.$$("input[type=number]:visible")) {
         const v = Number(await el.inputValue()) || 0;
         await el.fill(String(v + 1));
       }
-      for (const el of await page.$$("input[type=range]")) {
+      for (const el of await page.$$("input[type=range]:visible")) {
         await el.focus();
         await page.keyboard.press("ArrowRight");
       }
-      for (const el of await page.$$("select")) {
+      for (const el of await page.$$("select:visible")) {
         const values = await el.$$eval("option", (os) => os.map((o) => o.value));
         if (values.length > 1) await el.selectOption(values[1]);
+      }
+      for (const el of await page.$$("input[type=checkbox]:visible")) {
+        await el.check({ timeout: 2000 }).catch(() => {});
+      }
+      for (const el of await page.$$("input[type=number]:visible")) {
+        await el.fill(String((Number(await el.inputValue()) || 0) + 1), { timeout: 2000 }).catch(() => {});
       }
       for (const el of await page.$$("button:visible")) {
         await el.click({ timeout: 2000 }).catch(() => {});

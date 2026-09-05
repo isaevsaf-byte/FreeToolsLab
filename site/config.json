@@ -28,5 +28,6 @@
   },
   "submit_tool": "https://github.com/isaevsaf-byte/FreeToolsLab/issues/new?template=tool-idea.yml",
   "credit_en": "Architected by Safar Isaev",
-  "credit_ru": "Архитектор: Сафар Исаев"
+  "credit_ru": "Архитектор: Сафар Исаев",
+  "repo": "https://github.com/isaevsaf-byte/FreeToolsLab"
 }

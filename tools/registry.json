@@ -47,7 +47,9 @@
       "status": "next",
       "added": "",
       "url": "/tools/payment-terms-lens/",
-      "post_url": ""
+      "post_url": "",
+      "hook_en": "£5,918 a year leaves the deal when £1.2m moves from 30 to 60 days",
+      "hook_ru": "£5 918 в год уходит из сделки, когда £1,2 млн переводят с 30 на 60 дней"
     },
     {
       "id": "tail-spend-simulator",

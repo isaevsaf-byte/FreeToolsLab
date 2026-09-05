@@ -13,7 +13,14 @@ export const dictionary = {
       badge: "SYSTEM: OPERATIONAL",
       title: "Strategic Intelligence. Democratized.",
       sub: "A suite of local-first tools for business decisions. No tracking. No servers. Nothing leaves your browser.",
-      cta: "Access Tools",
+      cta: "All tools",
+      try: "Try {name}",
+    },
+    trust: {
+      requests: "0 network requests",
+      cookies: "No cookies",
+      account: "No account",
+      how: "How we check it",
     },
     mission: {
       title: "The Manifesto",
@@ -72,7 +79,14 @@ export const dictionary = {
       badge: "СТАТУС: АКТИВЕН",
       title: "Демократизация Стратегии.",
       sub: "Набор local-first инструментов для бизнес-решений. Без слежки. Без серверов. Ничего не покидает ваш браузер.",
-      cta: "Открыть Инструменты",
+      cta: "Все инструменты",
+      try: "Попробовать {name}",
+    },
+    trust: {
+      requests: "0 сетевых запросов",
+      cookies: "Без cookies",
+      account: "Без аккаунта",
+      how: "Как мы это проверяем",
     },
     mission: {
       title: "Манифест",

@@ -16,6 +16,8 @@ export type RegistryTool = {
   added?: string;
   url: string;
   post_url?: string;
+  hook_en?: string;
+  hook_ru?: string;
 };
 
 /** Plain <a>: tool pages are static HTML outside Next routing. */
@@ -26,6 +28,7 @@ export function ToolCard({ tool, lang }: { tool: RegistryTool; lang: Language })
   const href = `${tool.url}${prefsQuery(lang, theme)}`;
   const name = lang === "ru" ? tool.name_ru : tool.name_en;
   const tagline = lang === "ru" ? tool.tagline_ru : tool.tagline_en;
+  const hook = lang === "ru" ? tool.hook_ru : tool.hook_en;
   const body = (
     <>
       <div className="flex items-start justify-between gap-3 mb-2">
@@ -38,6 +41,7 @@ export function ToolCard({ tool, lang }: { tool: RegistryTool; lang: Language })
           {t[tool.status] ?? tool.status}
         </span>
       </div>
+      {hook && <p className="font-mono text-sm text-ink tabular leading-snug mb-2">{hook}</p>}
       <p className="text-sm text-muted leading-relaxed">{tagline}</p>
     </>
   );

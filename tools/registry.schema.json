@@ -2,24 +2,80 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "FreeToolsLab registry",
   "type": "object",
-  "required": ["tools"],
+  "required": [
+    "tools"
+  ],
   "properties": {
     "tools": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id","name_en","name_ru","tagline_en","tagline_ru","category","status","url"],
+        "required": [
+          "id",
+          "name_en",
+          "name_ru",
+          "tagline_en",
+          "tagline_ru",
+          "category",
+          "status",
+          "url"
+        ],
         "properties": {
-          "id": {"type":"string","pattern":"^[a-z0-9-]+$"},
-          "name_en": {"type":"string"},
-          "name_ru": {"type":"string"},
-          "tagline_en": {"type":"string","maxLength":120},
-          "tagline_ru": {"type":"string","maxLength":120},
-          "category": {"type":"string","enum":["decisions","procurement","operations","finance","other"]},
-          "status": {"type":"string","enum":["live","next","planned","idea","retired"]},
-          "added": {"type":"string"},
-          "url": {"type":"string"},
-          "post_url": {"type":"string"}
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "name_en": {
+            "type": "string"
+          },
+          "name_ru": {
+            "type": "string"
+          },
+          "tagline_en": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "tagline_ru": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "decisions",
+              "procurement",
+              "operations",
+              "finance",
+              "other"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "live",
+              "next",
+              "planned",
+              "idea",
+              "retired"
+            ]
+          },
+          "added": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "post_url": {
+            "type": "string"
+          },
+          "hook_en": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "hook_ru": {
+            "type": "string",
+            "maxLength": 100
+          }
         }
       }
     }

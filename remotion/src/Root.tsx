@@ -43,7 +43,7 @@ export const RemotionRoot: React.FC = () => (
         video: sc.video,
         events: sc.events,
         footage: sc.footage,
-        title: "Status is a state, not a deck.",
+        title: "One link. No slides.",
         kicker: "How you can run projects with Claude Code",
         url: "Live cockpit: link in the first comment",
         credit: "Safar Isaev",

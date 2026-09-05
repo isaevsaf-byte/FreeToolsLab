@@ -12,7 +12,7 @@ Why this scenario works on video: every click produces a visible consequence som
 
 ## Shot list (as recorded)
 
-Title 2.8 s: kicker "How you can run projects with Claude Code", "Status is a state, not a deck." → footage 39.6 s → credit 2.2 s.
+Title 2.8 s: kicker "How you can run projects with Claude Code", "One link. No slides." → footage 39.6 s → credit 2.2 s.
 
 | Time in video | Caption |
 |---|---|

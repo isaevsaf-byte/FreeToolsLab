@@ -63,6 +63,9 @@
               <option value="GBP">GBP £</option>
               <option value="USD">USD $</option>
               <option value="EUR">EUR €</option>
+              <option value="CNY">CNY ¥</option>
+              <option value="RUB">RUB ₽</option>
+              <option value="UZS">UZS so'm</option>
             </select>
           </div>
 
@@ -136,11 +139,19 @@
         <button type="button" class="btn btn--primary" data-action="copy">
           <span data-i18n="actions.copy"></span>
         </button>
+        <button type="button" class="btn" data-action="png">
+          <span data-i18n="actions.png"></span>
+        </button>
         <button type="button" class="btn" data-action="csv">
           <span data-i18n="actions.csv"></span>
         </button>
         <span class="muted" style="font-family: var(--font-mono); font-size: 0.75rem" data-out="status" role="status"></span>
       </section>
+
+      <p style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted)">
+        <a data-feedback-mail data-i18n="actions.feedback"></a>
+        · <a data-feedback-github target="_blank" rel="noopener noreferrer" data-i18n="actions.feedback_github"></a>
+      </p>
 
       <!-- 9. Assumptions -->
       <section class="card assumptions" aria-labelledby="assumptions-title">

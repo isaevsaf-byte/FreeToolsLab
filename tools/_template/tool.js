@@ -17,6 +17,8 @@ import {
   shareUrl,
   copyText,
   downloadCsv,
+  downloadSvgPng,
+  currencySymbol,
   formatMoney,
   formatNumber,
   CURRENCIES,
@@ -27,7 +29,6 @@ import { SITE } from "../../shared/site.js";
 import bundle from "./i18n.js";
 
 const DEFAULTS = { volume: 1200, unitCost: 4.5, saving: 10, ccy: DEFAULT_CURRENCY };
-const SYMBOL = { GBP: "£", USD: "$", EUR: "€" };
 
 /* ---------- state (settings only; lives in the URL) ---------- */
 const params = readParams();
@@ -89,7 +90,7 @@ function render() {
   out("after").textContent = money(after);
   out("delta").textContent = money(delta);
   out("savingLabel").textContent = formatNumber(state.saving, lang);
-  $$("[data-ccy-symbol]").forEach((el) => (el.textContent = SYMBOL[state.ccy]));
+  $$("[data-ccy-symbol]").forEach((el) => (el.textContent = currencySymbol(state.ccy, lang)));
 
   // primary visual: two bars, before (stop) vs after (go), max width 500
   const max = Math.max(annual, 1);
@@ -99,6 +100,11 @@ function render() {
     delta: money(delta),
     pct: formatNumber(state.saving, lang),
   });
+
+  // feedback links: mailto with the settings link (no data), and the GitHub issue form
+  const url = shareUrl(state);
+  $("[data-feedback-mail]").href = `mailto:${SITE.author.email}?subject=${encodeURIComponent(i18n.t("feedback.subject"))}&body=${encodeURIComponent(i18n.t("feedback.body", { url }))}`;
+  $("[data-feedback-github]").href = `${SITE.repo}/issues/new?template=tool-feedback.yml&title=${encodeURIComponent("[__SLUG__] ")}`;
 }
 
 /* ---------- actions ---------- */
@@ -123,6 +129,15 @@ function flash(key) {
 
 $("[data-action='copy']").addEventListener("click", async () => {
   flash((await copyText(resultText())) ? "actions.copied" : "actions.copy_failed");
+});
+
+$("[data-action='png']").addEventListener("click", async () => {
+  const ok = await downloadSvgPng($(".visual"), {
+    filename: "__SLUG__.png",
+    title: i18n.t("name"),
+    footer: `freetoolslab.org/tools/__SLUG__ · ${i18n.lang === "ru" ? SITE.credit_ru : SITE.credit_en}`,
+  });
+  flash(ok ? "actions.png_done" : "actions.png_failed");
 });
 
 $("[data-action='csv']").addEventListener("click", () => {

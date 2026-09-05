@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
     <title>Payment Terms Lens · FreeToolsLab</title>
-    <meta name="description" content="What a change in payment terms does to you, and to a supplier this size." />
+    <meta name="description" content="What longer payment terms give you, and what they cost a supplier this size." />
     <meta property="og:title" content="Payment Terms Lens · FreeToolsLab" />
-    <meta property="og:description" content="What a change in payment terms does to you, and to a supplier this size." />
+    <meta property="og:description" content="What longer payment terms give you, and what they cost a supplier this size." />
     <meta property="og:image" content="https://www.freetoolslab.org/tools/payment-terms-lens/og.png" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -17,10 +17,28 @@
     <link rel="stylesheet" href="../../shared/tokens.css" />
     <link rel="stylesheet" href="../../shared/tool.css" />
     <style>
+      .summary { font-size: 1.0625rem; line-height: 1.5; }
+      .summary .num { font-family: var(--font-mono); }
+      .tag { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--muted); border: 1px solid var(--rule-2); border-radius: 999px; padding: 0 0.4rem; margin-left: 0.4rem; vertical-align: middle; }
+      .chips { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+      .chip { font-family: var(--font-mono); font-size: 0.75rem; border: 1px solid var(--rule-2); background: var(--panel-2); color: var(--ink); border-radius: 999px; padding: 0.2rem 0.6rem; cursor: pointer; }
+      .chip:hover { border-color: var(--link); }
+      .chip[aria-pressed="true"] { border-color: var(--go); color: var(--go); background: var(--go-soft); }
+      .chips-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
       [data-panel="fair"][data-shown="0"] .fair-value { display: none; }
       [data-panel="fair"][data-shown="0"] { color: var(--muted); }
       .warn { color: var(--warn); font-family: var(--font-mono); font-size: 0.8125rem; }
       .dir { font-size: 0.8125rem; color: var(--warn); }
+      .value[title] { cursor: help; text-decoration: underline dotted var(--rule-2); text-underline-offset: 4px; }
+      details.card summary { cursor: pointer; font-family: var(--font-mono); font-size: 1rem; letter-spacing: 0.02em; text-transform: uppercase; color: var(--muted); }
+      table.numbers { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+      table.numbers th, table.numbers td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+      table.numbers td.v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+      table.numbers td.f { color: var(--muted); font-family: var(--font-mono); font-size: 0.75rem; }
+      .table-wrap { overflow-x: auto; }
+      .feedback-line { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
+      @media (min-width: 768px) { .sticky-col { position: sticky; top: 1rem; align-self: start; } }
+      @media print { .btn, .chips, .chips-label, [data-lang-toggle], [data-theme-toggle], .feedback-line { display: none !important; } .card { break-inside: avoid; } }
     </style>
   </head>
   <body>
@@ -54,6 +72,11 @@
         <p class="privacy" data-i18n="privacy"></p>
       </header>
 
+      <!-- Live plain-language summary -->
+      <section class="card" aria-live="polite">
+        <p class="summary" data-out="summary"></p>
+      </section>
+
       <div class="grid-2">
         <!-- Inputs -->
         <section class="card" aria-labelledby="inputs-title">
@@ -65,13 +88,16 @@
               <option value="GBP">GBP £</option>
               <option value="USD">USD $</option>
               <option value="EUR">EUR €</option>
+              <option value="CNY">CNY ¥</option>
+              <option value="RUB">RUB ₽</option>
+              <option value="UZS">UZS so'm</option>
             </select>
           </div>
 
           <div class="field">
-            <label for="spend" data-i18n="inputs.spend.label"></label>
+            <label for="spend"><span data-i18n="inputs.spend.label"></span><span class="tag" data-i18n="inputs.required"></span></label>
             <div class="input-unit">
-              <input id="spend" class="input" type="number" inputmode="decimal" min="0" step="1000" data-param="spend" />
+              <input id="spend" class="input" type="text" inputmode="numeric" autocomplete="off" data-param="spend" data-money />
               <span class="unit"><span data-ccy-symbol></span> <span data-i18n="inputs.spend.unit"></span></span>
             </div>
             <span class="hint" data-i18n="inputs.spend.source"></span>
@@ -79,19 +105,26 @@
 
           <div class="grid-2">
             <div class="field">
-              <label for="cur" data-i18n="inputs.current.label"></label>
+              <label for="cur"><span data-i18n="inputs.current.label"></span><span class="tag" data-i18n="inputs.required"></span></label>
               <div class="input-unit">
                 <input id="cur" class="input" type="number" inputmode="numeric" min="0" max="365" step="1" data-param="cur" />
                 <span class="unit" data-i18n="inputs.current.unit"></span>
               </div>
             </div>
             <div class="field">
-              <label for="next" data-i18n="inputs.proposed.label"></label>
+              <label for="next"><span data-i18n="inputs.proposed.label"></span><span class="tag" data-i18n="inputs.required"></span></label>
               <div class="input-unit">
                 <input id="next" class="input" type="number" inputmode="numeric" min="0" max="365" step="1" data-param="next" />
                 <span class="unit" data-i18n="inputs.proposed.unit"></span>
               </div>
             </div>
+          </div>
+          <div class="chips" role="group" aria-labelledby="quick-label">
+            <span id="quick-label" class="chips-label" data-i18n="inputs.quick"></span>
+            <button type="button" class="chip" data-preset="30,60">30 → 60</button>
+            <button type="button" class="chip" data-preset="30,90">30 → 90</button>
+            <button type="button" class="chip" data-preset="60,120">60 → 120</button>
+            <button type="button" class="chip" data-preset="60,30">60 → 30</button>
           </div>
 
           <div class="field">
@@ -101,12 +134,18 @@
           </div>
 
           <div class="field">
-            <label for="srev" data-i18n="inputs.supplier_revenue.label"></label>
+            <label for="srev"><span data-i18n="inputs.supplier_revenue.label"></span><span class="tag" data-i18n="inputs.optional"></span></label>
             <div class="input-unit">
-              <input id="srev" class="input" type="number" inputmode="decimal" min="0" step="10000" data-param="srev" />
+              <input id="srev" class="input" type="text" inputmode="numeric" autocomplete="off" data-param="srev" data-money />
               <span class="unit"><span data-ccy-symbol></span> <span data-i18n="inputs.supplier_revenue.unit"></span></span>
             </div>
             <span class="hint" data-i18n="inputs.supplier_revenue.source"></span>
+          </div>
+          <div class="chips" role="group" aria-labelledby="size-label">
+            <span id="size-label" class="chips-label" data-i18n="inputs.size"></span>
+            <button type="button" class="chip" data-size="2000000">2m</button>
+            <button type="button" class="chip" data-size="20000000">20m</button>
+            <button type="button" class="chip" data-size="200000000">200m</button>
           </div>
 
           <div class="field">
@@ -116,32 +155,38 @@
           </div>
 
           <div class="field">
-            <label for="m"><span data-i18n="inputs.margin.label"></span>: <span class="num" data-out="mLabel"></span><span data-i18n="inputs.margin.unit"></span></label>
+            <label for="m"><span data-i18n="inputs.margin.label"></span><span class="tag" data-i18n="inputs.optional"></span>: <span class="num" data-out="mLabel"></span><span data-i18n="inputs.margin.unit"></span></label>
             <input id="m" class="range" type="range" min="0" max="40" step="0.5" data-param="m" />
             <span class="hint" data-i18n="inputs.margin.source"></span>
           </div>
+          <div class="chips" role="group" aria-labelledby="margin-label">
+            <span id="margin-label" class="chips-label" data-i18n="inputs.margin_presets"></span>
+            <button type="button" class="chip" data-margin="3" data-i18n="inputs.preset_distributor"></button>
+            <button type="button" class="chip" data-margin="8" data-i18n="inputs.preset_manufacturer"></button>
+            <button type="button" class="chip" data-margin="15" data-i18n="inputs.preset_services"></button>
+          </div>
         </section>
 
-        <div style="display: grid; gap: 1rem; align-content: start">
+        <div class="sticky-col" style="display: grid; gap: 1rem; align-content: start">
           <!-- Result cards -->
           <section class="card" aria-labelledby="results-title" aria-live="polite">
             <h2 id="results-title" data-i18n="results.title"></h2>
             <div class="result result--warn">
               <span class="label" data-i18n="results.cash"></span>
-              <span class="value" data-out="cash"></span>
+              <span class="value" data-out="cash" data-formula="f1"></span>
               <span class="dir" data-out="cashDir"></span>
             </div>
             <div class="result result--go" data-card="buyer">
               <span class="label" data-out="buyerLabel"></span>
-              <span class="value" data-out="buyer"></span>
+              <span class="value" data-out="buyer" data-formula="f2"></span>
             </div>
             <div class="result result--stop" data-card="supplier">
               <span class="label" data-out="supplierLabel"></span>
-              <span class="value" data-out="supplier"></span>
+              <span class="value" data-out="supplier" data-formula="f3"></span>
             </div>
             <div class="result">
               <span class="label" data-out="leakLabel"></span>
-              <span class="value" data-out="leak"></span>
+              <span class="value" data-out="leak" data-formula="f4"></span>
               <span class="hint muted" data-out="leakNote"></span>
             </div>
           </section>
@@ -151,11 +196,11 @@
             <h2 id="impact-title" data-i18n="impact.title"></h2>
             <div class="result">
               <span class="label" data-i18n="impact.pct_profit"></span>
-              <span class="value" data-out="pctProfit"></span>
+              <span class="value" data-out="pctProfit" data-formula="f6"></span>
             </div>
             <div class="result">
               <span class="label" data-i18n="impact.days"></span>
-              <span class="value" data-out="days"></span>
+              <span class="value" data-out="days" data-formula="f7"></span>
             </div>
             <div class="result">
               <span class="label" data-i18n="impact.share"></span>
@@ -166,34 +211,65 @@
         </div>
       </div>
 
-      <!-- PRIMARY VISUAL -->
+      <!-- PRIMARY VISUAL: where the money goes -->
       <section class="card" aria-labelledby="visual-title">
         <h2 id="visual-title" data-i18n="visual.title"></h2>
-        <svg class="visual" viewBox="0 0 640 220" role="img" aria-labelledby="visual-desc">
+        <svg class="visual" viewBox="0 0 640 330" role="img" aria-labelledby="visual-desc">
           <title id="visual-desc" data-i18n="visual.title"></title>
-          <text x="0" y="20" font-size="20" data-out="vBuyer"></text>
-          <rect class="bar" x="0" y="30" height="26" width="0" fill="var(--go)" data-bar="buyer"></rect>
-          <text x="0" y="92" font-size="20" data-out="vSupplier"></text>
-          <rect class="bar" x="0" y="102" height="26" width="0" fill="var(--stop)" data-bar="supplier"></rect>
-          <text x="0" y="164" font-size="20" data-out="vProfit"></text>
-          <rect x="0" y="174" height="26" width="640" fill="var(--rule-2)"></rect>
-          <rect class="bar" x="0" y="174" height="26" width="0" fill="var(--stop)" data-bar="bite"></rect>
+          <!-- row A: the loan itself -->
+          <text x="0" y="18" font-size="17" data-out="vCash"></text>
+          <g data-flow="cash">
+            <rect class="bar" x="0" y="30" height="22" width="612" fill="var(--warn)" data-bar="cash"></rect>
+            <polygon points="612,22 640,41 612,60" fill="var(--warn)" data-arrow="right"></polygon>
+            <polygon points="28,22 0,41 28,60" fill="var(--warn)" data-arrow="left" visibility="hidden"></polygon>
+          </g>
+          <!-- row B: the yearly cost, split -->
+          <text x="0" y="118" font-size="17" data-out="vHead"></text>
+          <rect x="0" y="130" height="34" width="640" fill="var(--panel-2)" stroke="var(--rule-2)"></rect>
+          <rect class="bar" x="0" y="130" height="34" width="0" fill="var(--go)" data-bar="segA"></rect>
+          <rect class="bar" x="0" y="130" height="34" width="0" fill="var(--stop)" data-bar="segB"></rect>
+          <text x="0" y="190" font-size="16" fill="var(--go)" data-out="vA"></text>
+          <text x="640" y="190" font-size="16" fill="var(--stop)" text-anchor="end" data-out="vB"></text>
+          <!-- row C: the supplier's profit -->
+          <text x="0" y="262" font-size="17" data-out="vProfit"></text>
+          <rect x="0" y="274" height="28" width="640" fill="var(--rule-2)"></rect>
+          <rect class="bar" x="0" y="274" height="28" width="0" fill="var(--stop)" data-bar="bite"></rect>
+          <text x="0" y="324" font-size="13" fill="var(--muted)" data-out="vProfitNote"></text>
         </svg>
       </section>
 
-      <!-- Secondary panel: what's fair -->
+      <!-- Secondary panel: the fair alternative -->
       <section class="card" aria-labelledby="fair-title" data-panel="fair" data-shown="0">
         <h2 id="fair-title" data-i18n="fair.title"></h2>
         <p data-out="fairText"></p>
         <p class="fair-value num" style="font-family: var(--font-mono)" data-out="fairValue"></p>
       </section>
 
+      <!-- All numbers -->
+      <details class="card" open>
+        <summary data-i18n="table.title"></summary>
+        <div class="table-wrap">
+          <table class="numbers">
+            <thead>
+              <tr><th data-i18n="table.metric"></th><th data-i18n="table.value"></th><th data-i18n="table.formula"></th></tr>
+            </thead>
+            <tbody data-out="tableBody"></tbody>
+          </table>
+        </div>
+      </details>
+
       <!-- Actions -->
       <section class="row">
         <button type="button" class="btn btn--primary" data-action="copy"><span data-i18n="actions.copy"></span></button>
+        <button type="button" class="btn" data-action="link"><span data-i18n="actions.link"></span></button>
+        <button type="button" class="btn" data-action="png"><span data-i18n="actions.png"></span></button>
         <button type="button" class="btn" data-action="csv"><span data-i18n="actions.csv"></span></button>
         <span class="muted" style="font-family: var(--font-mono); font-size: 0.75rem" data-out="status" role="status"></span>
       </section>
+      <p class="feedback-line">
+        <a data-feedback-mail data-i18n="actions.feedback"></a>
+        · <a data-feedback-github target="_blank" rel="noopener noreferrer" data-i18n="actions.feedback_github"></a>
+      </p>
 
       <!-- Assumptions -->
       <section class="card assumptions" aria-labelledby="assumptions-title">

@@ -4,8 +4,8 @@
   --bg:#FFFFFF; --panel:#F5F7FA; --panel-2:#EEF2F7;
   --ink:#0F141B; --muted:#5B6675;
   --rule:#D9E0E8; --rule-2:#C4CDD8;
-  --go:#15803D; --go-soft:#E6F6EC;      /* good / after */
-  --warn:#B45309; --warn-soft:#FDF3E1;  /* caution */
+  --go:#166534; --go-soft:#E6F6EC;      /* good / after */
+  --warn:#92400E; --warn-soft:#FDF3E1;  /* caution */
   --stop:#B91C1C; --stop-soft:#FDECEC;  /* risk / before */
   --link:#0369A1;
   --font-mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;

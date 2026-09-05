@@ -1,0 +1,27 @@
+name: Tool feedback
+description: Something broke, or a number looks wrong, in a FreeToolsLab tool
+title: "[<tool>] "
+labels: ["tool-feedback"]
+body:
+  - type: input
+    id: tool
+    attributes:
+      label: Which tool?
+      placeholder: "payment-terms-lens"
+    validations: { required: true }
+  - type: textarea
+    id: what
+    attributes:
+      label: What broke, or what did you expect instead?
+    validations: { required: true }
+  - type: input
+    id: link
+    attributes:
+      label: Settings link (optional; delete the numbers if they are confidential)
+      placeholder: "https://www.freetoolslab.org/tools/...?spend=..."
+  - type: checkboxes
+    id: credit
+    attributes:
+      label: Credit
+      options:
+        - label: You may thank me by first name / handle in the changelog

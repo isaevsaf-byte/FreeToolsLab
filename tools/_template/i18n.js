@@ -30,6 +30,15 @@ export default {
       copy_failed: "Copy failed. Select the text manually",
       csv: "Download CSV",
       downloaded: "CSV downloaded",
+      png: "Download PNG",
+      png_done: "PNG downloaded",
+      png_failed: "PNG export failed in this browser",
+      feedback: "Tell me what broke",
+      feedback_github: "or on GitHub",
+    },
+    feedback: {
+      subject: "__NAME_EN__: what broke",
+      body: "Tool: __NAME_EN__\nSettings link (delete it if the numbers are confidential): {url}\n\nWhat broke, or what I expected instead:\n",
     },
     assumptions: {
       title: "Assumptions",
@@ -79,6 +88,15 @@ export default {
       copy_failed: "Не скопировалось. Выделите текст вручную",
       csv: "Скачать CSV",
       downloaded: "CSV скачан",
+      png: "Скачать PNG",
+      png_done: "PNG скачан",
+      png_failed: "Этот браузер не смог сохранить PNG",
+      feedback: "Расскажите, что сломалось",
+      feedback_github: "или на GitHub",
+    },
+    feedback: {
+      subject: "__NAME_RU__: что сломалось",
+      body: "Инструмент: __NAME_RU__\nСсылка с настройками (удалите, если цифры конфиденциальны): {url}\n\nЧто сломалось или чего я ожидал вместо этого:\n",
     },
     assumptions: {
       title: "Допущения",

@@ -14,16 +14,27 @@ const W = 540, H = 675, SCALE = 2;
 fs.mkdirSync(OUT, { recursive: true });
 
 const browser = await chromium.launch();
-const ctx = await browser.newContext({
-  viewport: { width: W, height: H },
-  deviceScaleFactor: SCALE,
-  recordVideo: { dir: OUT, size: { width: W * SCALE, height: H * SCALE } },
-  acceptDownloads: true,
-  reducedMotion: "no-preference",
-});
+const ctx = await browser.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: SCALE, acceptDownloads: true, reducedMotion: "no-preference" });
 const page = await ctx.newPage();
-const t0 = Date.now();
-const now = () => (Date.now() - t0) / 1000;
+
+// CDP screencast: device-pixel frames (1080x1350 at @2x) with timestamps; ffmpeg turns them into a constant-rate video.
+const FR = path.join(OUT, `${slug}.frames`);
+fs.rmSync(FR, { recursive: true, force: true });
+fs.mkdirSync(FR, { recursive: true });
+const cdp = await ctx.newCDPSession(page);
+const frames = [];
+let firstTs = null;
+cdp.on("Page.screencastFrame", ({ data, metadata, sessionId }) => {
+  const file = path.join(FR, `f${String(frames.length).padStart(5, "0")}.jpg`);
+  fs.writeFileSync(file, Buffer.from(data, "base64"));
+  if (firstTs === null) firstTs = metadata.timestamp;
+  frames.push({ t: metadata.timestamp - firstTs, file });
+  cdp.send("Page.screencastFrameAck", { sessionId }).catch(() => {});
+});
+await cdp.send("Page.startScreencast", { format: "jpeg", quality: 92, maxWidth: W * SCALE, maxHeight: H * SCALE, everyNthFrame: 1 });
+
+// event clock = the screencast clock (seconds since the first frame)
+const now = () => (firstTs === null ? 0 : Date.now() / 1000 - firstTs);
 const events = [];
 const pause = (s) => page.waitForTimeout(s * 1000);
 const caption = (text, dur) => events.push({ t: now(), dur, caption: text });
@@ -97,12 +108,22 @@ await dl.saveAs(path.join(OUT, `${slug}.export.png`));
 events.push({ t: now() + 0.4, dur: 2.6, image: `demo/${slug}.export.png` });
 await pause(3.2);
 const footage = now();
-
+await pause(0.3);
+await cdp.send("Page.stopScreencast").catch(() => {});
 await ctx.close();
 await browser.close();
-const webm = fs.readdirSync(OUT).find((f) => f.endsWith(".webm"));
+
+// constant-rate video from timestamped frames (each frame holds until the next one)
+const end = footage + 0.3;
+const list = frames
+  .map((f, i) => {
+    const next = i + 1 < frames.length ? frames[i + 1].t : end;
+    return `file '${f.file}'\nduration ${Math.max(0.001, next - f.t).toFixed(4)}`;
+  })
+  .join("\n") + `\nfile '${frames[frames.length - 1].file}'\n`;
+fs.writeFileSync(path.join(FR, "list.txt"), list);
 const mp4 = path.join(OUT, `${slug}.mp4`);
-execSync(`ffmpeg -y -loglevel error -i "${path.join(OUT, webm)}" -c:v libx264 -pix_fmt yuv420p -movflags +faststart "${mp4}"`);
-fs.unlinkSync(path.join(OUT, webm));
-fs.writeFileSync(path.join(OUT, `${slug}.events.json`), JSON.stringify({ slug, video: `demo/${slug}.mp4`, width: W * SCALE, height: H * SCALE, footage, events }, null, 2));
-log.ok(`recorded ${c.cyan(`remotion/public/demo/${slug}.mp4`)} (${footage.toFixed(1)}s, ${events.length} events)`);
+execSync(`ffmpeg -y -loglevel error -f concat -safe 0 -i "${path.join(FR, "list.txt")}" -vf "fps=30,scale=${W * SCALE}:${H * SCALE}:force_original_aspect_ratio=decrease,pad=${W * SCALE}:${H * SCALE}:(ow-iw)/2:(oh-ih)/2:color=white" -c:v libx264 -pix_fmt yuv420p -movflags +faststart "${mp4}"`);
+fs.rmSync(FR, { recursive: true, force: true });
+fs.writeFileSync(path.join(OUT, `${slug}.events.json`), JSON.stringify({ slug, video: `demo/${slug}.mp4`, width: W * SCALE, height: H * SCALE, footage: end, events }, null, 2));
+log.ok(`recorded ${c.cyan(`remotion/public/demo/${slug}.mp4`)} (${end.toFixed(1)}s, ${frames.length} frames, ${events.length} events)`);

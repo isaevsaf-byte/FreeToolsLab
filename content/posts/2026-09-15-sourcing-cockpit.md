@@ -11,18 +11,18 @@ metrics_7d:  { impressions: , reactions: , comments: , link_clicks: }
 board: { skeptic: , editor_hook_score: , growth_targets: [] }
 ---
 
-<!-- v3 draft 2026-09-05, cut to ~150 words, from Safar's brief: SaaS vs AI companies, Claude Code artifacts, a couple of prompts,
+<!-- v4 draft 2026-09-05, ~160 words, opens with the Claude Code artifacts background, from Safar's brief: SaaS vs AI companies, Claude Code artifacts, a couple of prompts,
      a live cockpit updated by hand or by the agent. Storytelling added. English. No em-dashes.
      The artifact is fictional (enterprise AI platform, £4.2m). Vendor names are real companies used only as
      recognisable examples; nothing in the risks or decisions is a claim about them. Link in the first comment. -->
 
-I used four tools to run one sourcing project. Now I use one link.
+Claude Code can now publish artifacts: a real web page, on a link, that keeps working after the chat ends.
+I used it to replace four tools on one sourcing project.
 
 Tracker, slide deck, funnel spreadsheet, risk register.
 Every Friday I copied numbers from three of them into the fourth.
 
-This week: one paragraph in a Claude Project describing the process. Two prompts.
-Out came a live cockpit. Stages, plan vs actual, vendor funnel, savings vs target, sign-offs, risks, decisions.
+This week: one paragraph describing the process. Two prompts. Out came a live cockpit. Stages, plan vs actual, vendor funnel, savings vs target, sign-offs, risks, decisions.
 
 Negotiation slipped a week: one click, the award date moved.
 A vendor won: the list folded into a recommendation.

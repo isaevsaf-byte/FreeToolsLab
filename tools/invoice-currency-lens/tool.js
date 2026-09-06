@@ -172,6 +172,7 @@ function render() {
     setText("moveLabel" + k, t("inputs.move", { ccy: c, home }));
     setText("moveHint" + k, t("inputs.move_hint", { ccy: c, home }));
     $("#rate" + k).disabled = same;
+    $(`[data-rate="${k}"]`).dataset.same = same ? "1" : "0";
     setText("label" + k, t(k === "A" ? "results.cost_a" : "results.cost_b", { home }));
     setText("bLabel" + k, `${t(k === "A" ? "inputs.quote_a" : "inputs.quote_b")} · ${num(state["amt" + k] ?? 0)} ${c}`);
   }
@@ -194,20 +195,19 @@ function render() {
   setText("costA", cost(r.A));
   setText("costB", cost(r.B));
   const rateOp = (k) => `${inverse(state["ccy" + k], home) ? "÷" : "×"} ${rateFmt(state["rate" + k])}`;
-  setText("subA", r.A.ok && !r.A.same ? `${num(r.A.amt)} ${r.A.cur} ${rateOp("A")}${state.feeA ? ` + ${pct(state.feeA)}` : ""}` : "");
-  setText("subB", r.B.ok && !r.B.same ? `${num(r.B.amt)} ${r.B.cur} ${rateOp("B")}${state.feeB ? ` + ${pct(state.feeB)}` : ""}` : "");
-  $("[data-card='a']").className = `stat ${r.cheaper === "A" ? "stat--go" : r.cheaper === "B" ? "stat--stop" : ""}`;
-  $("[data-card='b']").className = `stat ${r.cheaper === "B" ? "stat--go" : r.cheaper === "A" ? "stat--stop" : ""}`;
-  setText("diff", r.ok ? money(Math.abs(r.diff)) : na);
-  setText("diffPct", r.ok && r.diffPct !== null ? pct(r.diffPct) : "");
-  setText("crossSup", r.crossSup === null ? na : rateFmt(r.crossSup));
-  setText("crossBank", r.crossBank === null ? "" : `${t("results.cross_bank")}: ${rateFmt(r.crossBank)} · ${t("results.per", { a: state.ccyA, b: state.ccyB })}`);
+  const tileSub = (k, x) => (!x.ok ? "" : x.same ? t("inputs.same_home") : `${num(x.amt)} ${x.cur} ${rateOp(k)}${state["fee" + k] ? ` + ${pct(state["fee" + k])}` : ""}`);
+  setText("subA", tileSub("A", r.A));
+  setText("subB", tileSub("B", r.B));
+  $("[data-card='a']").className = `stat ${r.cheaper === "A" ? "stat--go" : ""}`;
+  $("[data-card='b']").className = `stat ${r.cheaper === "B" ? "stat--go" : ""}`;
   setText("crossLine", !r.ok ? "" : r.sameCcy ? t("answer.cross_same") : t("answer.cross", { a: state.ccyA, b: state.ccyB, sup: rateFmt(r.crossSup), bank: rateFmt(r.crossBank) }));
 
   // visual: two stacked bars, one scale
   setText("vTitle", t("visual.title", { home }));
   const big = Math.max(r.A.ok ? r.A.expected : 0, r.B.ok ? r.B.expected : 0, r.A.ok ? r.A.today : 0, r.B.ok ? r.B.today : 0, 1e-9);
-  const vis = { title: t("visual.title", { home }), rows: [] };
+  const tie = r.ok && r.cheaper === "same";
+  const flipLabel = r.flip === null ? "" : t("visual.flip", { pct: pct(r.flip) });
+  const vis = { title: t("visual.title", { home }), rows: [], tie, flipLabel, cross: !r.ok || r.crossSup === null ? "" : t("copy.cross", { sup: rateFmt(r.crossSup), bank: rateFmt(r.crossBank), a: state.ccyA, b: state.ccyB }) };
   for (const [k, x, other] of [["A", r.A, r.B], ["B", r.B, r.A]]) {
     const row = { label: out("bLabel" + k).textContent, value: x.ok ? money(x.expected) : na, base: 0, fee: 0, move: 0, neg: false, flip: null, best: r.cheaper === k };
     if (x.ok) {
@@ -226,10 +226,15 @@ function render() {
     setText("bVal" + k, row.value);
     const fm = $(`[data-flip="${k.toLowerCase()}"]`);
     fm.hidden = row.flip === null;
-    if (row.flip !== null) { fm.style.left = `${Math.min(99, row.flip)}%`; fm.setAttribute("data-label", t("visual.flip", { pct: pct(r.flip) })); }
-    $(`[data-brow="${k.toLowerCase()}"]`).classList.toggle("best", row.best);
+    if (row.flip !== null) { fm.style.left = `${Math.min(100, row.flip)}%`; fm.classList.toggle("left", row.flip > 70); $(".fl", fm).textContent = flipLabel; }
+    const brow = $(`[data-brow="${k.toLowerCase()}"]`);
+    brow.classList.toggle("best", row.best);
+    brow.classList.toggle("tie", tie);
   }
   lastVis = vis;
+  const anyFee = r.ok && ((!r.A.same && r.A.fee > 0) || (!r.B.same && r.B.fee > 0));
+  const legendOn = { best: r.ok && !tie, other: r.ok && !tie, fee: anyFee, move: r.hasMove };
+  $$("[data-legend]").forEach((el) => (el.hidden = !legendOn[el.dataset.legend]));
 
   // table
   const rows = [
@@ -253,19 +258,27 @@ function visualSvg() {
   const v = lastVis;
   if (!v) return null;
   const W = 640;
+  const H = 26;
   let y = 44;
   let body = `<text x="0" y="22" font-size="20">${esc(v.title)}</text>`;
   for (const row of v.rows) {
-    body += `<text x="0" y="${y + 14}" font-size="15" fill="var(--muted)">${esc(row.label)}</text><text x="${W}" y="${y + 14}" font-size="15" text-anchor="end">${esc(row.value)}</text>`;
+    body += `<text x="0" y="${y + 14}" font-size="15" fill="var(--muted)">${esc(row.label)}</text><text x="${W}" y="${y + 14}" font-size="15" text-anchor="end"${row.best ? ' fill="var(--go)"' : ""}>${esc(row.value)}</text>`;
     const ty = y + 24;
-    body += `<rect x="0" y="${ty}" width="${W}" height="30" fill="var(--panel-2)" stroke="var(${row.best ? "--go" : "--rule-2"})"/>`;
+    body += `<rect x="0" y="${ty}" width="${W}" height="${H}" rx="4" fill="var(--panel-2)"/>`;
     const baseW = ((row.neg ? row.base - row.move : row.base) / 100) * W;
     const feeW = (row.fee / 100) * W;
     const moveW = (row.move / 100) * W;
-    body += `<rect x="0" y="${ty}" width="${baseW}" height="30" fill="var(--link)"/><rect x="${baseW}" y="${ty}" width="${feeW}" height="30" fill="var(--warn)"/><rect x="${baseW + feeW}" y="${ty}" width="${moveW}" height="30" fill="var(${row.neg ? "--go" : "--stop"})"/>`;
-    if (row.flip !== null) body += `<rect x="${(Math.min(99, row.flip) / 100) * W - 1}" y="${ty - 6}" width="2" height="42" fill="var(--ink)"/>`;
-    y += 80;
+    const baseFill = v.tie ? "--link" : row.best ? "--go" : "--muted";
+    body += `<rect x="0" y="${ty}" width="${baseW}" height="${H}" fill="var(${baseFill})"/><rect x="${baseW}" y="${ty}" width="${feeW}" height="${H}" fill="var(--warn)"/><rect x="${baseW + feeW}" y="${ty}" width="${moveW}" height="${H}" fill="var(${row.neg ? "--go" : "--stop"})"/>`;
+    if (row.flip !== null) {
+      const fx = (Math.min(100, row.flip) / 100) * W;
+      const left = row.flip > 70;
+      body += `<line x1="${fx}" x2="${fx}" y1="${ty - 4}" y2="${ty + H + 4}" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 3"/>`;
+      body += `<text x="${left ? fx - 6 : fx + 6}" y="${ty + H + 18}" font-size="11" fill="var(--muted)" text-anchor="${left ? "end" : "start"}">${esc(v.flipLabel)}</text>`;
+    }
+    y += 84;
   }
+  if (v.cross) { body += `<text x="0" y="${y + 4}" font-size="13" fill="var(--muted)">${esc(v.cross)}</text>`; y += 24; }
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${y}" width="${W}" height="${y}">${body}</svg>`;
   return new DOMParser().parseFromString(svg, "image/svg+xml").documentElement;
 }

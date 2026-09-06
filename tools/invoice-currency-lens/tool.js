@@ -3,6 +3,8 @@
  *
  * FORMULAS (mirror of the visible "Assumptions" block — keep both in sync):
  *   base_X      = amount_X × bank_sell_rate_X                (home currency per 1 unit of X; 1 if X is the home currency)
+ *                 the rate is typed the way banks quote it: if 1 unit of X is worth less than 1 unit of home (KZT vs USD),
+ *                 the user types X per 1 home and the tool uses 1 / typed
  *   fee_X       = base_X × fee_pct_X
  *   today_X     = base_X + fee_X
  *   move_X      = base_X × expected_move_pct_X                (user's own assumption; 0 = no view)
@@ -34,8 +36,11 @@ import bundle from "./i18n.js";
 const CCY = ["UZS", "KZT", "RUB", "USD", "EUR", "GBP", "CNY"];
 // Illustrative example rates, UZS per 1 unit. Only used to pre-fill a rate when a currency changes; the user types the real bank rate.
 const EXAMPLE_UZS = { UZS: 1, USD: 12650, EUR: 14800, GBP: 17100, KZT: 24, RUB: 155, CNY: 1760 };
-const exampleRate = (cur, home) => (cur === home ? 1 : Number((EXAMPLE_UZS[cur] / EXAMPLE_UZS[home]).toPrecision(4)));
-const DEFAULTS = { home: "UZS", days: 60, amtA: 1000000, ccyA: "KZT", amtB: 2100, ccyB: "USD", feeA: 1, feeB: 0.5, moveA: 0, moveB: 0 };
+// Quote direction: the number the user types is always ≥ 1, as banks print it (527 KZT per 1 USD, 1.17 USD per 1 EUR).
+const inverse = (cur, home) => cur !== home && EXAMPLE_UZS[cur] < EXAMPLE_UZS[home]; // true: typed as cur per 1 home
+const exampleRate = (cur, home) => (cur === home ? 1 : Number((inverse(cur, home) ? EXAMPLE_UZS[home] / EXAMPLE_UZS[cur] : EXAMPLE_UZS[cur] / EXAMPLE_UZS[home]).toPrecision(4)));
+const homeRate = (s, k) => { const typed = s["rate" + k]; return has(typed) && typed > 0 && inverse(s["ccy" + k], s.home) ? 1 / typed : typed; };
+const DEFAULTS = { home: "USD", days: 60, amtA: 1000000, ccyA: "KZT", amtB: 2100, ccyB: "USD", feeA: 1, feeB: 0.5, moveA: 0, moveB: 0 };
 
 /* ---------- state ---------- */
 const params = readParams();
@@ -71,7 +76,7 @@ function side(s, k) {
   const amt = s["amt" + k];
   const cur = s["ccy" + k];
   const same = cur === s.home;
-  const rate = same ? 1 : s["rate" + k];
+  const rate = same ? 1 : homeRate(s, k);
   const ok = has(amt) && has(rate) && rate > 0;
   const base = ok ? amt * rate : null;
   const fee = ok ? base * ((same ? 0 : s["fee" + k]) / 100) : null;
@@ -158,9 +163,10 @@ function render() {
   for (const k of ["A", "B"]) {
     const c = state["ccy" + k];
     const same = c === home;
-    setText("rateLabel" + k, same ? t("inputs.same_home") : t("inputs.rate", { ccy: c }));
-    setText("home" + k, same ? "" : home);
-    setText("rateHint" + k, t("inputs.rate_hint", { home, ccy: c }));
+    const inv = inverse(c, home);
+    setText("rateLabel" + k, same ? t("inputs.same_home") : t(inv ? "inputs.rate_inv" : "inputs.rate", { ccy: c, home }));
+    setText("home" + k, same ? "" : inv ? c : home);
+    setText("rateHint" + k, t(inv ? "inputs.rate_hint_inv" : "inputs.rate_hint", { home, ccy: c }));
     setText("feeLabel" + k, t("inputs.fee", { ccy: c }));
     setText("feeHint" + k, t("inputs.fee_hint", { ccy: c }));
     setText("moveLabel" + k, t("inputs.move", { ccy: c, home }));
@@ -187,8 +193,9 @@ function render() {
   const cost = (x) => (x.ok ? money(x.expected) : na);
   setText("costA", cost(r.A));
   setText("costB", cost(r.B));
-  setText("subA", r.A.ok && !r.A.same ? `${num(r.A.amt)} ${r.A.cur} × ${rateFmt(r.A.rate)}${state.feeA ? ` + ${pct(state.feeA)}` : ""}` : "");
-  setText("subB", r.B.ok && !r.B.same ? `${num(r.B.amt)} ${r.B.cur} × ${rateFmt(r.B.rate)}${state.feeB ? ` + ${pct(state.feeB)}` : ""}` : "");
+  const rateOp = (k) => `${inverse(state["ccy" + k], home) ? "÷" : "×"} ${rateFmt(state["rate" + k])}`;
+  setText("subA", r.A.ok && !r.A.same ? `${num(r.A.amt)} ${r.A.cur} ${rateOp("A")}${state.feeA ? ` + ${pct(state.feeA)}` : ""}` : "");
+  setText("subB", r.B.ok && !r.B.same ? `${num(r.B.amt)} ${r.B.cur} ${rateOp("B")}${state.feeB ? ` + ${pct(state.feeB)}` : ""}` : "");
   $("[data-card='a']").className = `stat ${r.cheaper === "A" ? "stat--go" : r.cheaper === "B" ? "stat--stop" : ""}`;
   $("[data-card='b']").className = `stat ${r.cheaper === "B" ? "stat--go" : r.cheaper === "A" ? "stat--stop" : ""}`;
   setText("diff", r.ok ? money(Math.abs(r.diff)) : na);
@@ -294,11 +301,12 @@ $("[data-action='png']").addEventListener("click", async () => {
 $("[data-action='csv']").addEventListener("click", () => {
   const r = compute(state);
   const f = (n) => (n === null || n === undefined ? "" : Number(n).toFixed(2));
+  const rateUnit = (k) => (inverse(state["ccy" + k], state.home) ? `${state["ccy" + k]} per ${state.home}` : `${state.home} per ${state["ccy" + k]}`);
   downloadCsv("invoice-currency-lens.csv", [
     ["metric", "value", "unit"],
     ["home_currency", state.home, ""], ["days", state.days ?? "", "days"],
-    ["quote_a_amount", state.amtA ?? "", state.ccyA], ["quote_a_rate", state.rateA ?? "", `${state.home} per ${state.ccyA}`], ["quote_a_fee", state.feeA, "%"], ["quote_a_move", state.moveA, "%"],
-    ["quote_b_amount", state.amtB ?? "", state.ccyB], ["quote_b_rate", state.rateB ?? "", `${state.home} per ${state.ccyB}`], ["quote_b_fee", state.feeB, "%"], ["quote_b_move", state.moveB, "%"],
+    ["quote_a_amount", state.amtA ?? "", state.ccyA], ["quote_a_rate", state.rateA ?? "", rateUnit("A")], ["quote_a_fee", state.feeA, "%"], ["quote_a_move", state.moveA, "%"],
+    ["quote_b_amount", state.amtB ?? "", state.ccyB], ["quote_b_rate", state.rateB ?? "", rateUnit("B")], ["quote_b_fee", state.feeB, "%"], ["quote_b_move", state.moveB, "%"],
     ["quote_a_today", f(r.A.today), state.home], ["quote_a_expected", f(r.A.expected), state.home],
     ["quote_b_today", f(r.B.today), state.home], ["quote_b_expected", f(r.B.expected), state.home],
     ["difference_b_minus_a", f(r.diff), state.home], ["cheaper", r.cheaper ?? "", ""], ["break_even_move", f(r.flip), "%"],

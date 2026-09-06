@@ -12,7 +12,7 @@ The same goods are quoted in two currencies (say KZT and USD) and the importer p
 ## Inputs (defaults · units · label)
 | Input | Default | Unit | Label |
 |---|---|---|---|
-| Home currency | UZS | selector: UZS, KZT, RUB, GBP, EUR, USD, CNY | |
+| Home currency | USD | selector: USD, UZS, KZT, RUB, GBP, EUR, CNY | |
 | Quote A: amount and currency | 1,000,000 KZT | | your figure |
 | Quote B: amount and currency | 2,100 USD | | your figure |
 | Bank rate, home per unit of A | 24.0 | UZS per KZT | your bank's SELL rate today (what you pay) |
@@ -68,6 +68,6 @@ Cheaper: A by 2,774,000 UZS (10.1%). Flips if KZT gains 11% vs UZS.
 - Give advice: it's a comparison at the numbers you entered.
 
 ## Open questions for Safar
-- Default home currency UZS or GBP? (Lab convention: own examples in GBP, but the case is UZ.)
+- Default home currency: USD (Safar, 2026-09-06). Rates are typed the way banks print them: the number is always ≥ 1 (527 KZT per 1 USD, 1.17 USD per 1 EUR); the tool inverts when needed.
 - Do we need the "via USD" two-leg mode in v1, or is a direct rate input enough?
 - Post hook candidate: "The cheaper quote was 10% dearer. Your bank's cross rate, not the supplier's, decides."

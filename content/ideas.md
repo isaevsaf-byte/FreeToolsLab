@@ -25,3 +25,4 @@ Statuses: idea → spec → build → live → killed. One line per idea. New id
 | 19 | Glossary in Motion | 20 terms, each animated by what it means | Safar | idea | video series |
 | 20 | RU mirror of top tools | CIS audience; doubles as showcase for CIS clients | Safar | idea | after 8 tools |
 | 21 | Payment Terms Lens v1.2 | SCF toggle, supplier perspective, option A vs B, early-payment discount (2/10 net 30) | Board / CPO Skeptic + Safar 2026-09-05 | build | shipped in tools/payment-terms-lens; "supplier reprices X%" line still open |
+| 22 | Invoice Currency Lens | Same goods quoted in two currencies, paid in a third: which one is cheaper in home currency after bank cross rates, fees and the payment delay | Safar 2026-09-06 (UZ import cases) | spec | content/specs/invoice-currency-lens.md · not scheduled |

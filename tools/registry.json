@@ -74,6 +74,20 @@
       "added": "",
       "url": "/tools/renewal-radar/",
       "post_url": ""
+    },
+    {
+      "id": "invoice-currency-lens",
+      "name_en": "Invoice Currency Lens",
+      "name_ru": "В какой валюте платить",
+      "tagline_en": "Two quotes, two currencies, paid in a third: which one is cheaper after your bank's rates and fees.",
+      "tagline_ru": "Два предложения в разных валютах, оплата в третьей: какое дешевле после курсов и комиссий вашего банка.",
+      "category": "procurement",
+      "status": "next",
+      "added": "",
+      "url": "/tools/invoice-currency-lens/",
+      "post_url": "",
+      "hook_en": "The tenge quote looked dearer. After the bank's cross rate it was 9% cheaper.",
+      "hook_ru": "Цена в тенге казалась дороже. После кросс-курса банка она на 9 % дешевле."
     }
   ]
 }

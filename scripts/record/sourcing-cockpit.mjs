@@ -41,6 +41,6 @@ export async function steps({ goto, hold, note, tap, fill, waitFor, scrollTo }) 
   await tap("#shotClose");
 
   await scrollTo(".how .prompt");
-  await note("keep this cockpit updated from my Friday notes", { zoom: ".how .prompt", scale: 1.2 });
+  await note("keep this dashboard updated from my Friday notes", { zoom: ".how .prompt", scale: 1.2 });
   await hold(4.5);
 }

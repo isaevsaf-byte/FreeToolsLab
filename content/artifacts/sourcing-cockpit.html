@@ -1,4 +1,4 @@
-<title>AI Platform Sourcing Cockpit</title>
+<title>AI Platform Sourcing Dashboard</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -221,7 +221,7 @@
 <main class="wrap">
   <header class="top">
     <div>
-      <span class="eyebrow">Sourcing project · Group IT · live cockpit</span>
+      <span class="eyebrow">Sourcing project · Group IT · live dashboard</span>
       <h1>Enterprise AI platform</h1>
       <p class="meta">Baseline <span class="num">£4.2m</span> a year across 3 business units · Target <span class="num">−10%</span> · Owner: Category lead, Technology</p>
     </div>
@@ -309,13 +309,13 @@
 
   <div class="shot" id="shot" role="dialog" aria-label="Snapshot">
     <div class="box">
-      <img id="shotImg" alt="Cockpit snapshot">
+      <img id="shotImg" alt="Dashboard snapshot">
       <div class="row"><span id="shotMsg"></span><span style="display:flex;gap:8px"><button type="button" class="btn" id="shotDl" hidden>Download PNG</button><button type="button" class="btn ghost" id="shotClose">Close</button></span></div>
     </div>
   </div>
   <footer class="how">
-    <span>One link, no slides. Updated every Friday in the Claude Project: paste the week's notes and the cockpit rebuilds. Your edits here stay in this browser. Figures are illustrative.</span>
-    <span class="prompt"><b>Prompt:</b> keep this cockpit updated from my Friday notes</span>
+    <span>One link, no slides. Updated every Friday in the Claude Project: paste the week's notes and the dashboard rebuilds. Your edits here stay in this browser. Figures are illustrative.</span>
+    <span class="prompt"><b>Prompt:</b> keep this dashboard updated from my Friday notes</span>
   </footer>
 </main>
 
@@ -540,7 +540,7 @@
   if (window.claude?.use) claude.use("downloads").then((d) => { dl = d; if (d) $("#shotDl").hidden = false; });
   $("#shotDl").addEventListener("click", async () => {
     if (!dl || !lastShot) return;
-    try { await dl.save({ filename: `sourcing-cockpit-${TODAY}.png`, data: lastShot }); $("#shotMsg").textContent = "Saved."; }
+    try { await dl.save({ filename: `sourcing-dashboard-${TODAY}.png`, data: lastShot }); $("#shotMsg").textContent = "Saved."; }
     catch (e) { $("#shotMsg").textContent = e?.code === "declined" ? "Save cancelled." : "Save is not available here. Right-click the image instead."; }
   });
   $("#shotClose").addEventListener("click", () => shot.classList.remove("open"));

@@ -3,16 +3,16 @@
   "video": "demo/sourcing-cockpit.mp4",
   "width": 1080,
   "height": 1350,
-  "footage": 39.623,
+  "footage": 39.663,
   "events": [
     {
-      "t": 0.207,
+      "t": 0.217,
       "dur": 4.33,
       "caption": "One link. The whole sourcing project."
     },
     {
-      "t": 0.207,
-      "dur": 3.4,
+      "t": 0.217,
+      "dur": 3.5,
       "zoom": {
         "x": 168,
         "y": 392,
@@ -20,35 +20,35 @@
       }
     },
     {
-      "t": 4.738,
+      "t": 4.742,
       "dur": 3.99,
       "caption": "Six stages. Six vendors. One number."
     },
     {
-      "t": 8.926,
+      "t": 8.928,
       "x": 460,
       "y": 476,
       "tap": true
     },
     {
-      "t": 8.926,
+      "t": 8.928,
       "dur": 2.25,
       "caption": "Legal slipped a week. Log it."
     },
     {
-      "t": 9.186,
+      "t": 9.177,
       "x": 429,
       "y": 620,
       "tap": true
     },
     {
-      "t": 11.216,
+      "t": 11.209,
       "dur": 4.5,
       "caption": "The award date moves. Nobody rewrites a slide."
     },
     {
-      "t": 11.216,
-      "dur": 3.4,
+      "t": 11.209,
+      "dur": 3.5,
       "zoom": {
         "x": 61,
         "y": 772,
@@ -56,24 +56,24 @@
       }
     },
     {
-      "t": 16.232,
-      "dur": 3.49,
+      "t": 16.224,
+      "dur": 3.5,
       "caption": "Plan vs actual. The slip is red."
     },
     {
-      "t": 19.92,
+      "t": 19.922,
       "x": 561,
       "y": 674,
       "tap": true
     },
     {
-      "t": 19.92,
+      "t": 19.922,
       "dur": 4.5,
       "caption": "Award. The list becomes a recommendation."
     },
     {
-      "t": 21.249,
-      "dur": 3.4,
+      "t": 21.261,
+      "dur": 3.5,
       "zoom": {
         "x": 540,
         "y": 676,
@@ -81,30 +81,30 @@
       }
     },
     {
-      "t": 25.938,
+      "t": 25.964,
       "x": 146,
       "y": 675,
       "tap": true
     },
     {
-      "t": 25.938,
+      "t": 25.964,
       "dur": 3.0,
       "caption": "Legal signed. One click."
     },
     {
-      "t": 29.135,
+      "t": 29.166,
       "x": 787,
       "y": 675,
       "tap": true
     },
     {
-      "t": 29.135,
+      "t": 29.166,
       "dur": 4.5,
       "caption": "One PNG for the steering email."
     },
     {
-      "t": 30.388,
-      "dur": 3.4,
+      "t": 30.438,
+      "dur": 3.5,
       "zoom": {
         "x": 540,
         "y": 675,
@@ -112,19 +112,19 @@
       }
     },
     {
-      "t": 34.592,
+      "t": 34.63,
       "x": 932,
       "y": 1225,
       "tap": true
     },
     {
-      "t": 35.119,
-      "dur": 4.3,
-      "caption": "keep this cockpit updated from my Friday notes"
+      "t": 35.157,
+      "dur": 4.31,
+      "caption": "keep this dashboard updated from my Friday notes"
     },
     {
-      "t": 35.119,
-      "dur": 3.4,
+      "t": 35.157,
+      "dur": 3.5,
       "zoom": {
         "x": 540,
         "y": 1460,

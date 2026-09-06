@@ -45,7 +45,7 @@ export const RemotionRoot: React.FC = () => (
         footage: sc.footage,
         title: "One link. No slides.",
         kicker: "How you can run projects with Claude Code",
-        url: "Live cockpit: link in the first comment",
+        url: "Live dashboard: link in the first comment",
         credit: "Safar Isaev",
         tagline: "",
         titleSec: COCKPIT_TITLE_SEC,
